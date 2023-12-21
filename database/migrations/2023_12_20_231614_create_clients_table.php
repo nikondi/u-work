@@ -16,12 +16,12 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('address_id')->nullable();
             $table->foreign('address_id', 'FK_client_address')->references('id')->on('addresses')->nullOnDelete()->cascadeOnUpdate();
-            $table->string('phone', 12);
-            $table->string('phone_second', 12);
-            $table->string('name', 90);
+            $table->string('phone', 64);
+            $table->string('name', 90)->nullable();
             $table->unsignedTinyInteger('status')->default(Client::STATUS_INVALID);
             $table->unsignedTinyInteger('floor')->nullable();
-            $table->unsignedTinyInteger('apartment')->nullable();
+            $table->string('apartment', 20)->nullable();
+            $table->string('comment', 512)->nullable();
             $table->timestamps();
         });
     }

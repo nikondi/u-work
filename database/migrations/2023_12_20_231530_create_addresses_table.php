@@ -15,10 +15,14 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('worker_id')->nullable();
             $table->foreign('worker_id', 'FK_worker_address')->references('id')->on('workers')->nullOnDelete()->cascadeOnUpdate();
+
             $table->string('city', 50);
             $table->string('street', 100);
             $table->string('house', 10);
             $table->unsignedTinyInteger('entrance')->nullable();
+
+            $table->unique(['city', 'street', 'house', 'entrance']);
+
             $table->timestamps();
         });
     }
