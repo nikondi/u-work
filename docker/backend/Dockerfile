@@ -25,7 +25,7 @@ RUN apt-get update && apt-get install -y \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Add user for laravel application
-RUN groupadd -g 1000 www && useradd -u 1000 -ms /bin/bash -g www www
+RUN groupadd -g 1000 www && useradd -u 1000 -s /bin/bash -g www www
 
 # Change current user to www
 USER www
