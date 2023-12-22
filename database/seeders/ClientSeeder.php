@@ -6,6 +6,7 @@ use App\Models\Address;
 use App\Models\Client;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class ClientSeeder extends Seeder
@@ -24,6 +25,17 @@ class ClientSeeder extends Seeder
         if(!file_exists($filePath))
             $this->command->error('Ошибка: файл "'.$filePath.'" не найден');
 
+
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+
+        $this->command->info('Очистка таблицы clients');
+        Client::truncate();
+        $this->command->info('Очистка таблицы addresses');
+        Address::truncate();
+
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+
+
         $this->command->getOutput()->progressStart(count(file($filePath)));
 
         $csv = fopen($filePath, 'r');
@@ -32,6 +44,7 @@ class ClientSeeder extends Seeder
         while (($line_arr = fgetcsv($csv, 1000, ";")) !== FALSE) {
             if($k++ == 0)
                 continue;
+
             foreach($line_arr as $i => $value) {
                 if(isset($map[$i])) {
                     $value = trim(trim($value,'"'));
@@ -47,12 +60,28 @@ class ClientSeeder extends Seeder
             $line_arr['id'] = intval($line_arr['id']);
 
             $line_arr['phone'] = str_replace([',,', ','], ';', $line_arr['phone']);
-            $line_arr['phone'] = implode(';', array_map(function($value) {
-                return trim(preg_replace('/[^0-9]/', '', $value));
-            }, explode(';', $line_arr['phone'])));
+            $line_arr['phone_second'] = str_replace([',,', ','], ';', $line_arr['phone_second']);
 
-            if(empty($line_arr['name']) || $line_arr['name'] == 'Фио ..')
+            $line_arr['phone'] = implode(',', array_filter(array_map(function($value) {
+                $value = trim(preg_replace('/[^0-9]/', '', $value));
+                if(strlen($value) == 10 && str_starts_with($value, '9'))
+                    $value = '8'.$value;
+                if(str_starts_with($value, '98'))
+                    $value = '89'.substr($value, 2);
+                return $value;
+            }, [...explode(';', $line_arr['phone']), ...explode(';', $line_arr['phone_second'])])));
+            if(empty($line_arr['phone']))
+                $line_arr['phone'] = null;
+
+
+            $line_arr['name'] = trim(preg_replace('/[0-9\-]/', '', $line_arr['name']));
+            $line_arr['name'] = str_replace('  ', ' ', $line_arr['name']);
+            if(empty($line_arr['name']))
                 $line_arr['name'] = null;
+            $line_arr['name'] = match ($line_arr['name']) {
+                'Ф.И.О.', 'Фио ..', 'Фамилия И.О.', 'ФИО', '..', 'Ф.И.О ..' => null,
+                default => $line_arr['name']
+            };
 
             $line_arr['status'] = match ($line_arr['status']) {
                 'Действующий' => Client::STATUS_ACTIVE,
@@ -173,14 +202,19 @@ class ClientSeeder extends Seeder
             $line_arr['street'] = empty($line_arr['street'])?'unknown':$line_arr['street'];
             $line_arr['house'] = empty($line_arr['house'])?'unknown':$line_arr['house'];
 
-            $address = Address::firstOrCreate([
-                'city' => $line_arr['city'],
-                'street' => $line_arr['street'],
-                'house' => $line_arr['house'],
-                'entrance' => $line_arr['entrance'],
-            ], $line_arr);
-            $line_arr['address_id'] = $address->id;
-            $client = Client::firstOrCreate(['id' => $line_arr['id']], $line_arr);
+            $client = Client::updateOrCreate(['id' => $line_arr['id']], $line_arr);
+
+            if($line_arr['city'] != 'unknown' || $line_arr['street'] != 'unknown' || $line_arr['house'] != 'unknown') {
+                $address = Address::firstOrCreate([
+                    'city' => $line_arr['city'],
+                    'street' => $line_arr['street'],
+                    'house' => $line_arr['house'],
+                    'entrance' => $line_arr['entrance'],
+                ], $line_arr);
+                $client->address()->associate($address)->save();
+            }
+
+
             $this->command->getOutput()->progressAdvance();
         }
         $this->command->getOutput()->progressFinish();

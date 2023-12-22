@@ -13,4 +13,8 @@ class Address extends Model
         'worker_id',
         'city', 'street', 'house', 'entrance',
     ];
+
+    protected $casts = [
+        'entrance' => 'integer',
+    ];
 }
