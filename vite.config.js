@@ -1,11 +1,21 @@
 import { defineConfig } from 'vite';
 import laravel from 'laravel-vite-plugin';
+import react from "@vitejs/plugin-react";
 
 export default defineConfig({
+    server: {
+        hmr: {
+            host: 'docker.local',
+        }
+    },
     plugins: [
+        react(),
         laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js'],
+            input: ['resources/css/app.scss', 'resources/js/app.jsx'],
             refresh: true,
         }),
     ],
+   css: {
+       postcss: 'resources/js/postcss.config.js'
+    },
 });
