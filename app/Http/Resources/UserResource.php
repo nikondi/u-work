@@ -16,12 +16,16 @@ class UserResource extends JsonResource
     public function toArray(Request $request): array
     {
         /* @var \App\Models\User $this */
+        $roles = [];
+        foreach($this->roles as $role)
+            $roles[] = $role->slug;
+
         return [
             'id' => $this->id,
             'login' => $this->login,
             'name' => $this->name,
             'email' => $this->email,
-            'roles' => $this->roles,
+            'roles' => $roles,
         ];
     }
 }

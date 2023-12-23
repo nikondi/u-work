@@ -1,4 +1,7 @@
-import {createContext, useContext, useState} from "react";
+import {createContext, useContext, useEffect, useState} from "react";
+import axiosClient from "../axios-client.jsx";
+import toast from "react-hot-toast";
+import LoadingArea from "../components/LoadingArea.jsx";
 
 const StateContext = createContext({
   user: null, setUser: () => {},
@@ -6,7 +9,7 @@ const StateContext = createContext({
 });
 
 export const ContextProvider = ({children}) => {
-  const [user, setUser] = useState({});
+  const [user, _setUser] = useState(null);
   const [token, _setToken] = useState(localStorage.getItem('ACCESS_TOKEN'));
 
   const setToken = (token) => {
@@ -17,14 +20,42 @@ export const ContextProvider = ({children}) => {
       localStorage.removeItem('ACCESS_TOKEN');
   }
 
+  const setUser = (user) => {
+    _setUser({...user,
+      hasRole(...roles) {
+        return (roles.filter((role) => user.roles.indexOf(role) !== -1)).length !== 0;
+      }
+    })
+  }
+
   return (
     <StateContext.Provider value={{
       user, setUser,
       token, setToken,
     }}>
-      {children}
+      <Authorized>
+        {children}
+      </Authorized>
     </StateContext.Provider>
   )
 }
 
 export const useStateContext = () => useContext(StateContext);
+
+
+function Authorized({children}) {
+  const {user, setUser} = useStateContext();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axiosClient.get('/user').then(({data}) => {
+      setUser(data);
+    }).catch((e) => {
+      toast.error(`Произошла ошибка: ${e.message}`);
+    }).finally(() => setLoading(false));
+  }, []);
+
+  return (<>
+    {(loading && !user) ? <LoadingArea/> : children}
+  </>)
+}

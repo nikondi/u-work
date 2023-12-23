@@ -4,7 +4,8 @@ import {Link, Outlet} from "react-router-dom";
 import axiosClient from "../../axios-client.jsx";
 import toast from "react-hot-toast";
 import {useStateContext} from "../../contexts/ContextProvider.jsx";
-import {useMemo, useState} from "react";
+import {useEffect, useMemo, useState} from "react";
+import HasRole from "../HasRole.jsx";
 
 const initialOpenedSidebar = localStorage.getItem('sidebarOpened') == '1';
 
@@ -46,10 +47,15 @@ export default function Dashboard() {
           <BurgerButton active={openedSidebar} setActive={setOpenedSidebar} title={openedSidebar?'Скрыть меню':'Открыть меню'} />
         </div>
         <div className="flex mx-auto flex-grow mt-4 flex-col text-gray-400 space-y-2 p-3 w-full">
-          <SidebarNavLink to="/users" activeOn="/users/.*">
-            <svg className="h-5" viewBox="0 0 512 512"><path d="M437.02 330.98c-27.883-27.882-61.071-48.523-97.281-61.018C378.521 243.251 404 198.548 404 148 404 66.393 337.607 0 256 0S108 66.393 108 148c0 50.548 25.479 95.251 64.262 121.962-36.21 12.495-69.398 33.136-97.281 61.018C26.629 379.333 0 443.62 0 512h40c0-119.103 96.897-216 216-216s216 96.897 216 216h40c0-68.38-26.629-132.667-74.98-181.02zM256 256c-59.551 0-108-48.448-108-108S196.449 40 256 40s108 48.448 108 108-48.449 108-108 108z" fill="currentColor"></path></svg>
-            <span>Пользователи</span>
-          </SidebarNavLink>
+          <HasRole roles={['admin']}>
+            <SidebarNavLink to="/users" activeOn="/users/.*">
+              <svg className="h-5" viewBox="0 0 512 512"><path d="M437.02 330.98c-27.883-27.882-61.071-48.523-97.281-61.018C378.521 243.251 404 198.548 404 148 404 66.393 337.607 0 256 0S108 66.393 108 148c0 50.548 25.479 95.251 64.262 121.962-36.21 12.495-69.398 33.136-97.281 61.018C26.629 379.333 0 443.62 0 512h40c0-119.103 96.897-216 216-216s216 96.897 216 216h40c0-68.38-26.629-132.667-74.98-181.02zM256 256c-59.551 0-108-48.448-108-108S196.449 40 256 40s108 48.448 108 108-48.449 108-108 108z" fill="currentColor"></path></svg>
+              <span>Пользователи</span>
+            </SidebarNavLink>
+          </HasRole>
+          <HasRole roles={['manager']}>
+
+          </HasRole>
         </div>
       </div>
       <div className="flex-grow overflow-hidden h-full flex flex-col">
@@ -59,8 +65,6 @@ export default function Dashboard() {
             <Link to="/" className="hidden sm:block">
               <svg width="120" viewBox="0 0 238 96"><style type="text/css">{'.st0{fill:#636363;}.st1{fill:#246BFD;}.st2{fill:#0f0f0f;} @media (prefers-color-scheme: dark) {.st0{fill:#B7B7B7;}.st1{fill:#44c9bd;}.st2{fill:#F5F5F5;}}'}</style><path className="st0" d="M146.2,51.5v12.9h3.6V59C148.1,56.9,146.8,54.3,146.2,51.5z"/><path className="st0" d="M120.5,51.5v12.9h-3.6V59C118.6,56.9,119.9,54.3,120.5,51.5z"/><path className="st0" d="M33,51.5v12.9h-3.6V59C31.2,56.9,32.4,54.3,33,51.5z"/><path className="st0" d="M29.4,44.5V31.5H33v5.4C31.2,39.1,29.9,41.6,29.4,44.5z"/><path className="st0" d="M205,51.5v12.9h3.6V59C206.8,56.9,205.6,54.3,205,51.5z"/><path className="st0" d="M179.2,51.5v12.9h-3.6V59C177.4,56.9,178.7,54.3,179.2,51.5z"/><path className="st0" d="M177.2,40.1c-2.8-5.1-8.2-8.6-14.5-8.6c-6.2,0-11.7,3.4-14.5,8.5c0.9,1.7,1.5,3.7,1.8,5.7c1.1-6,6.3-10.6,12.7-10.6c6.3,0,11.6,4.6,12.7,10.6C175.7,43.7,176.3,41.8,177.2,40.1z"/><path className="st0" d="M118.5,40.1c-2.8-5.1-8.2-8.6-14.5-8.6c-8.9,0-16.2,7.1-16.5,16h3.6c0.3-6.9,5.9-12.3,12.9-12.3c6.3,0,11.6,4.6,12.7,10.6C116.9,43.7,117.5,41.8,118.5,40.1z M88.5,53.7c-0.1-0.1-0.1-0.3-0.1-0.4c0.1-0.2,0.3-0.4,0.4-0.6L88.5,53.7z"/><path className="st0" d="M207,40c0.9,1.7,1.5,3.7,1.8,5.7c1.1-6,6.3-10.6,12.7-10.6c7.1,0,12.9,5.7,12.9,12.8h3.6c0-9.1-7.4-16.4-16.5-16.4C215.3,31.5,209.8,35,207,40z"/><path className="st0" d="M122.5,35c-1.5,1-2.5,2.7-3.5,3.8V0h3.4L122.5,35z"/><path className="st0" d="M209,46h28.7l0.3,1.8v1.8h-28.9L209,46z"/><circle className="st1" cx="75" cy="33.3" r="2"/><path className="st2" d="M146.2,48.1L146.2,48.1L146.2,48.1c0.1,9.1,7.4,16.4,16.5,16.4c9.1,0,16.5-7.4,16.5-16.4v-0.1v-0.1h0c0.1-7,5.8-12.7,12.9-12.7c7.1,0,12.8,5.7,12.9,12.7c0,0.1,0,0.1,0,0.2c0,9.1,7.4,16.4,16.5,16.4c0.1,0,0.2,0,0.3,0v-3.6c-0.1,0-0.2,0-0.3,0c-7.1,0-12.8-5.7-12.9-12.7c0,0,0-0.1,0-0.1c0-9.1-7.4-16.4-16.5-16.4c-9.1,0-16.5,7.4-16.5,16.4c0,0.1,0,0.2,0,0.3h0c-0.2,6.9-5.9,12.5-12.9,12.5s-12.7-5.6-12.9-12.5h0l0,0c0-0.1,0-0.2,0-0.3c0-9.1-7.4-16.4-16.5-16.4c-9.1,0-16.5,7.4-16.5,16.4c0,0.1,0,0.2,0,0.3h0c-0.2,6.9-5.9,12.5-12.9,12.5c-7.1,0-12.8-5.7-12.9-12.7v-0.2h-0.2h-3.4c0,0.4,0,1.2,0,1.6l0,46.3h3.4V58.1c3,3.9,7.7,6.4,13,6.4c6.4,0,12-3.6,14.7-8.9l0,0.1l0-0.1c1.1-2.2,1.8-4.7,1.8-7.3v-0.1V48v-0.1c0-7,5.8-12.7,12.9-12.7C140.5,35.1,146.2,40.9,146.2,48.1L146.2,48.1z"/><path className="st2" d="M73,35v29.6h4V35c-0.4,0.6-1.2,1-2,1C74.2,36,73.4,35.6,73,35z"/><path className="st2" d="M3.6,31.5H0V48C0,57,7.4,64.4,16.5,64.4C25.6,64.4,33,57,33,48c0-0.1,0-0.1,0-0.2c0.1-7,5.8-12.7,12.9-12.7c7,0,12.7,5.6,12.9,12.5h0V48v0v0V55l0,9.4h3.6V48c0-9.1-7.4-16.4-16.5-16.4S29.4,38.9,29.4,48c0,0.1,0,0.2,0,0.3l0,0c-0.2,7-5.9,12.5-12.9,12.5C9.4,60.8,3.6,55.1,3.6,48v0c0-0.1,0-0.2,0-0.3h0V31.5z"/></svg>
             </Link>
-            {/*<a href="/export" className="h-full border-b-2 border-transparent inline-flex items-center mr-8">Экспорт</a>
-              <a href="/users" className="h-full border-b-2 border-blue-500 text-blue-500 dark:text-white dark:border-white inline-flex mr-8 items-center">Пользователи</a>*/}
           </div>
           <div className="flex items-center gap-x-3">
             <span className="ml-2">{user.name}</span>
