@@ -1,9 +1,11 @@
-import React from "react";
 import {createBrowserRouter} from "react-router-dom";
 import Login from "./views/Login.jsx";
 import NotFound from "./views/NotFound.jsx";
 import DefaultLayout from "./layouts/DefaultLayout.jsx";
 import GuestLayout from "./layouts/GuestLayout.jsx";
+import Dashboard from "./views/Dashboard.jsx";
+import Requests from "./views/Requests.jsx";
+import Clients from "./views/Clients.jsx";
 
 const router = createBrowserRouter([
   {
@@ -12,7 +14,19 @@ const router = createBrowserRouter([
     children: [
       {
         path: '/',
-        element: <div></div>
+        element: <Dashboard/>
+      },
+      {
+        path: '/users',
+        element: <Dashboard/>
+      },
+      {
+        path: '/clients',
+        element: <Clients/>
+      },
+      {
+        path: '/requests',
+        element: <Requests/>
       },
     ],
   },

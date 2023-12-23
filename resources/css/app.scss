@@ -30,7 +30,7 @@
     .sidebar-link {
         @apply h-10 duration-300 transition-colors rounded-md flex items-center px-4 gap-x-3 text-blue-600 dark:text-gray-400 bg-gray-200 hover:bg-blue-100 dark:bg-gray-800 dark:hover:bg-gray-700;
         &.active {
-            @apply bg-blue-200 text-blue-600 dark:bg-gray-300 dark:hover:bg-gray-300 dark:text-white;
+            @apply bg-blue-200 text-blue-600 dark:bg-gray-600 dark:hover:bg-gray-600 dark:text-white;
         }
     }
     .btn {
