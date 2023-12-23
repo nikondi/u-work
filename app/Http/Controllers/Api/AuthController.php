@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LoginRequest;
+use App\Http\Resources\UserResource;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,4 +32,9 @@ class AuthController extends Controller
 
         return response('', 204);
     }
+    public function getUserResource(Request $request): UserResource
+    {
+        return new UserResource($request->user());
+    }
+
 }
