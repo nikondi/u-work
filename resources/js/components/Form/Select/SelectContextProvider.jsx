@@ -2,11 +2,11 @@ import {createContext, useContext, useState} from "react";
 
 const SelectContext = createContext({
     selectedOption: {},
-    setSelectedOption: () => {},
+    setSelectedOption: (v) => {},
     opened: false,
-    setOpened: () => {},
+    setOpened: (v) => {},
     selectedValue: '',
-    setSelectedValue: () => {},
+    setSelectedValue: (v) => {},
 });
 
 

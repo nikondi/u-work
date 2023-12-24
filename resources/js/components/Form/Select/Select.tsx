@@ -1,9 +1,15 @@
-import {mergeClasses} from "../../helpers.jsx";
-import {useEffect, useMemo, useState} from "react";
-import SelectContextProvider, {useSelectContext} from "../../contexts/SelectContextProvider.jsx";
-import useOutsideClick from "../../hooks/useOutsideClick.js";
+import {mergeClasses} from "../../../helpers.js";
+import React, {PropsWithChildren, useEffect, useMemo, useState} from "react";
+import SelectContextProvider, {useSelectContext} from "./SelectContextProvider.jsx";
+import useOutsideClick from "../../../hooks/useOutsideClick.js";
 
-export default function Select({children, onChange=(v)=>{}, value, label, ...props}) {
+type SelectProps = {
+    onChange?: (v:OptionValue) => void,
+    value?: OptionValue,
+    label?: string|number,
+}
+
+export default function Select({children, onChange=()=>{}, value, label, ...props}:PropsWithChildren<SelectProps>) {
     return (
         <SelectContextProvider>
             <SelectInner onChange={onChange} value={value} label={label} {...props}>
@@ -13,7 +19,14 @@ export default function Select({children, onChange=(v)=>{}, value, label, ...pro
     )
 }
 
-function SelectInner({className, children, onChange=(v)=>{}, value, label}) {
+type SelectInnerProps = {
+    className?: string,
+    onChange?: (value:OptionValue) => void,
+    value?: OptionValue,
+    label: string|number
+}
+
+function SelectInner({className, children, onChange=()=>{}, value, label}: PropsWithChildren<SelectInnerProps>) {
     const [defaultClasses, setDefaultClasses] = useState('form-select-heading');
     const {setSelectedValue, selectedOption, setOpened, opened} = useSelectContext();
     const headerRef = useOutsideClick(() => setOpened(false));
@@ -24,7 +37,7 @@ function SelectInner({className, children, onChange=(v)=>{}, value, label}) {
 
     const classes = useMemo(() => {
         return mergeClasses(defaultClasses, className);
-    }, [defaultClasses]);
+    }, [defaultClasses, className]);
 
     useEffect(() => {
         if(value)
@@ -54,14 +67,20 @@ function SelectInner({className, children, onChange=(v)=>{}, value, label}) {
     </>)
 }
 
+type OptionValue = string | number;
+type OptionProps = {
+    value?: OptionValue,
+    className?: string,
+    index: number
+}
 
-export function Option({value, children, className, index}) {
+export function Option({value, children, className = '', index}:PropsWithChildren<OptionProps>) {
     const classes = mergeClasses("form-select-option", className);
     const {setSelectedOption, selectedValue} = useSelectContext();
     const option = {value: value ?? index, label: children};
 
     useEffect(() => {
-        if(selectedValue == value)
+        if(selectedValue === value)
             setSelectedOption(option);
     }, [selectedValue]);
 

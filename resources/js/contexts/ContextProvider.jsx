@@ -21,7 +21,7 @@ export const ContextProvider = ({children}) => {
   }
 
   const setUser = (usr) => {
-    _setUser({...user,
+    _setUser({...usr,
       hasRole(...roles) {
         return (roles.filter((role) => usr.roles.indexOf(role) !== -1)).length !== 0;
       }

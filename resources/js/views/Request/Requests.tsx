@@ -8,7 +8,9 @@ import {Client} from "../Client/Clients";
 import {Address} from "../Address/Addresses";
 import toast from "react-hot-toast";
 
-type Request = {
+export type RequestStatus = 'new' | 'done' | 'important' | 'unknown';
+
+export type Request = {
     id:number,
     client?: Client,
     client_name?: string,
@@ -17,7 +19,7 @@ type Request = {
     addressDB?: Address,
     address?: string,
     content: string,
-    status: string
+    status: RequestStatus
 }
 
 export default function Requests() {
@@ -39,7 +41,7 @@ export default function Requests() {
                         <div className="text-orange-500 dark:text-orange-400">#{request.id}</div>
                         <div>{request.client?request.client.name:request.client_name}</div>
                     </div>
-                    <div className="mt-2 flex gap-x-3">
+                    <div className="mt-2 flex gap-x-3 flex-wrap gap-y-1.5">
                         <a href={request.client_phone?'tel:'+request.client_phone:'#'} className="request-phone">
                             <svg height=".85em" className="inline" viewBox="0 0 513.64 513.64"><g><path d="m499.66 376.96-71.68-71.68c-25.6-25.6-69.12-15.359-79.36 17.92-7.68 23.041-33.28 35.841-56.32 30.72-51.2-12.8-120.32-79.36-133.12-133.12-7.68-23.041 7.68-48.641 30.72-56.32 33.28-10.24 43.52-53.76 17.92-79.36l-71.68-71.68c-20.48-17.92-51.2-17.92-69.12 0L18.38 62.08c-48.64 51.2 5.12 186.88 125.44 307.2s256 176.641 307.2 125.44l48.64-48.64c17.921-20.48 17.921-51.2 0-69.12z" fill="currentColor"></path></g></svg>
                             <div>{request.client_phone?request.client_phone:<span className="text-gray-300">-</span>}</div>

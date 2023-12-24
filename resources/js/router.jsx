@@ -6,6 +6,7 @@ import GuestLayout from "./layouts/GuestLayout.jsx";
 import Dashboard from "./views/Dashboard.jsx";
 import Requests from "./views/Request/Requests";
 import Clients from "./views/Client/Clients";
+import RequestForm from "./views/Request/RequestForm";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +29,15 @@ const router = createBrowserRouter([
         path: '/requests',
         element: <Requests/>
       },
+      {
+        path: '/requests/new',
+        element: <RequestForm type="requestCreate"/>
+      },
+      {
+        path: '/requests/:id',
+        element: <RequestForm type="requestUpdate"/>
+      },
+
     ],
   },
   {

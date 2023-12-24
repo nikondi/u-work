@@ -10,4 +10,14 @@ export default class RequestsAPI {
     }
     return axiosClient.get(`/requests`, {params});
   }
+  static async single(id) {
+    const response = await axiosClient.get(`/requests/${id}`);
+    return response.data;
+  }
+  static create(data) {
+    return axiosClient.post(`/requests`, data);
+  }
+  static async update(id, data) {
+    return axiosClient.put(`/requests/${id}`, data);
+  }
 }
