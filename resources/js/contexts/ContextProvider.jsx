@@ -20,10 +20,10 @@ export const ContextProvider = ({children}) => {
       localStorage.removeItem('ACCESS_TOKEN');
   }
 
-  const setUser = (user) => {
+  const setUser = (usr) => {
     _setUser({...user,
       hasRole(...roles) {
-        return (roles.filter((role) => user.roles.indexOf(role) !== -1)).length !== 0;
+        return (roles.filter((role) => usr.roles.indexOf(role) !== -1)).length !== 0;
       }
     })
   }
