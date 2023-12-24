@@ -15,6 +15,11 @@ class Request extends Model
     const STATUS_DONE = 1;
     const STATUS_IMPORTANT = 2;
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+    }
+
     public function addressDB(): BelongsTo
     {
         return $this->belongsTo(Address::class);
@@ -27,12 +32,23 @@ class Request extends Model
 
     public function getStatusLabel(): string
     {
-        return match($this->status) {
+        return static::getStatuses($this->status);
+    }
+
+    private static function getStatuses($status = null): array|string
+    {
+        $statuses = [
+            static::STATUS_UNKNOWN => 'unknown',
             static::STATUS_NEW => 'new',
             static::STATUS_DONE => 'done',
             static::STATUS_IMPORTANT => 'important',
-            default => 'unknown',
-        };
+        ];
+
+        return $statuses[$status] ?? $statuses;
+    }
+    public static function convertStatusLabel($label):int
+    {
+        return ($a = array_search($label, static::getStatuses())) !== false?$a:static::STATUS_UNKNOWN;
     }
 
     protected $fillable = [

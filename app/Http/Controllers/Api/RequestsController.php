@@ -27,6 +27,9 @@ class RequestsController extends Controller
 
         if($request->exists('filter')) {
             foreach($request->get('filter') as $column => $value) {
+                if($column == 'status')
+                    $value = RequestModel::convertStatusLabel($value);
+
                 if(is_array($value))
                     $query->where($column, $value[0], $value[1]);
                 else

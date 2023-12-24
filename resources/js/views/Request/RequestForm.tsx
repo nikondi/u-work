@@ -5,9 +5,10 @@ import LoadingArea from "../../components/LoadingArea";
 import Textarea from "../../components/Form/Textarea";
 import RequestsAPI from "../../API/RequestsAPI";
 import useFetching from "../../hooks/useFetching";
-import {Request, RequestStatus} from "./Requests";
+import {Request, RequestStatus, requestTypes} from "./Requests";
 import {ErrorResponse, Response} from "../../types/LaravelResponse";
 import Select, {Option} from "../../components/Form/Select/Select";
+import {FormRow} from "../../components/Form/Form";
 
 type RequestFormProps = {
     type: 'requestCreate' | 'requestUpdate',
@@ -97,15 +98,12 @@ export default function RequestForm({type}: RequestFormProps) {
                     <div className="mx-auto relative" style={{maxWidth: '800px'}}>
                         <LoadingArea show={submitting}/>
                         <form onSubmit={onSubmit}>
-                            <div className="mb-6 relative">
                                 {/*<LoadingArea show={loadingTypes}/>*/}
-                                <Select label="Тип устройства" value={request.status} onChange={(value) => setRequest({...request, status: value as RequestStatus})}>
-                                    <Option value="unknown" index={1}>Неизвестно</Option>
-                                    <Option value="new" index={2}>Новая</Option>
-                                    <Option value="done" index={3}>Завершена</Option>
-                                    <Option value="important" index={4}>Срочная</Option>
+                            <FormRow label="Тип заявки" className="mb-6">
+                                <Select label="Тип заявки" value={request.status} onChange={(value) => setRequest({...request, status: value as RequestStatus})}>
+                                    {Object.keys(requestTypes).map((key, i) => <Option value={key} key={i} index={i}>{requestTypes[key]}</Option>)}
                                 </Select>
-                            </div>
+                            </FormRow>
                             {/*<div className="mb-6">
                                 <InputRow label="Название" value={request.name} onChange={(ev) => setRequest({...request, name: ev.target.value})}/>
                             </div>
@@ -115,9 +113,9 @@ export default function RequestForm({type}: RequestFormProps) {
                             <div className="mb-6">
                                 <Textarea style={{height: 100}} label="Короткое описание (для экспорта)" value={request.short_description} onChange={(ev) => setRequest({...request, short_description: ev.target.value})}/>
                             </div>*/}
-                            <div className="mb-6">
+                            <FormRow>
                                 <Textarea label="Описание" value={request.content} onChange={(ev:InputEvent) => setRequest({...request, content: (ev.target as HTMLInputElement).value})}/>
-                            </div>
+                            </FormRow>
                             {/*<div className="mb-6">
                          <InputRow label="Координаты" value={peer.locate} onChange={(ev) => setPeer({...peer, locate: ev.target.value})}/>
                      </div>*/}

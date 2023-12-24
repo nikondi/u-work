@@ -60,7 +60,7 @@ export default function useResource(config: ResourceConfig) {
             if(config.onFetchFinally) config.onFetchFinally();
             setLoading(false);
         });
-    }, [page]);
+    }, [page, config.fetch]);
 
     useEffect(() => {
         if(pageList.length == 0 || !config.pagination)
