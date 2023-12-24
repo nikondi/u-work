@@ -33,9 +33,7 @@ export const ContextProvider = ({children}) => {
       user, setUser,
       token, setToken,
     }}>
-      <Authorized>
-        {children}
-      </Authorized>
+      {children}
     </StateContext.Provider>
   )
 }
@@ -43,7 +41,7 @@ export const ContextProvider = ({children}) => {
 export const useStateContext = () => useContext(StateContext);
 
 
-function Authorized({children}) {
+export function Authorized({children}) {
   const {user, setUser} = useStateContext();
   const [loading, setLoading] = useState(true);
 
