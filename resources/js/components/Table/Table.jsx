@@ -114,7 +114,7 @@ const TableContent = ({children, config = {}}) => {
         return [...sortedContent].filter((row) => {
             let find = false;
             search_columns.forEach(function(column) {
-                const col_phrase = row[column].toLowerCase();
+                const col_phrase = row[column].toString().toLowerCase();
                 if(col_phrase.indexOf(phrase) >= 0 || col_phrase.indexOf(phrase_unt) >= 0) {
                     find = true;
                     return false;
