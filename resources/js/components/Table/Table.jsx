@@ -106,7 +106,7 @@ const TableContent = ({children, config = {}}) => {
             return content;
     }, [sort, content]);
 
-    const sortedFiltererdContent = useMemo(() => {
+    const sortedFilteredContent = useMemo(() => {
         if(!searchPhrase.trim())
             return sortedContent;
         const phrase = searchPhrase.trim().toLowerCase();
@@ -159,8 +159,8 @@ const TableContent = ({children, config = {}}) => {
             </tr>
             </thead>
             <tbody>
-            {sortedFiltererdContent.length > 0 ?
-                sortedFiltererdContent.map((row, k) => (
+            {sortedFilteredContent.length > 0 ?
+                sortedFilteredContent.map((row, k) => (
                     <RowContextProvider key={k} index={k}>
                         <Row item={row}/>
                     </RowContextProvider>

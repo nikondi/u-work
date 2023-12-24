@@ -1,5 +1,5 @@
 import Table from "../../components/Table/Table.jsx";
-import {useEffect, useState} from "react";
+import {Fragment, useEffect, useState} from "react";
 import ClientsAPI from "../../API/ClientsAPI.js";
 import LoadingArea from "../../components/LoadingArea.jsx";
 import React from "react";
@@ -39,7 +39,7 @@ export default function Clients() {
                         key: 'name',
                         label: 'ФИО',
                         searchable: true,
-                        filter(value:string) {
+                        filter(value: string) {
                             if(!value.trim())
                                 return (<span className="text-gray-400 dark:text-gray-500">Пусто</span>)
                             return value;
@@ -62,7 +62,7 @@ export default function Clients() {
                             if(!value || value.length == 0)
                                 return (<span className="text-gray-400 dark:text-gray-500">Пусто</span>)
 
-                            return value.map((tel:number|string, i:number) => <><a key={i} className="underline text-blue-600 dark:text-blue-300" href={'tel:'+tel}>{tel}</a>{i < value.length - 1?', ':''}</>);
+                            return value.map((tel:number|string, i:number) => <Fragment key={i}><a className="underline text-blue-600 dark:text-blue-300" href={'tel:'+tel}>{tel}</a>{i < value.length - 1?', ':''}</Fragment>);
                         }
                     }
                 ],

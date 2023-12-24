@@ -1,6 +1,6 @@
 import LoadingArea from "../../components/LoadingArea.jsx";
 import {Link} from "react-router-dom";
-import HasRole from "../../components/HasRole.jsx";
+import HasRole from "../../components/HasRole";
 import useResource, {PagiLink} from "../../components/Resource/hooks/useResource";
 import RequestsAPI from "../../API/RequestsAPI.js";
 import React, {ReactElement} from "react";
@@ -22,7 +22,7 @@ type Request = {
 
 export default function Requests() {
 
-    const [requests, pagination, loading, reFetch]:any[] = useResource({
+    const [requests, pagination, loading]:any[] = useResource({
         fetch(page) {
             return RequestsAPI.get(30, page);
         },
