@@ -6,9 +6,12 @@ export default {
     // darkMode: 'class',
     content: [
         "./resources/**/*.blade.php",
-        "./resources/**/*.{js,jsx}",
+        "./resources/**/*.{js,jsx,tsx}",
     ],
     theme: {
+        container: {
+            center: true,
+        },
         extend: {
             colors: {
                 primary: {

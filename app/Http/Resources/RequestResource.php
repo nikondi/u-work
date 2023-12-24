@@ -14,6 +14,18 @@ class RequestResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return parent::toArray($request);
+        /* @var \App\Models\Request $this */
+
+        return [
+            'id' => $this->id,
+            'client' => $this->client,
+            'client_name' => $this->client_name,
+            'client_phone' => $this->client_phone,
+            'client_phone_contact' => $this->client_phone_contact,
+            'addressDB' => $this->addressDB,
+            'address' => $this->address,
+            'content' => $this->content,
+            'status' => $this->getStatusLabel()
+        ];
     }
 }

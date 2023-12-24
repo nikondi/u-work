@@ -1,6 +1,6 @@
 import {useMemo} from "react";
 
-export default function LoadingArea({show}) {
+export default function LoadingArea({show = false}) {
 
     const classes = useMemo(() => {
         const classes = "loading-area";

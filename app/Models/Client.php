@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Client extends Model
 {
@@ -33,7 +34,11 @@ class Client extends Model
     }
 
     public function getPhones(): array {
-        return array_map('intval', explode(',', $this->phone));
+        if(empty(trim($this->phone)))
+            return [];
+
+        $ex = explode(',', $this->phone);
+        return empty($ex)?[]:array_map('intval', $ex);
     }
 
     public function getFullAddress(): string
@@ -41,6 +46,11 @@ class Client extends Model
         return $this->address->city.', '.$this->address->street.', д. '.$this->address->house
             .($this->address->entrance?', п. '.$this->address->entrance:'').($this->apartment?', кв. '.$this->apartment:'')
             .($this->floor?', '.$this->floor.' этаж':'');
+    }
+
+    public function requests(): HasMany
+    {
+        return $this->hasMany(Request::class);
     }
 
     protected $fillable = [

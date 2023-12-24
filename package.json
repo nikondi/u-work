@@ -6,6 +6,7 @@
         "build": "vite build"
     },
     "devDependencies": {
+        "@types/react": "^18.2.45",
         "autoprefixer": "^10.4.16",
         "axios": "^1.6.1",
         "laravel-vite-plugin": "^1.0.0",
@@ -15,6 +16,7 @@
     },
     "dependencies": {
         "@vitejs/plugin-react": "^4.2.1",
+        "prop-types": "^15.8.1",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-hot-toast": "^2.4.1",

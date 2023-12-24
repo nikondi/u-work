@@ -23,4 +23,14 @@ class ClientsController extends Controller
 
         return response(new ClientResource($client), 200);
     }
+
+    public function index(Request $request) {
+        $page = $request->exists('page')?intval($request->get('page')):1;
+        $limit = $request->exists('limit')?intval($request->get('limit')):-1;
+
+        if($limit == -1)
+            return ClientResource::collection(Client::all());
+        else
+            return ClientResource::collection(Client::paginate($limit, ['*'], '', $page));
+    }
 }

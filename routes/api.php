@@ -3,8 +3,6 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ClientsController;
 use App\Http\Controllers\Api\RequestsController;
-use App\Http\Resources\UserResource;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,11 +20,13 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/user', [AuthController::class, 'getUserResource']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    Route::middleware('role:tomoru')->prefix('clients')->group(function() {
-        Route::post('search', [ClientsController::class, 'search']);
-    });
-    Route::middleware('role:tomoru')->prefix('requests')->group(function() {
-        Route::post('/', [RequestsController::class, 'store']);
+    Route::post('/clients/search', [ClientsController::class, 'search'])->middleware('role:tomoru');
+    Route::resource('/clients', ClientsController::class)->middleware('role:manager');
+
+    Route::get('/requests', [RequestsController::class, 'index']);
+
+    Route::middleware('role:tomoru')->group(function() {
+        Route::post('/requests', [RequestsController::class, 'store']);
     });
 });
 

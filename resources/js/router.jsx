@@ -4,8 +4,8 @@ import NotFound from "./views/NotFound.jsx";
 import DefaultLayout from "./layouts/DefaultLayout.jsx";
 import GuestLayout from "./layouts/GuestLayout.jsx";
 import Dashboard from "./views/Dashboard.jsx";
-import Requests from "./views/Requests.jsx";
-import Clients from "./views/Clients.jsx";
+import Requests from "./views/Request/Requests";
+import Clients from "./views/Client/Clients";
 
 const router = createBrowserRouter([
   {

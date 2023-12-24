@@ -5,8 +5,13 @@
 @tailwind utilities;
 
 @layer utilities {
+    .center-container {
+        @apply mx-auto;
+        max-width: 1280px;
+    }
+
     .topbar {
-        @apply h-16 w-full border-b border-gray-200 dark:border-gray-800 px-5 flex items-center justify-between;
+        @apply h-16 w-full border-b border-gray-200 dark:border-gray-800 px-5 flex items-center justify-between min-h-16;
     }
     .sidebar {
         @apply bg-white dark:bg-gray-900 dark:border-gray-800 border-r border-gray-200 flex-col text-sm;
@@ -159,12 +164,12 @@
             left: 0;
             right: 0;
             bottom: 0;
-            background-color: rgba(121, 121, 121, 0.5);
             opacity: 0;
             visibility: hidden;
             transition-property: opacity, visibility;
             transition-duration: .4s;
             border-radius: inherit;
+            @apply bg-white dark:bg-gray-900;
         }
         &:after {
             content: "";
@@ -181,7 +186,7 @@
             visibility: visible;
             &:before {
                 visibility: visible;
-                opacity: 1;
+                opacity: 0.7;
             }
             &:after {
                 visibility: visible;
@@ -291,6 +296,38 @@
             &:last-child {
                 @apply pl-3;
             }
+        }
+    }
+
+    .pagination {
+        @apply flex gap-x-2 mt-5;
+        div {
+            @apply transition-colors duration-300 px-3 py-2 bg-gray-200 hover:bg-blue-200 dark:bg-gray-700 hover:dark:bg-gray-500 cursor-pointer rounded-sm;
+            min-width: 36px;
+            text-align: center;
+            &.no-link {
+                @apply cursor-default hover:bg-gray-200 hover:dark:bg-gray-700;
+            }
+            &.active {
+                @apply bg-blue-600 text-white dark:bg-white dark:text-gray-900 dark:hover:bg-white cursor-default;
+            }
+        }
+    }
+
+    .request {
+        @apply rounded-xl bg-gray-200/50 dark:bg-gray-800 flex overflow-hidden;
+        &:not(:last-child) {
+            @apply mb-3;
+        }
+        &-right {
+            @apply px-4 py-3;
+            flex: 1;
+        }
+        &-title {
+            @apply text-lg;
+        }
+        &-phone {
+            @apply transition-colors duration-150 inline-flex items-center gap-x-1.5 text-gray-400 hover:text-gray-800 dark:text-gray-500 dark:hover:text-gray-300;
         }
     }
 }
