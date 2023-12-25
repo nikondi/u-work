@@ -101,7 +101,7 @@ export default function RequestForm({type}: RequestFormProps) {
                                 {/*<LoadingArea show={loadingTypes}/>*/}
                             <FormRow label="Тип заявки" className="mb-6">
                                 <Select label="Тип заявки" value={request.status} onChange={(value) => setRequest({...request, status: value as RequestStatus})}>
-                                    {Object.keys(requestTypes).map((key, i) => <Option value={key} key={i} index={i}>{requestTypes[key]}</Option>)}
+                                    {Object.keys(requestTypes).map((key, i) => key != 'unknown'?<Option value={key} key={i} index={i}>{requestTypes[key]}</Option>:'')}
                                 </Select>
                             </FormRow>
                             {/*<div className="mb-6">
@@ -113,8 +113,8 @@ export default function RequestForm({type}: RequestFormProps) {
                             <div className="mb-6">
                                 <Textarea style={{height: 100}} label="Короткое описание (для экспорта)" value={request.short_description} onChange={(ev) => setRequest({...request, short_description: ev.target.value})}/>
                             </div>*/}
-                            <FormRow>
-                                <Textarea label="Описание" value={request.content} onChange={(ev:InputEvent) => setRequest({...request, content: (ev.target as HTMLInputElement).value})}/>
+                            <FormRow className="mb-6" label="Содержимое">
+                                <Textarea label="Содержимое" value={request.content} onChange={(ev:InputEvent) => setRequest({...request, content: (ev.target as HTMLInputElement).value})}/>
                             </FormRow>
                             {/*<div className="mb-6">
                          <InputRow label="Координаты" value={peer.locate} onChange={(ev) => setPeer({...peer, locate: ev.target.value})}/>

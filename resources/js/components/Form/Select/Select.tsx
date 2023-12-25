@@ -1,5 +1,5 @@
 import {mergeClasses} from "../../../helpers.js";
-import React, {PropsWithChildren, useEffect, useMemo, useState} from "react";
+import React, {PropsWithChildren, useEffect} from "react";
 import SelectContextProvider, {useSelectContext} from "./SelectContextProvider.jsx";
 import useOutsideClick from "../../../hooks/useOutsideClick.js";
 
@@ -28,16 +28,18 @@ type SelectInnerProps = {
 }
 
 function SelectInner({className, children, onChange=()=>{}, value, label}: PropsWithChildren<SelectInnerProps>) {
-    const {setSelectedValue, selectedOption, setOpened, opened} = useSelectContext();
+    const {setSelectedValue, setInitialValue, selectedOption, setOpened, opened} = useSelectContext();
     const headerRef = useOutsideClick(() => setOpened(false));
 
     useEffect(() => {
-        onChange(selectedOption.value);
+        setSelectedValue(selectedOption.value);
+        if(selectedOption.dispatch)
+            onChange(selectedOption.value);
     }, [selectedOption]);
 
     useEffect(() => {
-        if(value)
-            setSelectedValue(value);
+        if(value || value === null)
+            setInitialValue(value);
     }, []);
 
     return (<div className={'relative '+className}>
@@ -51,7 +53,7 @@ function SelectInner({className, children, onChange=()=>{}, value, label}: Props
     </div>)
 }
 
-type OptionValue = string | number;
+type OptionValue = string | number | null;
 type OptionProps = {
     value?: OptionValue,
     className?: string,
@@ -60,13 +62,18 @@ type OptionProps = {
 
 export function Option({value, children, className = '', index}:PropsWithChildren<OptionProps>) {
     const classes = mergeClasses("form-select-option", className);
-    const {setSelectedOption, selectedValue} = useSelectContext();
-    const option = {value: value ?? index, label: children};
+    const {setSelectedOption, initialValue} = useSelectContext();
+
+    if(!value && value !== null)
+        value = index;
+
+    const option = {value, label: children};
+
 
     useEffect(() => {
-        if(selectedValue === value)
-            setSelectedOption(option);
-    }, [selectedValue]);
+        if(initialValue === value)
+            setSelectedOption(option, false);
+    }, [initialValue]);
 
     return (<div onClick={() => {setSelectedOption(option)}} className={classes}>{children}</div>);
 }

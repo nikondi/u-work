@@ -3,9 +3,6 @@ export default function Textarea({name='', item={}, setItem=(item)=>{}, label=''
         attributes.value = '';
 
     return (
-        <label>
-            <div className="mb-2 text-sm font-medium text-gray-900 dark:text-white">{label}</div>
-            <textarea name={name} placeholder={label} {...attributes} className={'form-input-textarea'+(attributes.disabled?' opacity-70':'')} />
-        </label>
+        <textarea name={name} placeholder={label} {...attributes} className={'form-input-textarea'+(attributes.disabled?' opacity-70':'')} />
     )
 }

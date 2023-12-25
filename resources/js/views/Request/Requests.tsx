@@ -26,11 +26,11 @@ export type Request = {
 
 export default function Requests() {
     const {user} = useStateContext();
-    const [statusFilter, setStatusFilter] = useState<string>(user.hasRole('manager', 'worker', 'admin')?'unknown':null);
+    const [filter, _setFilter] = useState<any>(user.hasRole('worker', 'manager', 'admin')?{status: 'new'}:null);
 
     const fetchRequests = useCallback((page: number) => {
-        return RequestsAPI.get(30, page, {created_at: 'desc', id: 'desc'}, {status: statusFilter});
-    }, [statusFilter]);
+        return RequestsAPI.get(30, page, {created_at: 'desc', id: 'desc'}, filter);
+    }, [filter]);
 
     const [requests, pagination, loading]:any[] = useResource({
         fetch: fetchRequests,
@@ -46,6 +46,16 @@ export default function Requests() {
         }
     });
 
+    const setFilter = (prop:string, value:any) => {
+        const tmp = {...filter};
+        if(value !== null)
+            tmp[prop] = value;
+        else
+            delete tmp[prop];
+
+        _setFilter(tmp)
+    }
+
     return (
         <div className="container mx-auto">
             <div className="mb-4 flex gap-x-3 items-start">
@@ -53,7 +63,8 @@ export default function Requests() {
                     <Link to="/requests/new" className="btn btn-primary">Добавить</Link>
                 </HasRole>
                 {/*<button onClick={() => { reFetch() }} className="btn btn-primary">Reload</button>*/}
-                <Select className="min-w-40" label="Статус заявки" onChange={(val) => setStatusFilter(val as string)}>
+                <Select className="min-w-40" value={filter?.status} label="Статус заявки" onChange={(val) => setFilter('status', val as string)}>
+                    <Option value={null} index={-1000}>Не выбрано</Option>
                     {Object.keys(requestTypes).map((key, i) => <Option value={key} key={i} index={i}>{requestTypes[key]}</Option>)}
                 </Select>
             </div>

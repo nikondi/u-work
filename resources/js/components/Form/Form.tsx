@@ -12,8 +12,8 @@ type FormRowProps = {
 };
 
 export function FormRow({label = '', className = '', children}: PropsWithChildren<FormRowProps>) {
-    return <div className={'form-row '+className}>
+    return <label className={'form-row '+className}>
         {label && <div className="mb-2 text-sm font-medium text-gray-900 dark:text-white">{label}</div>}
         {children}
-    </div>
+    </label>
 }
