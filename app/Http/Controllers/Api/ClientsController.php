@@ -24,6 +24,23 @@ class ClientsController extends Controller
         return response(new ClientResource($client), 200);
     }
 
+    public function searchAny(Request $request) {
+        $page = $request->exists('page')?intval($request->get('page')):1;
+        $limit = $request->exists('limit')?intval($request->get('limit')):-1;
+
+        $query = Client::query();
+        $columns = ['id', 'phone', 'name', 'comment'];
+        foreach($columns as $column)
+            $query->orWhere($column, 'LIKE', '%'.$request->get('word').'%');
+
+        if($limit == -1)
+            $result = $query->get();
+        else
+            $result = $query->paginate($limit, ['*'], '', $page);
+
+        return ClientResource::collection($result);
+    }
+
     public function index(Request $request) {
         $page = $request->exists('page')?intval($request->get('page')):1;
         $limit = $request->exists('limit')?intval($request->get('limit')):-1;
@@ -32,5 +49,9 @@ class ClientsController extends Controller
             return ClientResource::collection(Client::all());
         else
             return ClientResource::collection(Client::paginate($limit, ['*'], '', $page));
+    }
+
+    public function show(Client $client) {
+        return new ClientResource($client);
     }
 }

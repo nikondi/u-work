@@ -21,6 +21,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::post('/clients/search', [ClientsController::class, 'search'])->middleware('role:tomoru');
+    Route::get('/clients/searchAny', [ClientsController::class, 'searchAny'])->middleware('role:manager');
     Route::resource('/clients', ClientsController::class)->middleware('role:manager');
 
     Route::get('/requests', [RequestsController::class, 'index']);

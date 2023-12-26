@@ -1,7 +1,7 @@
-import React, {createContext, ReactElement, useContext, useEffect, useState} from "react";
+import React, {createContext, ReactElement, useContext, useEffect, useRef, useState} from "react";
 
-type ResourceConfig = {
-    fetch: (page:number) => Promise<any>,
+export type ResourceConfig = {
+    fetch: (page:number, setPage: (page: number, silently: boolean) => void) => Promise<any>,
     fetchCallback?: (result:any) => any,
     onFetchError?: (error:any) => any,
     onFetchFinally?: () => any,
@@ -11,8 +11,6 @@ type ResourceConfig = {
     page?:number,
 
     renderRow: (elem:string|object|number, index:number) => ReactElement,
-
-    search?: (word:string) => Promise<object>
 };
 
 type Row = object | string | number | null;
@@ -32,35 +30,52 @@ const default_config = {
 export default function useResource(config: ResourceConfig) {
     config = {...default_config, ...config};
 
-    const [page, setPage] = useState(config.page);
+    const [page, _setPage] = useState(config.page);
+    const [setPageSilent, setSetPageSilent] = useState(false);
     const [pageList, setPageList] = useState<PagiLink[]>([]);
     const [loading, setLoading] = useState(false);
     const [content, setContent] = useState<Row[]>([]);
 
     const [pagination, setPagination] = useState<ReactElement>(null)
     const [list, setList] = useState<ReactElement[]>([]);
+    const timeoutRef = useRef<number>(null);
 
-    const reFetch = () => {
-        setPage(0);
+    const setPage = (page:number, silently: boolean = false) => {
+        setSetPageSilent(silently);
+        _setPage(page);
     }
 
     useEffect(() => {
-        setLoading(true);
-        if(page == 0)
-            setPage(1);
-        config.fetch(page == 0?1:page).then(({data}) => {
-            setContent(data.data)
-            if(config.pagination)
-                setPageList(data.meta.links);
-            if(config.fetchCallback) config.fetchCallback(data);
-        }).catch((e) => {
-            if(config.onFetchError) config.onFetchError(e);
+        if(!config.fetch)
+            return;
 
-        }).finally(() => {
-            if(config.onFetchFinally) config.onFetchFinally();
-            setLoading(false);
-        });
-    }, [page, config.fetch]);
+        if(setPageSilent)
+            return;
+
+        if(page == 0) {
+            setPage(1);
+            return;
+        }
+
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = setTimeout(() => {
+            setLoading(true);
+            config.fetch(page, setPage).then(({data}) => {
+                setContent(data.data)
+                if(config.pagination && data.meta?.links)
+                    setPageList(data.meta.links);
+                else
+                    setPageList([]);
+                if(config.fetchCallback) config.fetchCallback(data);
+            }).catch((e:object) => {
+                if(config.onFetchError) config.onFetchError(e);
+
+            }).finally(() => {
+                if(config.onFetchFinally) config.onFetchFinally();
+                setLoading(false);
+            });
+        }, 50);
+    }, [page, config.fetch, setPageSilent]);
 
     useEffect(() => {
         if(pageList.length == 0 || !config.pagination)
@@ -76,7 +91,7 @@ export default function useResource(config: ResourceConfig) {
     }, [content]);
 
     return [
-        list, pagination, loading, reFetch
+        list, pagination, loading, setPage
     ];
 }
 
