@@ -20,15 +20,15 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/user', [AuthController::class, 'getUserResource']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    Route::post('/clients/search', [ClientsController::class, 'search'])->middleware(['request.logging', 'role:tomoru']);
     Route::get('/clients/searchAny', [ClientsController::class, 'searchAny'])->middleware('role:manager');
     Route::resource('/clients', ClientsController::class)->middleware('role:manager');
 
     Route::get('/requests', [RequestsController::class, 'index']);
+});
 
-    Route::middleware(['request.logging', 'role:tomoru'])->group(function() {
-        Route::post('/requests', [RequestsController::class, 'store']);
-    });
+Route::middleware(['request.addJson', 'auth:sanctum', 'role:tomoru'])->group(function() {
+    Route::post('/clients/search', [ClientsController::class, 'search']);
+    Route::post('/requests', [RequestsController::class, 'store']);
 });
 
 Route::post('/login', [AuthController::class, 'login']);
