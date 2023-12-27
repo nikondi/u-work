@@ -20,7 +20,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/user', [AuthController::class, 'getUserResource']);
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    Route::post('/clients/search', [ClientsController::class, 'search'])->middleware('role:tomoru');
+    Route::post('/clients/search', [ClientsController::class, 'search'])->middleware(['request.logging', 'role:tomoru']);
     Route::get('/clients/searchAny', [ClientsController::class, 'searchAny'])->middleware('role:manager');
     Route::resource('/clients', ClientsController::class)->middleware('role:manager');
 
