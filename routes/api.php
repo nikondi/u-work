@@ -26,7 +26,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::get('/requests', [RequestsController::class, 'index']);
 
-    Route::middleware('role:tomoru')->group(function() {
+    Route::middleware(['request.logging', 'role:tomoru'])->group(function() {
         Route::post('/requests', [RequestsController::class, 'store']);
     });
 });
