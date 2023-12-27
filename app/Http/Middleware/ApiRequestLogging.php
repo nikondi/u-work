@@ -3,6 +3,7 @@
 namespace App\Http\Middleware;
 
 use Closure;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Monolog\Formatter\LineFormatter;
@@ -41,7 +42,7 @@ class ApiRequestLogging
         return $next($request);
     }
 
-    public function terminate(Request $request, Response $response): void
+    public function terminate(Request $request, Response|JsonResponse $response): void
     {
         $this->logger->info('Outgoing response:');
         $this->logger->info($response);
