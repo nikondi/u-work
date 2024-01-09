@@ -20,12 +20,17 @@ class UserResource extends JsonResource
         foreach($this->roles as $role)
             $roles[] = $role->slug;
 
+        $roleLabels = [];
+        foreach($this->roles as $role)
+            $roleLabels[] = $role->name;
+
         return [
             'id' => $this->id,
             'login' => $this->login,
             'name' => $this->name,
             'email' => $this->email,
             'roles' => $roles,
+            'roleLabels' => $roleLabels,
         ];
     }
 }

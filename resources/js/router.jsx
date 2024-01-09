@@ -7,6 +7,8 @@ import Dashboard from "./views/Dashboard.jsx";
 import Requests from "./views/Request/Requests";
 import Clients from "./views/Client/Clients";
 import RequestForm from "./views/Request/RequestForm";
+import Users from "./views/Users";
+import UserForm from "./views/UserForm.jsx";
 
 const router = createBrowserRouter([
   {
@@ -19,7 +21,15 @@ const router = createBrowserRouter([
       },
       {
         path: '/users',
-        element: <Dashboard/>
+        element: <Users/>
+      },
+      {
+        path: '/users/new',
+        element: <UserForm key="userCreate"/>
+      },
+      {
+        path: '/users/:id',
+        element: <UserForm key="userUpdate"/>
       },
       {
         path: '/clients',
