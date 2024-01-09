@@ -136,7 +136,7 @@ export const requestTypes = {
     'unknown': 'Неизвестно',
     'new': 'Новая',
     'done': 'Завершена',
-    'important': 'Важная',
+    'important': 'Срочная',
 };
 
 export function Pagination({setPage, list, className = '', ...attributes}: PaginationProps) {
