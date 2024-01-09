@@ -27,6 +27,7 @@ class ClientsController extends Controller
     public function searchAny(Request $request) {
         $page = $request->exists('page')?intval($request->get('page')):1;
         $limit = $request->exists('limit')?intval($request->get('limit')):-1;
+        $pagination = !$request->exists('pagination') || $request->get('pagination') == 'true';
 
         $query = Client::query();
         $columns = ['id', 'phone', 'name', 'comment'];
@@ -35,8 +36,12 @@ class ClientsController extends Controller
 
         if($limit == -1)
             $result = $query->get();
-        else
-            $result = $query->paginate($limit, ['*'], '', $page);
+        else {
+            if($pagination)
+                $result = $query->paginate($limit, ['*'], '', $page);
+            else
+                $result = $query->limit($limit)->get();
+        }
 
         return ClientResource::collection($result);
     }

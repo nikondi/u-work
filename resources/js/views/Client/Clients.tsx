@@ -12,7 +12,7 @@ export type Client = {
     name: string,
     address: Address,
     phone?: string,
-    phones: [],
+    phones?: [],
 }
 
 export default function Clients() {
@@ -20,6 +20,8 @@ export default function Clients() {
 
     const [word, setWord] = useState('');
     const lastWord = useRef('');
+
+    const timeoutRef = useRef(0);
 
     const fetchClients = useCallback((page:number, setPage: (page: number, silently: boolean) => void) => {
         if(word.trim() !== '') {
@@ -32,9 +34,16 @@ export default function Clients() {
             return ClientsAPI.get(30, page);
     }, [word]);
 
+    const onSearch = (e: any) => {
+        clearTimeout(timeoutRef.current);
+        timeoutRef.current = setTimeout(() => {
+            setWord(e.target.value);
+        }, 500);
+    }
+
     return (
         <div className="relative">
-            <SearchInput value={word} setValue={setWord} inputTimeout={500}/>
+            <SearchInput onChange={onSearch} />
             <div className="relative">
                 <LoadingArea show={loading}/>
                 <TableServer config={{

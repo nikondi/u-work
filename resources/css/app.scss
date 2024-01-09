@@ -28,15 +28,15 @@
             }
         }
         @media (min-width: 640px) {
-            &:not(.expanded) .sidebar-link span {
+            &:not(.expanded) &-link span {
                 @apply hidden;
             }
         }
-    }
-    .sidebar-link {
-        @apply h-10 duration-300 transition-colors rounded-md flex items-center px-4 gap-x-3 text-blue-600 dark:text-gray-400 bg-gray-200 hover:bg-blue-100 dark:bg-gray-800 dark:hover:bg-gray-700;
-        &.active {
-            @apply bg-blue-200 text-blue-600 dark:bg-gray-600 dark:hover:bg-gray-600 dark:text-white;
+        &-link {
+            @apply h-10 duration-300 transition-colors rounded-md flex items-center px-4 gap-x-3 text-blue-600 dark:text-gray-400 bg-gray-200 hover:bg-blue-100 dark:bg-gray-800 dark:hover:bg-gray-700;
+            &.active {
+                @apply bg-blue-200 text-blue-600 dark:bg-gray-600 dark:hover:bg-gray-600 dark:text-white;
+            }
         }
     }
     .btn {
@@ -73,7 +73,7 @@
             }
         }
         &-options {
-            @apply w-full hidden absolute bg-gray-50 dark:bg-gray-500;
+            @apply w-full hidden absolute bg-gray-50 dark:bg-gray-600;
             top: 0;
             z-index: 20;
             padding-top: 45px;
@@ -91,13 +91,53 @@
             @apply block;
         }
         &-option {
-            @apply transition-colors duration-300 bg-inherit hover:bg-gray-200 hover:dark:bg-gray-600 px-4 py-2 cursor-pointer;
+            @apply transition-colors duration-300 bg-inherit hover:bg-gray-200 hover:dark:bg-gray-700 px-4 py-2 cursor-pointer;
+        }
+        &-label {
+            flex: 1;
         }
     }
     .form-input-textarea {
         @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500;
         height: 200px;
         resize: none;
+    }
+    .radio {
+        @apply flex py-0.5 items-center gap-x-2 cursor-pointer;
+        &:not(:last-child) {
+            margin-bottom: 8px;
+        }
+        input {
+            @apply absolute;
+            opacity: 0;
+        }
+        &-mark {
+            @apply rounded-full h-4 w-4 dark:text-white relative transition-colors duration-300;
+            border: 1px solid currentColor;
+
+            &:before {
+                content: '';
+                @apply rounded-full;
+                position: absolute;
+                top: 3px;
+                left: 3px;
+                right: 3px;
+                bottom: 3px;
+                opacity: 0;
+                transition: .2s opacity;
+                background-color: currentColor;
+            }
+        }
+        &:hover input:not(:checked) + &-mark,
+        input:focus:not(:checked) + &-mark {
+            @apply text-gray-400 dark:text-gray-400;
+        }
+        input:checked + &-mark {
+            @apply text-primary-500;
+            &:before {
+                opacity: 1;
+            }
+        }
     }
     .heading {
         @apply font-bold mb-5 text-3xl
