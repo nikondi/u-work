@@ -3,6 +3,8 @@
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ClientsController;
 use App\Http\Controllers\Api\RequestsController;
+use App\Http\Controllers\Api\UserController;
+use App\Http\Controllers\Api\WorkerController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,10 +20,15 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware('auth:sanctum')->group(function() {
     Route::get('/user', [AuthController::class, 'getUserResource']);
+
+    Route::resource('/users', UserController::class);
+    Route::post('/users/add', [UserController::class, 'store']);
+
     Route::post('/logout', [AuthController::class, 'logout']);
 
     Route::get('/clients/searchAny', [ClientsController::class, 'searchAny'])->middleware('role:manager');
     Route::resource('/clients', ClientsController::class)->middleware('role:manager');
+    Route::resource('/workers', WorkerController::class)->middleware('role:manager');
 
     Route::get('/requests', [RequestsController::class, 'index']);
 });
