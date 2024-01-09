@@ -32,16 +32,18 @@ class Handler extends ExceptionHandler
                     'errorCode' => 1,
                 ], 401);
             }
+
+            return null;
         });
 
         $this->renderable(function (ValidationException $exception, $request) {
-            if (!$request->wantsJson()) {
+            if (!$request->wantsJson() || !$request->user()->hasRole('tomoru'))
                 return null; // Laravel handles as usual
-            }
 
             throw ApiValidationException::withMessages(
                 $exception->validator->getMessageBag()->getMessages()
             );
+
         });
 
         $this->reportable(function (Throwable $e) {
