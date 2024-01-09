@@ -1,12 +1,5 @@
-type user = | {
-    id: number,
-    login: string,
-    name: string,
-    email: string,
-    roles: string[],
-    roleLabels: string[],
-} | {
-    id: null,
+type user = {
+    id: number | null,
     login: string,
     name: string,
     email: string,
