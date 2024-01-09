@@ -13,6 +13,17 @@ class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable, HasRoles;
 
+    public function syncRoles($role_slugs): void
+    {
+        $role_ids = [];
+        foreach($role_slugs as $_role) {
+            $role = Role::where('slug', $_role)->first();
+            if(!is_null($role))
+                $role_ids[] = $role->id;
+        }
+        $this->roles()->sync($role_ids);
+    }
+
     /**
      * The attributes that are mass assignable.
      *
