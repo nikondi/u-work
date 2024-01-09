@@ -38,7 +38,7 @@ export default function useResource(config: ResourceConfig) {
 
     const [pagination, setPagination] = useState<ReactElement>(null)
     const [list, setList] = useState<ReactElement[]>([]);
-    const timeoutRef = useRef<number>(null);
+    const timeoutRef = useRef<null | ReturnType<typeof setTimeout>>(null);
 
     const setPage = (page:number, silently: boolean = false) => {
         setSetPageSilent(silently);
