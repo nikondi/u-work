@@ -18,11 +18,12 @@ class RequestResource extends JsonResource
 
         return [
             'id' => $this->id,
-            'client' => $this->client,
+            'client' => new ClientResource($this->client),
             'client_name' => $this->client_name,
             'client_phone' => $this->client_phone,
             'client_phone_contact' => $this->client_phone_contact,
-            'addressDB' => $this->addressDB,
+            'addressDB' => new AddressResource($this->addressDB),
+            'worker' => new UserResource($this->worker),
             'address' => $this->address,
             'content' => $this->content,
             'status' => $this->getStatusLabel()

@@ -23,7 +23,8 @@ class AddressResource extends JsonResource
             'street' => $this->street,
             'house' => $this->house,
             'entrance' => $this->entrance,
-            'full' => $this->city.', '.$this->street.', д. '.$this->house.($this->entrance?', п. '.$this->entrance:'')
+            'full' => $this->city.', '.$this->street.', д. '.$this->house.($this->entrance?', п. '.$this->entrance:''),
+            'worker' => new UserResource($this->worker),
         ];
     }
 }

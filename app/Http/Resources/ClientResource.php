@@ -17,20 +17,17 @@ class ClientResource extends JsonResource
         /**
          * @var \App\Models\Client $this
          */
+        $address_resource = (new AddressResource($this->address))->toArray($request);
         return [
             'id' => $this->id,
             'name' => $this->name,
             'phones' => $this->getPhones(),
             'status' => $this->getStatusName(),
             'address' => [
-                'address_id' => $this->address->id,
-                'city' => $this->address->city,
-                'street' => $this->address->street,
-                'house' => $this->address->house,
-                'entrance' => $this->address->entrance,
+                ...$address_resource,
                 'floor' => $this->floor,
                 'apartment' => $this->apartment,
-                'full' => $this->getFullAddress(),
+                'full' => $address_resource['full'].($this->apartment?', кв. '.$this->apartment:'').($this->floor?', этаж '.$this->floor:'')
             ],
         ];
     }

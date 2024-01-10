@@ -282,6 +282,7 @@ function WorkerSelect({worker}: {worker: user}) {
     }, [word]);
 
     const workerLabel = (worker: user) => {
+        console.log(worker);
         return <><span className="text-orange-500 dark:text-orange-400 text-xs">#{worker.id}</span> {worker.name} <span className="text-xs text-gray-400">{worker.email}</span></>;
     }
 

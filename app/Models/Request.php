@@ -22,12 +22,17 @@ class Request extends Model
 
     public function addressDB(): BelongsTo
     {
-        return $this->belongsTo(Address::class);
+        return $this->belongsTo(Address::class, 'address_id', 'id');
     }
 
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class);
+    }
+
+    public function worker(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'worker_id', 'id');
     }
 
     public function getStatusLabel(): string
@@ -52,7 +57,7 @@ class Request extends Model
     }
 
     protected $fillable = [
-        'client_id',
+        'client_id', 'worker_id',
         'client_name', 'client_phone', 'client_phone_contact',
         'address_id', 'address',
         'content',
