@@ -5,7 +5,6 @@ import useResource, {PagiLink} from "../../components/Resource/hooks/useResource
 import RequestsAPI from "../../API/RequestsAPI.js";
 import React, {ReactElement, useCallback, useState} from "react";
 import {Client} from "../Client/Clients";
-import {Address} from "../Address/Addresses";
 import toast from "react-hot-toast";
 import Select, {Option} from "../../components/Form/Select/Select";
 import {useStateContext} from "../../contexts/ContextProvider";
@@ -15,6 +14,7 @@ export type RequestStatus = 'new' | 'done' | 'important' | 'unknown';
 export type Request = {
     id:number,
     client?: Client,
+    worker: | user | null,
     client_name?: string,
     client_phone: number|string,
     client_phone_contact?: number|string,

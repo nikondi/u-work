@@ -11,7 +11,7 @@ class RequestStoreRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return auth()->user()->hasRole('tomoru', 'manager');
+        return auth()->user()->hasRole('tomoru', 'manager', 'admin');
     }
 
     /**
@@ -23,12 +23,14 @@ class RequestStoreRequest extends FormRequest
     {
         return [
             'client_id' => 'integer|nullable',
-            'client_name' => 'string|nullable',
-            'client_phone' => 'required',
-            'client_phone_contact' => 'nullable',
+            'worker_id' => 'integer|nullable',
             'address_id' => 'integer|nullable',
-            'address' => 'string|nullable',
-            'content' => 'string|nullable',
+            'client_name' => 'string|nullable|max:90',
+            'client_phone' => 'nullable|string|max:12',
+            'client_phone_contact' => 'nullable|string|max:12',
+            'address' => 'string|nullable|max:128',
+            'content' => 'string|nullable|max:1024',
+            'status' => 'string|nullable',
         ];
     }
 }

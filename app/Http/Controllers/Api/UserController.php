@@ -8,6 +8,7 @@ use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class UserController extends Controller
@@ -64,5 +65,42 @@ class UserController extends Controller
         $user->delete();
 
         return response('', 204);
+    }
+
+    public function search(Request $request) {
+        $page = $request->exists('page')?intval($request->get('page')):1;
+        $limit = $request->exists('limit')?intval($request->get('limit')):-1;
+        $pagination = !$request->exists('pagination') || $request->get('pagination') == 'true';
+        $word = strtolower($request->get('word'));
+
+        $query = User::query();
+        $columns = ['id', 'login', 'email', 'name'];
+        foreach($columns as $column)
+            $query->orWhere($column, 'like', '%'.$word.'%');
+
+        if($request->exists('filter')) {
+            foreach($request->get('filter') as $key => $value) {
+                if($key == 'role') {
+                    $role_id = Role::where('slug', $value)->first()->id;
+                    $query->leftJoin('users_roles', function($leftJoin) use ($role_id) {
+                        $leftJoin->on('users_roles.user_id', '=', 'users.id')
+                            ->where('users_roles.role_id', '=', $role_id);
+                    });
+                }
+                else
+                    $query->where($key, $value);
+            }
+        }
+
+        if($limit == -1)
+            $result = $query->get();
+        else {
+            if($pagination)
+                $result = $query->paginate($limit, ['*'], '', $page);
+            else
+                $result = $query->limit($limit)->get();
+        }
+
+        return UserResource::collection($result);
     }
 }

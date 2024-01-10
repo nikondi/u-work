@@ -18,6 +18,7 @@ class AddressResource extends JsonResource
          * @var \App\Models\Address $this
         */
         return [
+            'id' => $this->id,
             'city' => $this->city,
             'street' => $this->street,
             'house' => $this->house,

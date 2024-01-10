@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 
 export function mergeClasses(/**/) {
     const args = arguments;
@@ -21,7 +22,7 @@ export function mergeClasses(/**/) {
             return true;
         }
         for(let j = i; j < classes.length; j++) {
-            if(classes[j] == _class) {
+            if(classes[j] === _class) {
                 classes.slice(i, 1);
                 break;
             }
@@ -66,4 +67,17 @@ export function isMysqlDate(date_str) {
 export function formatMysqlDate(date_str) {
     const date = mysqlDateRegEx.exec(date_str).groups;
     return date.day+'.'+date.month+'.'+date.year+' '+date.hours+':'+date.minutes+':'+date.seconds;
+}
+
+export function err(text = 'Произошла ошибка') {
+    toast.error(text);
+}
+
+export function uniqName(len = 8) {
+    let password = "";
+    const symbols = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+    for(let i = 0; i < len; i++)
+        password += symbols.charAt(Math.floor(Math.random() * symbols.length));
+
+    return password;
 }

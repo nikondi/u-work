@@ -5,6 +5,7 @@ import LoadingDiv from "../components/LoadingDiv.jsx";
 import toast from "react-hot-toast";
 import {FormRow} from "../components/Form/Form";
 import Input from "../components/Form/InputRow.jsx";
+import ErrorList from "../components/ErrorList.jsx";
 
 const defaultUser = {
     id: null,
@@ -137,14 +138,7 @@ export default function UserForm() {
                       </form>
                 }
 
-                {errors && <div className="mt-3">{
-                    Object.keys(errors).map(key =>
-                        Array.isArray(errors[key])
-                            ? errors[key].map((e, i) => <div key={key+i} className="errordiv mt-2">{e}</div>)
-                            : <div key={key} className="errordiv mt-2">{errors[key]}</div>
-                    )}
-                </div>
-                }
+                <ErrorList errors={errors} />
             </div>
         </>
     )

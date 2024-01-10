@@ -11,7 +11,7 @@ export type Client = {
     name: string,
     address: Address,
     phone?: string,
-    phones?: [],
+    phones?: string[],
 }
 
 export default function Clients() {

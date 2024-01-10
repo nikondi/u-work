@@ -5,14 +5,23 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\RequestStoreRequest;
 use App\Http\Resources\RequestProtectedResource;
 use App\Http\Resources\RequestResource;
+use App\Models\Client;
 use App\Models\Request as RequestModel;
 use Illuminate\Http\Request;
 
 class RequestsController extends Controller
 {
     public function store(RequestStoreRequest $request) {
-        $item = RequestModel::create($request->validated());
-        return response(new RequestProtectedResource($item), 200);
+        $data = $request->validated();
+        if(isset($data['status']))
+            $data['status'] = RequestModel::convertStatusLabel($data['status']);
+
+        $item = RequestModel::create($data);
+
+        if($request->user()->hasRole('tomoru'))
+            return response(new RequestProtectedResource($item), 200);
+        else
+            return response(new RequestResource($item), 200);
     }
     public function index(Request $request) {
         $page = $request->exists('page')?intval($request->get('page')):1;
