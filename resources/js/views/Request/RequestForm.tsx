@@ -145,8 +145,9 @@ export default function RequestForm({type}: { type: 'requestCreate' | 'requestUp
     const setAddress = (address: Address) => setRequest({...request, addressDB: address});
 
     return (
-        <>
-            {!loading ? <div className="relative">
+        loading
+            ? <div className="h-5"><LoadingArea/></div>
+            : <div className="relative">
                     <h1 className="heading">{request.id?`Изменить заявку #${request.id}`:'Создать заявку'}</h1>
                     <div className="h-3"></div>
                     <div className="mx-auto relative" style={{maxWidth: '800px'}}>
@@ -224,11 +225,8 @@ export default function RequestForm({type}: { type: 'requestCreate' | 'requestUp
 
                         <ErrorList errors={errors} />
                     </div>
-                </div> :
-                <div className="h-5"><LoadingArea/></div>
-            }
+                </div>
 
-        </>
     )
 }
 
@@ -277,14 +275,16 @@ function WorkerSelect({worker}: {worker: user}) {
                 .then(({data}) => setWorkers(data.data))
                 .catch(() => err());
         }
-        else
-            setWorkers([]);
+        else {
+            UsersAPI
+                .get(5, 1, {role: 'worker'}, false)
+                .then(({data}) => setWorkers(data.data))
+                .catch(() => err());
+        }
     }, [word]);
 
-    const workerLabel = (worker: user) => {
-        console.log(worker);
-        return <><span className="text-orange-500 dark:text-orange-400 text-xs">#{worker.id}</span> {worker.name} <span className="text-xs text-gray-400">{worker.email}</span></>;
-    }
+    const workerLabel = (worker: user) =>
+        <><span className="text-orange-500 dark:text-orange-400 text-xs">#{worker.id}</span> {worker.name} <span className="text-xs text-gray-400">{worker.email}</span></>;
 
     const [_word, _setWord] = useDelayedState(setWord, 400, '');
 

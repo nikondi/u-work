@@ -16,9 +16,42 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return UserResource::collection(User::query()->orderBy('id', 'desc')->get());
+        $page = $request->exists('page')?intval($request->get('page')):1;
+        $limit = $request->exists('limit')?intval($request->get('limit')):-1;
+        $pagination = !$request->exists('pagination') || $request->get('pagination') == 'true';
+
+        $query = User::query();
+
+        if($request->exists('filter'))
+            $this->filterRequest($query, $request->get('filter'));
+
+        return UserResource::collection($this->getResult($query, $limit, $page, $pagination));
+    }
+
+    private function filterRequest($query, $filter) {
+        foreach($filter as $key => $value) {
+            if($key == 'role') {
+                $role_id = Role::where('slug', $value)->first()->id;
+                if($role_id) {
+                    $query->leftJoin('users_roles', 'users_roles.user_id', '=', 'users.id');
+                    $query->where('users_roles.role_id', $role_id);
+                }
+            }
+            else
+                $query->where($key, $value);
+        }
+    }
+    private function getResult($query, $limit, $page, $pagination) {
+        if($limit == -1)
+            return $query->get();
+        else {
+            if($pagination)
+                return $query->paginate($limit, ['*'], '', $page);
+            else
+                return $query->limit($limit)->get();
+        }
     }
 
     /**
@@ -78,29 +111,9 @@ class UserController extends Controller
         foreach($columns as $column)
             $query->orWhere($column, 'like', '%'.$word.'%');
 
-        if($request->exists('filter')) {
-            foreach($request->get('filter') as $key => $value) {
-                if($key == 'role') {
-                    $role_id = Role::where('slug', $value)->first()->id;
-                    $query->leftJoin('users_roles', function($leftJoin) use ($role_id) {
-                        $leftJoin->on('users_roles.user_id', '=', 'users.id')
-                            ->where('users_roles.role_id', '=', $role_id);
-                    });
-                }
-                else
-                    $query->where($key, $value);
-            }
-        }
+        if($request->exists('filter'))
+            $this->filterRequest($query, $request->get('filter'));
 
-        if($limit == -1)
-            $result = $query->get();
-        else {
-            if($pagination)
-                $result = $query->paginate($limit, ['*'], '', $page);
-            else
-                $result = $query->limit($limit)->get();
-        }
-
-        return UserResource::collection($result);
+        return UserResource::collection($this->getResult($query, $limit, $page, $pagination));
     }
 }
