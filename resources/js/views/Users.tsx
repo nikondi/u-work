@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import UsersAPI from "../API/UsersAPI";
 import {err} from "../helpers";
 
-export default function Users({type = null}: {type: 'workers' | null}) {
+export default function Users({type = null}: {type?: 'workers' | null}) {
   const [loading, setLoading] = useState(false);
   const [users, setUsers] = useState<user[]>([]);
 
