@@ -1,5 +1,6 @@
 import React, {createContext, ReactElement, useContext, useEffect, useRef, useState} from "react";
 
+type renderRowFunction = (elem:string|object|number, index:number) => ReactElement;
 export type ResourceConfig = {
     fetch: (page:number, setPage: (page: number, silently: boolean) => void) => Promise<any>,
     fetchCallback?: (result:any) => any,
@@ -10,10 +11,10 @@ export type ResourceConfig = {
     renderPagination?: (list: PagiLink[], setPage:(page:number) => void) => ReactElement,
     page?:number,
 
-    renderRow: (elem:string|object|number, index:number) => ReactElement,
+    renderRow: renderRowFunction
 };
 
-type Row = object | string | number | null;
+type Row = any | object | string | number | null;
 
 export type PagiLink = {
     url: string|null,
@@ -87,7 +88,7 @@ export default function useResource(config: ResourceConfig) {
         if(!content)
             return;
 
-        setList(content.map((row, i) => <RowContextProvider key={i}>{config.renderRow(row, i)}</RowContextProvider>));
+        setList(content.map((row, i) => <RowContextProvider key={i}><RenderRow row={row} index={i} render={config.renderRow} /></RowContextProvider>));
     }, [content]);
 
     return [
@@ -95,20 +96,29 @@ export default function useResource(config: ResourceConfig) {
     ];
 }
 
+function RenderRow({row, index, render}: {row: any, index: number, render: renderRowFunction}) {
+    const [,setRow] = useRowContext();
+    useEffect(() => {
+        setRow(row);
+    }, []);
 
-type RowContext = {
-    setRow: React.Dispatch<React.SetStateAction<Row>>,
-    row: Row,
+    return render(row, index);
 }
 
-const RowContext = createContext<RowContext>({} as RowContext);
+
+type RowContext = [
+    row: Row,
+    setRow: stateFunction,
+]
+
+const RowContext = createContext<RowContext>(null);
 
 function RowContextProvider({children}) {
     const [row, setRow] = useState<Row>(null);
 
-    return <RowContext.Provider value={{
+    return <RowContext.Provider value={[
         row, setRow
-    }}>
+    ]}>
         {children}
     </RowContext.Provider>;
 }
