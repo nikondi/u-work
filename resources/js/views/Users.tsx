@@ -16,7 +16,6 @@ export default function Users({type = null}: {type?: 'workers' | null}) {
   const getUsers = () => {
     setLoading(true);
     const filter = type == 'workers'?{role: 'worker'}:{};
-    console.log(filter);
     UsersAPI.get(-1, 0, filter, false)
         .then(({data}) => setUsers(data.data))
         .catch(() => err())
