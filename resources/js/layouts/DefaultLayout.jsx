@@ -1,5 +1,5 @@
 import {Navigate} from "react-router-dom";
-import {Authorized, useStateContext} from "../contexts/ContextProvider.jsx";
+import {Authorized, useStateContext} from "../contexts/ContextProvider";
 import {Toaster} from "react-hot-toast";
 import ErrorBoundary from "../components/ErrorBoundary.jsx";
 import DashboardLayout from "../components/DashboardLayout/DashboardLayout.jsx";

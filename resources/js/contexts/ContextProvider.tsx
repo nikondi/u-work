@@ -2,17 +2,26 @@ import {createContext, useContext, useEffect, useState} from "react";
 import axiosClient from "../axios-client.jsx";
 import toast from "react-hot-toast";
 import LoadingArea from "../components/LoadingArea.jsx";
+import React from "react";
 
-const StateContext = createContext({
-  user: null, setUser: () => {},
-  token: null, setToken: () => {},
-});
+type LoginedUser = null | (user & {
+  hasRole: (...roles:string[]) => boolean,
+})
+
+type StateContext = {
+  user: LoginedUser,
+  setUser: (user: LoginedUser) => void,
+  token: string,
+  setToken: (token: string) => void,
+}
+
+const StateContext = createContext<StateContext>(null);
 
 export const ContextProvider = ({children}) => {
-  const [user, _setUser] = useState(null);
-  const [token, _setToken] = useState(localStorage.getItem('ACCESS_TOKEN'));
+  const [user, _setUser] = useState<LoginedUser>(null);
+  const [token, _setToken] = useState<string>(localStorage.getItem('ACCESS_TOKEN'));
 
-  const setToken = (token) => {
+  const setToken = (token: string) => {
     _setToken(token);
     if(token)
       localStorage.setItem('ACCESS_TOKEN', token);
@@ -20,7 +29,7 @@ export const ContextProvider = ({children}) => {
       localStorage.removeItem('ACCESS_TOKEN');
   }
 
-  const setUser = (usr) => {
+  const setUser = (usr: LoginedUser) => {
     _setUser({...usr,
       hasRole(...roles) {
         return (roles.filter((role) => usr.roles.indexOf(role) !== -1)).length !== 0;
@@ -53,7 +62,5 @@ export function Authorized({children}) {
     }).finally(() => setLoading(false));
   }, []);
 
-  return (<>
-    {(loading && !user) ? <LoadingArea/> : children}
-  </>)
+  return (loading && !user) ? <LoadingArea/> : children;
 }

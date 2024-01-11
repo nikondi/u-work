@@ -1,6 +1,6 @@
 import {useRef, useState} from "react";
 import axiosClient from "../axios-client.jsx";
-import {useStateContext} from "../contexts/ContextProvider.jsx";
+import {useStateContext} from "../contexts/ContextProvider";
 import LoadingArea from "../components/LoadingArea.jsx";
 import toast from "react-hot-toast";
 

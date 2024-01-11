@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom/client'
 import '../css/app.scss'
 import {RouterProvider} from "react-router-dom";
 import router from "./router.jsx";
-import {ContextProvider} from "./contexts/ContextProvider.jsx";
+import {ContextProvider} from "./contexts/ContextProvider";
 
 ReactDOM.createRoot(document.getElementById('app')).render(
   <>
