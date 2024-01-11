@@ -1,8 +1,6 @@
 import React, {ReactElement} from "react";
 import {useStateContext} from "../contexts/ContextProvider";
 
-type Role = 'admin' | 'manager' | 'tomoru' | 'worker';
-
 type HasRoleProps = {
     roles: Role[] | Role,
     showAdmin?: boolean,

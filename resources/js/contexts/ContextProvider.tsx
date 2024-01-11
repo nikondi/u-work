@@ -5,7 +5,7 @@ import LoadingArea from "../components/LoadingArea.jsx";
 import React from "react";
 
 type LoginedUser = null | (user & {
-  hasRole: (...roles:string[]) => boolean,
+  hasRole: (...roles:Role[]) => boolean,
 })
 
 type StateContext = {
