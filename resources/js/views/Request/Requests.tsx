@@ -103,7 +103,6 @@ function RequestStatus({status}) {
 }
 
 function RequestRow({request}: {request: Request}) {
-    console.log(request.client?.address);
     return <div className="request">
         <div className="request-left">
             <RequestStatus status={request.status}/>
