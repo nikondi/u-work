@@ -111,6 +111,8 @@ return [
         'login' => 'Логин',
         'email' => 'E-mail',
         'name' => 'Имя',
+        'client_phone' => 'Номер телефона клиента',
+        'client_phone_contact' => 'Контактный номер телефона клиента',
     ],
 
 ];
