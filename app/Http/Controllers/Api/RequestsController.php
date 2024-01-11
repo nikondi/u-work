@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Requests\RequestStoreRequest;
 use App\Http\Resources\RequestProtectedResource;
 use App\Http\Resources\RequestResource;
+use App\Models\Address;
 use App\Models\Client;
 use App\Models\Request as RequestModel;
 use Illuminate\Http\Request;
@@ -15,6 +16,20 @@ class RequestsController extends Controller
         $data = $request->validated();
         if(isset($data['status']))
             $data['status'] = RequestModel::convertStatusLabel($data['status']);
+
+        if(!empty($data['address_id'])) {
+            $address = Address::find($data['address_id']);
+            if($address && $address->worker)
+                $data['worker_id'] = $address->worker->id;
+        }
+        if(!empty($data['client_id'])) {
+            $client = Client::find($data['client_id']);
+            if($client) {
+                $data['address_id'] = $client->address->id;
+                if($client->address->worker)
+                    $data['worker_id'] = $client->address->worker->id;
+            }
+        }
 
         $item = RequestModel::create($data);
 
@@ -44,6 +59,11 @@ class RequestsController extends Controller
                 else
                     $query->where($column, $value);
             }
+        }
+
+        if($request->user()->hasRole('worker')) {
+            $query->whereWorkerId($request->user()->id);
+            $query->orWhereNull('worker_id');
         }
 
         if($limit != -1)
