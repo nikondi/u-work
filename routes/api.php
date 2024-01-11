@@ -33,6 +33,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/addresses/search', [AddressesController::class, 'search'])->middleware('role:manager');
 
     Route::get('/requests', [RequestsController::class, 'index']);
+    Route::put('/requests/{request}', [RequestsController::class, 'update']);
 });
 
 Route::middleware(['request.addJson', 'auth:sanctum', 'role:tomoru'])->group(function() {

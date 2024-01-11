@@ -383,6 +383,10 @@
                 min-width: .85em;
             }
         }
+        &-button {
+            @apply transition-colors px-3 py-2 bg-gray-400 bg-opacity-30 hover:bg-opacity-50 rounded-md inline-flex items-center gap-x-1;
+            line-height: 1;
+        }
     }
 }
 @keyframes shine {

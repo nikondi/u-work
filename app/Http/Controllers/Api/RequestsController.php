@@ -45,8 +45,14 @@ class RequestsController extends Controller
         $query = RequestModel::query();
 
         if($request->exists('order')) {
-            foreach($request->get('order') as $orderKey => $direction)
-                $query->orderBy($orderKey, $direction);
+            foreach($request->get('order') as $orderKey => $direction) {
+                if($orderKey == 'status') {
+                    $order = RequestModel::getStatusOrder();
+                    $query->orderByRaw('FIELD(status'.str_repeat(', ?', sizeof($order)).') '.$direction, $order);
+                }
+                else
+                    $query->orderBy($orderKey, $direction);
+            }
         }
 
         if($request->exists('filter')) {
@@ -72,5 +78,14 @@ class RequestsController extends Controller
             $results = $query->get();
 
         return RequestResource::collection($results);
+    }
+
+    public function update(Request $req, RequestModel $request) {
+        $data = $req->toArray();
+        if(isset($data['status']) && preg_replace('/\d/', '', $data['status']) != '')
+            $data['status'] = RequestModel::convertStatusLabel($data['status']);
+
+        $request->update($data);
+        return new RequestResource($request);
     }
 }

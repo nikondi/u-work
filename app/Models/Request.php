@@ -51,6 +51,17 @@ class Request extends Model
 
         return $statuses[$status] ?? $statuses;
     }
+
+    public static function getStatusOrder(): array
+    {
+        return [
+            static::STATUS_UNKNOWN,
+            static::STATUS_DONE,
+            static::STATUS_NEW,
+            static::STATUS_IMPORTANT,
+        ];
+    }
+
     public static function convertStatusLabel($label):int
     {
         return ($a = array_search($label, static::getStatuses())) !== false?$a:static::STATUS_UNKNOWN;
