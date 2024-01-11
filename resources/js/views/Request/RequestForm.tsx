@@ -307,7 +307,6 @@ function WorkerSelect({worker}: {worker: user}) {
 }
 
 function AddressSelect({address}: {address: Address}) {
-    // TODO: useselectcontext
     const [word, setWord] = useState('');
     const [addresses, setAddresses] = useState<Address[]>([]);
 
