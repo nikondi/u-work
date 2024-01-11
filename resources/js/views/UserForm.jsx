@@ -1,11 +1,11 @@
 import {useNavigate, useParams} from "react-router-dom";
 import {useEffect, useState} from "react";
-import axiosClient from "../axios-client.jsx";
 import LoadingDiv from "../components/LoadingDiv.jsx";
 import toast from "react-hot-toast";
 import {FormRow} from "../components/Form/Form";
 import Input from "../components/Form/InputRow.jsx";
 import ErrorList from "../components/ErrorList.jsx";
+import UsersAPI from "../API/UsersAPI.js";
 
 const defaultUser = {
     id: null,
@@ -23,7 +23,7 @@ const userRoles = [
     ['manager', 'Менеджер'],
 ];
 
-export default function UserForm() {
+export default function UserForm({type = null}) {
     const {id} = useParams();
 
     const navigate = useNavigate();
@@ -37,17 +37,18 @@ export default function UserForm() {
     if(id) {
         useEffect(() => {
             setLoading(true);
-            axiosClient.get('/users/'+id).then(({data}) => {
-                setLoading(false);
-                setUser(data);
-                setPasswordRequired(false);
-            }).catch(err => {
-              setLoading(false);
-
-              const response = err.response;
-              if(response.data.errors)
-                setErrors(response.data.errors);
-            });
+            UsersAPI
+                .getSingle(id)
+                .then(({data}) => {
+                    setUser(data);
+                    setPasswordRequired(false);
+                })
+                .catch(err => {
+                  const response = err.response;
+                  if(response.data.errors)
+                    setErrors(response.data.errors);
+                })
+                .finally(() => setLoading(false));
         }, []);
     }
 
@@ -58,8 +59,9 @@ export default function UserForm() {
 
         setErrors(null);
         if(user.id) {
-          axiosClient.put('/users/'+user.id, user)
-              .then(() => toast.success('Пользователь успешно сохранен'))
+          UsersAPI
+              .update(user.id, user)
+              .then(() => toast.success((type === 'workers'?'Исполнитель':'Пользователь')+' успешно сохранен'))
               .catch((err) => {
                 toast.error('Произошла ошибка');
                 const response = err.response;
@@ -69,15 +71,16 @@ export default function UserForm() {
               .finally(() => setSubmitting(false));
         }
         else {
-          axiosClient.post('/users/add', user)
+            UsersAPI
+              .create(user)
               .then(({data}) => {
                 if(typeof data.id !== 'undefined') {
-                  toast.success('Пользователь успешно создан');
-                  navigate('/users/'+data.id);
+                  toast.success((type === 'workers'?'Исполнитель':'Пользователь')+' успешно создан');
+                  navigate((type === 'workers'?'/workers/':'/users/')+data.id);
                 }
                 else {
                   toast.error('Произошла ошибка');
-                  console.log(data);
+                  console.error(data);
                 }
               })
               .catch((err) => {
@@ -103,9 +106,14 @@ export default function UserForm() {
         }
     }
 
+    useEffect(() => {
+        if(type === 'workers')
+            setUser({...user, roles: ['worker']});
+    }, [type]);
+
     return (
         <>
-            <h1 className="heading">{user.id?`Изменить пользователя ${user.name} (${user.id})`:'Новый пользователь'}</h1>
+            <h1 className="heading">{user.id?'Изменить '+(type === 'workers'?'исполнителя':'пользователя')+` ${user.name} (${user.id})`:(type === 'workers'?'Новый исполнитель':'Новый пользователь')}</h1>
             <div className="h-3"></div>
             <div className="mx-auto" style={{maxWidth: '800px'}}>
                 {(loading || !user)
@@ -126,13 +134,15 @@ export default function UserForm() {
                         <FormRow label="Подтверждение пароля" className="mb-4" required={passwordRequired}>
                             <Input label="Подтверждение пароля" type="password" onChange={(ev) => setUser({...user, password_confirmation: ev.target.value})} required={passwordRequired} />
                         </FormRow>
-                        <FormRow label="Роли" className="mb-5">
-                            {userRoles.map((role) =>
-                                <label className="block mb-1 cursor-pointer" key={role[0]}>
-                                    <input type="checkbox" name="role" value={role[0]} onChange={changeRoles} checked={user.roles.indexOf(role[0]) >= 0} required={user.roles.length === 0} /> {role[1]}
-                                </label>
-                            )}
-                        </FormRow>
+                        {type !== 'workers' &&
+                            <FormRow label="Роли" className="mb-5">
+                                {userRoles.map((role) =>
+                                    <label className="block mb-1 cursor-pointer" key={role[0]}>
+                                        <input type="checkbox" name="role" value={role[0]} onChange={changeRoles} checked={user.roles.indexOf(role[0]) >= 0} required={user.roles.length === 0} /> {role[1]}
+                                    </label>
+                                )}
+                            </FormRow>
+                        }
                         {!submitting && <button type="submit" className="btn btn-primary py-3 px-7">{user.id?'Сохранить':'Добавить'}</button>}
                         <LoadingDiv loading={submitting}/>
                       </form>

@@ -7,4 +7,13 @@ export default class UsersAPI {
     static search(count, page, word, filter = null, params = {}, pagination = true) {
         return axiosClient.get('/users/search', {params: {limit: count, word, page, pagination, filter, ...params}})
     }
+    static getSingle(id) {
+        return axiosClient.get('/users/'+id);
+    }
+    static create(data) {
+        return axiosClient.post('/users/add', data);
+    }
+    static update(id, data) {
+        return axiosClient.put('/users/'+id, data);
+    }
 }

@@ -4,7 +4,7 @@ import {Link, Outlet} from "react-router-dom";
 import axiosClient from "../../axios-client.jsx";
 import toast from "react-hot-toast";
 import {useStateContext} from "../../contexts/ContextProvider.jsx";
-import {useMemo, useState} from "react";
+import React, {useMemo, useState} from "react";
 import HasRole from "../HasRole";
 
 const initialOpenedSidebar = localStorage.getItem('sidebarOpened') === '1';
@@ -67,6 +67,10 @@ export default function DashboardLayout() {
             <SidebarNavLink to="/clients" activeOn="/clients/.*" onClick={() => setMobileOpenedSidebar(false)}>
               <svg width="20" className="h-5" viewBox="0 0 32 32"><g><g fill="currentColor" fillRule="evenodd" clipRule="evenodd"><path d="M11 8a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11zm-7.5 5.5a7.5 7.5 0 1 1 15 0 7.5 7.5 0 0 1-15 0zM21.184 6h.004a7.5 7.5 0 0 1 0 15 1 1 0 1 1 0-2 5.5 5.5 0 0 0 .001-11 5.813 5.813 0 0 0-1.502.203 1 1 0 0 1-.524-1.93A7.813 7.813 0 0 1 21.184 6z"></path><path d="M11 21a10 10 0 0 0-8.182 4.25 1 1 0 1 1-1.636-1.15 12 12 0 0 1 19.636 0 1 1 0 0 1-1.636 1.15A10 10 0 0 0 11 21zM25.798 22.124A9.988 9.988 0 0 0 21.188 21a1 1 0 1 1-.001-2 11.987 11.987 0 0 1 9.819 5.1 1 1 0 1 1-1.637 1.15 9.988 9.988 0 0 0-3.57-3.126z"></path></g></g></svg>
               <span>Клиенты</span>
+            </SidebarNavLink>
+            <SidebarNavLink to="/workers" activeOn="/workers/.*" onClick={() => setMobileOpenedSidebar(false)}>
+              <svg height="20" className="h-5" viewBox="0 0 48 48"><g><path d="M45 33.14c0-4.16.28-8.68-3.17-14.21a2 2 0 0 0-.21-2.46l-2.91-3.11A2 2 0 0 0 36.3 13a20.83 20.83 0 0 0-7.41-3.4 3 3 0 0 0-.81-1.67C27 6.74 26 7 22.08 7a3 3 0 0 0-3 2.59A21.07 21.07 0 0 0 11.7 13c-1.82-1-2.89.88-5.32 3.48a2 2 0 0 0-.21 2.46C2.73 24.45 3 29 3 33.14A4 4 0 0 0 4 41h40a4 4 0 0 0 1-7.86ZM43 33H28l.82-21.37a19.09 19.09 0 0 1 6.23 2.95l-4.47 8.94A2.61 2.61 0 0 0 33 27.29c1.47 0 1.47-.42 7.42-6.81C43.28 25.37 43 29.35 43 33Zm-2.84-15.17c-7.34 7.89-6.82 7.46-7.19 7.46a.61.61 0 0 1-.56-.88l4.84-9.68Zm-18.8-8.52c.39-.41.4-.31 4.56-.31a1 1 0 0 1 1 1L26 33h-4c-1-24.95-1.07-23.25-.64-23.69Zm-10.61 5.42c5.17 10.34 5.16 9.94 4.72 10.38a.6.6 0 0 1-.87 0l-6.76-7.28Zm-3.18 5.75 5.56 6a2.61 2.61 0 0 0 4.25-2.94l-4.47-8.94a19.28 19.28 0 0 1 6.23-2.95L20 33H5c0-4.13-.21-7.75 2.57-12.52ZM44 39H4a2 2 0 0 1 0-4h40a2 2 0 0 1 0 4Z" fill="currentColor"></path></g></svg>
+              <span>Исполнители</span>
             </SidebarNavLink>
           </HasRole>
         </div>

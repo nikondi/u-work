@@ -32,6 +32,18 @@ const router = createBrowserRouter([
         element: <UserForm key="userUpdate"/>
       },
       {
+        path: '/workers',
+        element: <Users key="workerList" type="workers"/>
+      },
+      {
+        path: '/workers/new',
+        element: <UserForm key="workerCreate" type="workers"/>
+      },
+      {
+        path: '/workers/:id',
+        element: <UserForm key="workerUpdate" type="workers"/>
+      },
+      {
         path: '/clients',
         element: <Clients/>
       },
