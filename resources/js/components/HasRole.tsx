@@ -1,13 +1,12 @@
-import React, {ReactElement} from "react";
+import React, {PropsWithChildren, ReactElement} from "react";
 import {useStateContext} from "../contexts/ContextProvider";
 
 type HasRoleProps = {
     roles: Role[] | Role,
     showAdmin?: boolean,
-    children?: ReactElement[] | ReactElement
 }
 
-export default function HasRole({roles = [], showAdmin = true, children}: HasRoleProps) {
+export default function HasRole({roles = [], showAdmin = true, children}: PropsWithChildren<HasRoleProps>) {
     const {user} = useStateContext();
 
     if(typeof roles === 'string')
