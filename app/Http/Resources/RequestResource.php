@@ -26,6 +26,7 @@ class RequestResource extends JsonResource
             'addressDB' => new AddressResource($this->addressDB),
             'worker' => new UserResource($this->worker),
             'address' => $this->address,
+            'email' => $this->email,
             'content' => $this->content,
             'status' => $this->getStatusLabel()
         ];
