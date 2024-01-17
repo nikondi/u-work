@@ -11,6 +11,7 @@ export type Client = {
     name: string,
     address: Address,
     phone?: string,
+    email?: string,
     phones?: string[],
 }
 
