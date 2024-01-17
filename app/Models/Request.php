@@ -69,7 +69,9 @@ class Request extends Model
 
     protected $fillable = [
         'client_id', 'worker_id',
-        'client_name', 'client_phone', 'client_phone_contact',
+        'client_name',
+        'client_phone', 'client_phone_contact',
+        'email',
         'address_id', 'address',
         'content',
         'status'
