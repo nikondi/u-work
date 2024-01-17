@@ -23,6 +23,7 @@ const defaultRequest = {
   id: null,
   client: null,
   worker: null,
+  email: '',
   client_name: '',
   client_phone: '',
   client_phone_contact: '',
@@ -186,8 +187,9 @@ export default function RequestForm({type}: { type: 'requestCreate' | 'requestUp
                   : <div>
                     <div className="mb-3"><Input label="ФИО" value={request.client_name} setValue={(value: string) => setRequest({...request, client_name: value})} required={clientType == "new"}/></div>
                     <div className="mb-3 flex gap-x-3">
-                      <FormRow label="Номер телефона" className="w-1/2"><Input label="Номер телефона" value={request.client_phone} setValue={(value: string) => setRequest({...request, client_phone: value})}/></FormRow>
-                      <FormRow label="Контактный номер телефона" className="w-1/2"><Input label="Контактный номер телефона" value={request.client_phone_contact} setValue={(value: string) => setRequest({...request, client_phone_contact: value})}/></FormRow>
+                      <FormRow label="Номер телефона" className="w-1/3"><Input label="Номер телефона" value={request.client_phone} setValue={(value: string) => setRequest({...request, client_phone: value})}/></FormRow>
+                      <FormRow label="Контактный номер телефона" className="w-1/3"><Input label="Контактный номер телефона" value={request.client_phone_contact} setValue={(value: string) => setRequest({...request, client_phone_contact: value})}/></FormRow>
+                      <FormRow label="E-mail" className="w-1/3"><Input label="E-mail" value={request.email} setValue={(value: string) => setRequest({...request, email: value})}/></FormRow>
                     </div>
                     <h3 className="text-xl border-b pb-1 mb-3">Адрес</h3>
                     <div className="mb-3">
