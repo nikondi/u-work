@@ -2,15 +2,12 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Client extends Model
+class Client extends Authenticatable
 {
-    use HasFactory;
-
     public const STATUS_INVALID = 0; // Нет договора
     public const STATUS_ACTIVE = 1; // Действующий
     public const STATUS_UNKNOWN = 2; // Неизвестный
@@ -53,10 +50,15 @@ class Client extends Model
         return $this->hasMany(Request::class);
     }
 
+    public function getAuthPassword()
+    {
+        return $this->password;
+    }
+
     protected $fillable = [
         'id',
         'address_id', 'floor', 'apartment',
-        'phone',
+        'phone', 'email', 'password',
         'name',
         'status',
         'comment',
@@ -65,5 +67,10 @@ class Client extends Model
     protected $casts = [
         'apartment' => 'integer',
         'floor' => 'integer',
+        'password' => 'hashed',
+    ];
+
+    protected $hidden = [
+        'password'
     ];
 }
