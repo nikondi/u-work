@@ -25,6 +25,7 @@ class RequestStoreRequest extends FormRequest
             'client_id' => 'integer|nullable',
             'worker_id' => 'integer|nullable',
             'address_id' => 'integer|nullable',
+            'email' => 'string|nullable|max:50',
             'client_name' => 'string|nullable|max:90',
             'client_phone' => 'nullable|integer|max_digits:12',
             'client_phone_contact' => 'nullable|integer|max_digits:12',
