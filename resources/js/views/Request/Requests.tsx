@@ -26,7 +26,8 @@ export type Request = {
     addressDB?: Address,
     address?: string,
     content: string,
-    status: RequestStatus
+    status: RequestStatus,
+    created: string,
 }
 
 export default function Requests() {
