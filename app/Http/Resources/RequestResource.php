@@ -19,6 +19,8 @@ class RequestResource extends JsonResource
 
         return [
             'id' => $this->id,
+            'type' => $this->type,
+            'source' => $this->source,
             'client' => new ClientResource($this->client),
             'client_name' => $this->client_name,
             'client_phone' => $this->client_phone,

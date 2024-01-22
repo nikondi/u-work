@@ -68,6 +68,7 @@ class Request extends Model
     }
 
     protected $fillable = [
+        'type', 'source',
         'client_id', 'worker_id',
         'client_name',
         'client_phone', 'client_phone_contact',
