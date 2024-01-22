@@ -74,7 +74,7 @@ class Request extends Model
         'client_phone', 'client_phone_contact',
         'email',
         'address_id', 'address',
-        'content',
+        'subject', 'content',
         'status'
     ];
 
