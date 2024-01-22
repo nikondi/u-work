@@ -9,6 +9,7 @@ import Clients from "./views/Client/Clients";
 import RequestForm from "./views/Request/RequestForm";
 import Users from "./views/Users";
 import UserForm from "./views/UserForm.jsx";
+import RequestsKanban from "./views/Request/RequestsKanban";
 
 const router = createBrowserRouter([
   {
@@ -49,7 +50,7 @@ const router = createBrowserRouter([
       },
       {
         path: '/requests',
-        element: <Requests/>
+        element: <RequestsKanban/>
       },
       {
         path: '/requests/new',
