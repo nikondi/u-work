@@ -49,8 +49,12 @@ const router = createBrowserRouter([
         element: <Clients/>
       },
       {
-        path: '/requests',
+        path: '/kanban',
         element: <RequestsKanban/>
+      },
+      {
+        path: '/requests',
+        element: <Requests/>
       },
       {
         path: '/requests/new',
