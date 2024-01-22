@@ -1,7 +1,7 @@
 import React, {SVGProps} from "react"
 
 type IconProps = {
-    icon: 'arrow-right' | 'check' | string,
+    icon: 'phone' | 'phone-o' | 'envelope' | 'locate' | string,
 } & SVGProps<any>;
 
 export default function Icon({width = '1em', height = '1em', icon, ...props}: IconProps) {
