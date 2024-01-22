@@ -388,6 +388,23 @@
             line-height: 1;
         }
     }
+    .kanban-item {
+        &__icons {
+            @apply flex flex-col gap-y-1 py-1;
+            a, span {
+                position: relative;
+            }
+            a, span.active {
+                @apply text-primary-600;
+            }
+            span {
+                @apply text-gray-500;
+            }
+        }
+        &__color {
+            width: 3px;
+        }
+    }
 }
 @keyframes shine {
     to {
