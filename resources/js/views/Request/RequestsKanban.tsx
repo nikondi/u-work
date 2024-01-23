@@ -27,7 +27,7 @@ function KanbanList({type, name, colors}: KanbanListProps) {
     const [page, setPage] = useState(1);
     const [total, setTotal] = useState(0);
     const fetchRequests = useCallback((page: number) => {
-        return RequestsAPI.get(30, page, null, {type});
+        return RequestsAPI.get(30, page, {id: 'desc'}, {type});
     }, [type]);
 
     useEffect(() => {
