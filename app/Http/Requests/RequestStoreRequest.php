@@ -23,6 +23,9 @@ class RequestStoreRequest extends FormRequest
     {
         return [
             'client_id' => 'integer|nullable',
+            'type' => 'string|nullable',
+            'source' => 'string|nullable',
+            'subject' => 'string|nullable',
             'worker_id' => 'integer|nullable',
             'address_id' => 'integer|nullable',
             'email' => 'string|nullable|max:50',

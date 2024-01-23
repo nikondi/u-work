@@ -31,6 +31,12 @@ class RequestsController extends Controller
             }
         }
 
+        if($request->user()->hasRole('tomoru')) {
+            $data['source'] = empty($data['source'])?'tomoru':$data['source'];
+            $data['type'] = empty($data['type'])?'call':$data['type'];
+            $data['subject'] = empty($data['subject'])?($data['client_phone'].' - Входящий звонок'):$data['subject'];
+        }
+
         $item = RequestModel::create($data);
 
         if($request->user()->hasRole('tomoru'))
