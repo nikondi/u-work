@@ -59,4 +59,9 @@ class ClientsController extends Controller
     public function show(Client $client) {
         return new ClientResource($client);
     }
+    public function update(Request $request, Client $client) {
+        $client->update($request->toArray());
+        $client->save();
+        return new ClientResource($client);
+    }
 }

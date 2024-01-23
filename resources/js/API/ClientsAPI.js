@@ -7,4 +7,7 @@ export default class ClientsAPI {
     static search(count, page, word, pagination = true) {
         return axiosClient.get('/clients/searchAny', {params: {limit: count, word, page, pagination}})
     }
+    static update(id, data) {
+        return axiosClient.put('/clients/'+id, data);
+    }
 }
