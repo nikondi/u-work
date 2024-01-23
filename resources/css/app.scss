@@ -419,6 +419,7 @@
 
         &__background {
             @apply absolute bg-black bg-opacity-35 w-full h-full;
+            backdrop-filter: blur(5px);
             z-index: 0;
         }
         &__content {

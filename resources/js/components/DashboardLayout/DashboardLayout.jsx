@@ -95,7 +95,7 @@ export default function DashboardLayout() {
           </div>
         </div>
         <div className="flex-grow flex overflow-x-hidden">
-          <div className="flex-grow bg-white dark:bg-gray-900 overflow-y-auto sm:p-7 p-4">
+          <div className="flex-grow bg-gray-100 dark:bg-gray-900 overflow-y-auto sm:p-7 p-4">
             <ErrorBoundary>
               <Outlet/>
             </ErrorBoundary>

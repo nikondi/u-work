@@ -8,10 +8,10 @@ import {KanbanContextProvider, useKanbanContext} from "./KanbanContext";
 export default function RequestsKanban() {
     return <KanbanContextProvider>
         <div className="flex overflow-x-auto px-4 sm:px-7 -mx-4 sm:-mx-7 h-full">
-            <KanbanList type="simple" name="Новые обращения" colors="bg-orange-500"/>
-            <KanbanList type="call" name="Звонки" colors="bg-rose-400"/>
-            <KanbanList type="done" name="Завершены" colors="bg-green-600"/>
-            <KanbanList type="suggest" name="Новые предложения" colors="bg-gray-500"/>
+            <KanbanColumn type="simple" name="Новые обращения" colors="bg-orange-500"/>
+            <KanbanColumn type="call" name="Звонки" colors="bg-rose-400"/>
+            <KanbanColumn type="done" name="Завершены" colors="bg-green-600"/>
+            <KanbanColumn type="suggest" name="Новые предложения" colors="bg-gray-500"/>
         </div>
         <Popup/>
     </KanbanContextProvider>;
@@ -22,7 +22,7 @@ type KanbanListProps = {
     name: string,
     colors: string,
 }
-function KanbanList({type, name, colors}: KanbanListProps) {
+function KanbanColumn({type, name, colors}: KanbanListProps) {
     const [list, setList] = useState([]);
     const [page, setPage] = useState(1);
     const [total, setTotal] = useState(0);
@@ -38,15 +38,9 @@ function KanbanList({type, name, colors}: KanbanListProps) {
     }, []);
 
     return <div className="w-[250px] min-w-[250px] pr-2 flex flex-col">
-            <div className={"px-3 py-2 rounded flex "+colors}><div className="flex-1">{name}</div><span className="text-gray-300">({total})</span></div>
-            <div className="h-7 border-l border-dashed border-gray-400"></div>
+            <div className={"px-3 py-2 rounded flex text-white mb-5 "+colors}><div className="flex-1">{name}</div><span className="text-gray-300">({total})</span></div>
             <div className="overflow-auto flex-1">
-                {list.map((request: Request, i) => {
-                    return <React.Fragment key={request.id}>
-                        <KanbanItem item={request} colors={colors}/>
-                        {(i < list.length - 1) && <div className="h-2 border-l border-dashed border-gray-400"/>}
-                    </React.Fragment>
-                })}
+                {list.map((request: Request) => <KanbanItem key={request.id} item={request} colors={colors}/>)}
             </div>
         </div>;
 }
@@ -69,7 +63,7 @@ function KanbanItem({item, colors}: KanbanItemProps) {
 
 
 
-    return <div className="rounded-md bg-white text-gray-800 overflow-hidden flex">
+    return <div className="rounded-md shadow bg-white text-gray-800 overflow-hidden flex mb-2">
         <div className={"kanban-item__color "+colors}></div>
         <div className="p-2 flex-1">
             <div className="flex items-start">
