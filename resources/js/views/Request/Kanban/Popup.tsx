@@ -73,15 +73,15 @@ function PopupWorker() {
                 <div className="rounded-md bg-gray-50 border border-gray-300 p-2 mt-2">
                     <Link target="_blank" to={`/workers/${currentRequest.worker.id}`} className="text-blue-600">{currentRequest.worker.name}</Link>
                 </div>
-                <span className="text-blue-600 border-b border-dotted cursor-pointer border-blue-600" onClick={() => setEdit(true)}>Изменить</span>
+                <span className="dotted-btn" onClick={() => setEdit(true)}>Изменить</span>
             </>
             : (edit
                 ? <div className="mt-2">
                     <Select label="Выбрать исполнителя" value={currentRequest.worker} onChange={v => setCurrentRequest({...currentRequest, worker: v})}>
                         <WorkerSelect worker={currentRequest.worker}/>
                     </Select>
-                    <span className="text-blue-600 border-b border-dotted cursor-pointer border-blue-600" onClick={() => setEdit(false)}>Отменить</span>
+                    <span className="dotted-btn" onClick={() => setEdit(false)}>Отменить</span>
                 </div>
-                : <span className="text-blue-600 border-b border-dotted cursor-pointer border-blue-600" onClick={() => setEdit(true)}>Назначить</span>)
+                : <span className="dotted-btn" onClick={() => setEdit(true)}>Назначить</span>)
 
 }
