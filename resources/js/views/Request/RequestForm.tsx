@@ -1,4 +1,4 @@
-import React, {FormEvent, useCallback, useEffect, useState} from "react";
+import React, {FormEvent, useCallback, useEffect, useRef, useState} from "react";
 import {useNavigate, useParams} from "react-router-dom";
 import toast from "react-hot-toast";
 import LoadingArea from "../../components/LoadingArea";
@@ -18,6 +18,7 @@ import RadioList, {Radio} from "../../components/Form/RadioList";
 import UsersAPI from "../../API/UsersAPI";
 import {err} from "../../helpers";
 import AddressesAPI from "../../API/AddressesAPI";
+import {useSelectContext} from "../../components/Form/Select/SelectContextProvider";
 
 const defaultRequest = {
   id: null,
@@ -211,7 +212,7 @@ export default function RequestForm({type}: { type: 'requestCreate' | 'requestUp
                       : <>
                         <FormRow label="Адрес" required={addressType == "new"} className="mb-3"><Input label="Адрес" value={request.address} setValue={(value: string) => setRequest({...request, address: value})} required={addressType == "new"}/></FormRow>
                         <FormRow label="Исполнитель" required={true}>
-                          <Select label="Выбрать исполнителя" value={request.client} onChange={setWorker}>
+                          <Select label="Выбрать исполнителя" value={request.worker} onChange={setWorker}>
                             <WorkerSelect worker={request.worker}/>
                           </Select>
                         </FormRow>
@@ -265,9 +266,15 @@ function ClientSelect({client}: {client: Client}) {
   </>
 }
 
-function WorkerSelect({worker}: {worker: user}) {
+export function WorkerSelect({worker}: {worker: user}) {
   const [word, setWord] = useState('');
   const [workers, setWorkers] = useState<user[]>([]);
+  const {opened} = useSelectContext();
+  const searchInput = useRef<HTMLInputElement>();
+
+  useEffect(() => {
+    (opened)?searchInput.current.focus():searchInput.current.blur();
+  }, [opened]);
 
   useEffect(() => {
     if(word.trim() !== '') {
@@ -298,7 +305,7 @@ function WorkerSelect({worker}: {worker: user}) {
       <div style={{height: '1px', backgroundColor: 'currentColor'}} className="text-gray-400 dark:text-gray-400 mt-0.5 mb-2"></div>
     </>}
     <div className="px-2">
-      <Input label="Поиск..." value={_word} setValue={_setWord} />
+      <Input label="Поиск..." value={_word} setValue={_setWord} inputRef={searchInput} />
     </div>
     {workers.length > 0 && <div className="h-2"></div>}
     {workers.map((_worker: user, i: number) => <Option index={i} key={i} value={_worker}>

@@ -1,7 +1,9 @@
 import {useKanbanContext} from "./KanbanContext";
 import {Link} from "react-router-dom";
 import Icon from "../../../components/Icon";
-import React from "react";
+import React, {useState} from "react";
+import Select from "../../../components/Form/Select/Select";
+import {WorkerSelect} from "../RequestForm";
 
 export default function Popup() {
     const {currentRequest, setCurrentRequest} = useKanbanContext();
@@ -19,10 +21,7 @@ export default function Popup() {
                 <PopupBlock name="О заявке">
                     <PopupSubBlock name="Комментарий" contentClassName="whitespace-pre-wrap">{currentRequest.content}</PopupSubBlock>
                     <PopupSubBlock name="Ответственный">
-                        {currentRequest.worker
-                            ? <Link target="_blank" to={`/workers/${currentRequest.worker.id}`} className="text-blue-600">{currentRequest.worker.name}</Link>
-                            : <span className="text-blue-600 border-b border-dotted cursor-pointer border-blue-600">Назначить</span>
-                        }
+                        <PopupWorker/>
                     </PopupSubBlock>
                     <PopupSubBlock name="Источник">
                         {currentRequest.source == 'uniwork' && 'Добавлено оператором'}
@@ -62,4 +61,27 @@ function PopupSubBlock({name, contentClassName = "", children}) {
         <div className="text-xs text-gray-500">{name}</div>
         <div className={"text-base "+contentClassName}>{children || <span className="text-gray-400">Пусто</span>}</div>
     </div>
+}
+
+
+function PopupWorker() {
+    const [edit, setEdit] = useState(false);
+    const {currentRequest, setCurrentRequest} = useKanbanContext();
+
+    return (currentRequest.worker && !edit)
+            ? <>
+                <div className="rounded-md bg-gray-50 border border-gray-300 p-2 mt-2">
+                    <Link target="_blank" to={`/workers/${currentRequest.worker.id}`} className="text-blue-600">{currentRequest.worker.name}</Link>
+                </div>
+                <span className="text-blue-600 border-b border-dotted cursor-pointer border-blue-600" onClick={() => setEdit(true)}>Изменить</span>
+            </>
+            : (edit
+                ? <div className="mt-2">
+                    <Select label="Выбрать исполнителя" value={currentRequest.worker} onChange={v => setCurrentRequest({...currentRequest, worker: v})}>
+                        <WorkerSelect worker={currentRequest.worker}/>
+                    </Select>
+                    <span className="text-blue-600 border-b border-dotted cursor-pointer border-blue-600" onClick={() => setEdit(false)}>Отменить</span>
+                </div>
+                : <span className="text-blue-600 border-b border-dotted cursor-pointer border-blue-600" onClick={() => setEdit(true)}>Назначить</span>)
+
 }

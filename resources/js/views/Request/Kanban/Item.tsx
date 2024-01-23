@@ -46,7 +46,7 @@ export default function KanbanItem({item, colors}: KanbanItemProps) {
             <div className="text-gray-400 text-xs">Ответственный</div>
             {item.worker
                 ? <Link target="_blank" to={`/workers/${item.worker.id}`} className="text-blue-600">{item.worker.name}</Link>
-                : <span className="text-blue-600 border-b border-dotted cursor-pointer border-blue-600">Назначить</span>
+                : <span className="text-blue-600 border-b border-dotted cursor-pointer border-blue-600" onClick={() => setCurrentRequest(item)}>Назначить</span>
             }
         </div>
     </div>;
