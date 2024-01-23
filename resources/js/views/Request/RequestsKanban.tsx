@@ -113,7 +113,7 @@ function Popup() {
 
             <div className="flex flex-col flex-1 gap-y-3 overflow-auto">
                 <PopupBlock name="О заявке">
-                    <PopupSubBlock name="Комментарий">{currentRequest.content}</PopupSubBlock>
+                    <PopupSubBlock name="Комментарий" contentClassName="whitespace-pre-wrap">{currentRequest.content}</PopupSubBlock>
                     <PopupSubBlock name="Ответственный">
                         {currentRequest.worker
                             ? <Link target="_blank" to={`/workers/${currentRequest.worker.id}`} className="text-blue-600">{currentRequest.worker.name}</Link>
@@ -152,9 +152,9 @@ function PopupBlock({name, children}) {
         <div className="flex flex-col gap-y-2">{children}</div>
     </div>
 }
-function PopupSubBlock({name, children}) {
+function PopupSubBlock({name, contentClassName = "", children}) {
     return <div>
         <div className="text-xs text-gray-500">{name}</div>
-        <div className="text-base">{children || <span className="text-gray-400">Пусто</span>}</div>
+        <div className={"text-base "+contentClassName}>{children || <span className="text-gray-400">Пусто</span>}</div>
     </div>
 }
