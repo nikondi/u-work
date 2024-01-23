@@ -120,6 +120,11 @@ function Popup() {
                             : <span className="text-blue-600 border-b border-dotted cursor-pointer border-blue-600">Назначить</span>
                         }
                     </PopupSubBlock>
+                    <PopupSubBlock name="Источник">
+                        {currentRequest.source == 'uniwork' && 'Добавлено оператором'}
+                        {currentRequest.source == 'unisite' && 'С сайта uniphone.su'}
+                        {currentRequest.source == 'tomoru' && 'Звонок Tomoru'}
+                    </PopupSubBlock>
                 </PopupBlock>
                 <PopupBlock name="Клиент">
                     <div className="mb-2">

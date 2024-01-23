@@ -15,7 +15,7 @@ export type RequestStatus = 'new' | 'done' | 'important' | 'unknown';
 export type Request = {
     id:number,
     type: string,
-    source: string,
+    source: "unisite" | "uniwork" | "tomoru" | string,
     subject: string,
     client?: Client,
     worker: | user | null,
