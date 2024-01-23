@@ -9,7 +9,7 @@ import Clients from "./views/Client/Clients";
 import RequestForm from "./views/Request/RequestForm";
 import Users from "./views/Users";
 import UserForm from "./views/UserForm.jsx";
-import RequestsKanban from "./views/Request/RequestsKanban";
+import RequestsKanban from "./views/Request/Kanban/RequestsKanban";
 
 const router = createBrowserRouter([
   {
