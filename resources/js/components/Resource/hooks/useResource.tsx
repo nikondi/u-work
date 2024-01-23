@@ -88,7 +88,7 @@ export default function useResource(config: ResourceConfig) {
         if(!content)
             return;
 
-        setList(content.map((row, i) => <RowContextProvider key={i}><RenderRow row={row} index={i} render={config.renderRow} /></RowContextProvider>));
+        setList(content.map((row, i) => <RowContextProvider key={i} initial={row}>{config.renderRow(row, i)}</RowContextProvider>));
     }, [content]);
 
     return [
@@ -96,29 +96,21 @@ export default function useResource(config: ResourceConfig) {
     ];
 }
 
-function RenderRow({row, index, render}: {row: any, index: number, render: renderRowFunction}) {
-    const [,setRow] = useRowContext();
-    useEffect(() => {
-        setRow(row);
-    }, []);
-
-    return render(row, index);
-}
 
 
-type RowContext = [
+type RowContext = {
     row: Row,
     setRow: stateFunction,
-]
+}
 
 const RowContext = createContext<RowContext>(null);
 
-function RowContextProvider({children}) {
-    const [row, setRow] = useState<Row>(null);
+function RowContextProvider({children, initial = null}) {
+    const [row, setRow] = useState<Row>(initial);
 
-    return <RowContext.Provider value={[
+    return <RowContext.Provider value={{
         row, setRow
-    ]}>
+    }}>
         {children}
     </RowContext.Provider>;
 }

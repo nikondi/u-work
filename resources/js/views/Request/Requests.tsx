@@ -112,7 +112,7 @@ function RequestStatus({status}) {
 
 function RequestRow() {
     const {user} = useStateContext();
-    const [request, setRequest]: [Request, stateFunction<Request>] = useRowContext();
+    const {row: request, setRow: setRequest}: {row: Request, setRow: stateFunction<Request>} = useRowContext();
     const [loading, setLoading] = useState(false);
 
     const takeRequest = () => {
