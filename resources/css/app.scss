@@ -388,7 +388,8 @@
             line-height: 1;
         }
     }
-    .kanban-item {
+    .kanban-card {
+        @apply rounded-md shadow bg-white text-gray-800 overflow-hidden flex mb-2 cursor-grab;
         &__icons {
             @apply flex flex-col gap-y-1 py-1;
             a, span {
@@ -436,6 +437,7 @@
             transform: translateX(-100%);
         }
     }
+
     .icon {
         @apply inline;
     }
