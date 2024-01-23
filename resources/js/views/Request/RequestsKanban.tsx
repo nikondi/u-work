@@ -7,7 +7,7 @@ import {KanbanContextProvider, useKanbanContext} from "./KanbanContext";
 
 export default function RequestsKanban() {
     return <KanbanContextProvider>
-        <div className="flex overflow-x-auto h-full">
+        <div className="flex overflow-x-auto px-4 sm:px-7 -mx-4 sm:-mx-7 h-full">
             <KanbanList type="simple" name="Новые обращения" colors="bg-orange-500"/>
             <KanbanList type="call" name="Звонки" colors="bg-rose-400"/>
             <KanbanList type="done" name="Завершены" colors="bg-green-600"/>
