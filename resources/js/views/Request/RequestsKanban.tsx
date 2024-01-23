@@ -11,6 +11,7 @@ export default function RequestsKanban() {
             <KanbanList type="simple" name="Новые обращения" colors="bg-orange-500"/>
             <KanbanList type="call" name="Звонки" colors="bg-rose-400"/>
             <KanbanList type="done" name="Завершены" colors="bg-green-600"/>
+            <KanbanList type="suggest" name="Новые предложения" colors="bg-gray-500"/>
         </div>
         <Popup/>
     </KanbanContextProvider>;
@@ -36,7 +37,7 @@ function KanbanList({type, name, colors}: KanbanListProps) {
         });
     }, []);
 
-    return <div className="w-[250px] pr-2 flex flex-col">
+    return <div className="w-[250px] min-w-[250px] pr-2 flex flex-col">
             <div className={"px-3 py-2 rounded flex "+colors}><div className="flex-1">{name}</div><span className="text-gray-300">({total})</span></div>
             <div className="h-7 border-l border-dashed border-gray-400"></div>
             <div className="overflow-auto flex-1">
