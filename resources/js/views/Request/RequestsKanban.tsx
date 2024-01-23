@@ -140,7 +140,7 @@ function Popup() {
                     <PopupSubBlock name="Телефон">{currentRequest.client_phone}</PopupSubBlock>
                     <PopupSubBlock name="Контактный телефон">{currentRequest.client_phone_contact}</PopupSubBlock>
                     <PopupSubBlock name="Адрес">{currentRequest.address}</PopupSubBlock>
-                    <PopupSubBlock name="E-mail">{currentRequest.email?<a href={"mailto:"+currentRequest.email}><Icon icon="envelope"/> {currentRequest.email}</a>:null}</PopupSubBlock>
+                    <PopupSubBlock name="E-mail">{currentRequest.email?<a href={"mailto:"+currentRequest.email} className="link"><Icon icon="envelope"/> {currentRequest.email}</a>:null}</PopupSubBlock>
 
                 </PopupBlock>
             </div>
