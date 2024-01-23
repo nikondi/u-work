@@ -404,6 +404,36 @@
         &__color {
             width: 3px;
         }
+        &__subject {
+            @apply flex-1 transition-colors leading-4 duration-150 text-gray-800 hover:text-primary-500 cursor-pointer font-semibold;
+        }
+    }
+
+    .kanban-popup {
+        @apply fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 1000;
+
+        &__background {
+            @apply absolute bg-black bg-opacity-35 w-full h-full;
+            z-index: 0;
+        }
+        &__content {
+            @apply absolute right-0 text-gray-800 py-4 px-6 shadow-lg bg-gray-200 flex flex-col;
+            width: calc(100% - 77px);
+            height: 100%;
+            max-width: 900px;
+        }
+        &__close {
+            @apply absolute text-white py-3.5 pl-4 pr-5 cursor-pointer transition-colors duration-300 bg-primary-600 hover:bg-primary-700 rounded-l-full;
+            left: 0;
+            font-size: 14px;
+            top: 20px;
+            transform: translateX(-100%);
+        }
     }
 }
 @keyframes shine {
