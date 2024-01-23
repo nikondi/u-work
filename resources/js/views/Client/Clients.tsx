@@ -1,5 +1,5 @@
 import {TableServer} from "../../components/Table/Table.jsx";
-import React, {Fragment, KeyboardEventHandler, useCallback, useEffect, useMemo, useRef, useState} from "react";
+import React, {Fragment, KeyboardEventHandler, useCallback, useMemo, useRef, useState} from "react";
 import ClientsAPI from "../../API/ClientsAPI.js";
 import LoadingArea from "../../components/LoadingArea.jsx";
 import {ResourceConfig, useRowContext} from "../../components/Resource/hooks/useResource";
@@ -146,14 +146,14 @@ function InlineEdit({value, onSave, formattedValue=(value)=>value}: InlineEdit) 
             discard();
     }
 
-    return <div className={"flex items-center rounded"+(unsaved?" bg-orange-300":'')}>
+    return <div className={"flex items-center rounded"+(unsaved?" bg-orange-300 dark:bg-orange-700":'')}>
             <input
                 ref={inputRef}
                 onKeyUp={onKeyUp}
-                value={input} onChange={event => setInput(event.target.value)} className="w-full bg-transparent transition-colors duration-300 rounded px-1.5 py-1 outline-none focus:bg-orange-300 hover:bg-orange-300"/>
+                value={input} onChange={event => setInput(event.target.value)} className="w-full bg-transparent transition-colors duration-300 rounded px-1.5 py-1 outline-none focus:bg-orange-300 hover:bg-orange-300 dark:focus:bg-orange-700 dark:hover:bg-orange-700"/>
             {unsaved && <>
-                <button onClick={save} className="w-6 h-6 flex items-center justify-center transition-colors duration-300 text-gray-500 hover:text-gray-700"><Icon icon="check" width=".9em" height=".9em" /></button>
-                <button onClick={discard} className="w-6 h-6 flex items-center justify-center transition-colors duration-300 text-gray-500 hover:text-gray-700"><Icon icon="times" width=".73em" height=".73em" /></button>
+                <button onClick={save} className="w-6 h-6 flex items-center justify-center transition-colors duration-300 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white"><Icon icon="check" width=".9em" height=".9em" /></button>
+                <button onClick={discard} className="w-6 h-6 flex items-center justify-center transition-colors duration-300 text-gray-500 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white"><Icon icon="times" width=".73em" height=".73em" /></button>
             </>}
         </div>
 }
