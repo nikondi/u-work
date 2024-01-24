@@ -1,12 +1,22 @@
 import {useKanbanContext} from "./KanbanContext";
 import {Link} from "react-router-dom";
 import Icon from "../../../components/Icon";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import Select from "../../../components/Form/Select/Select";
 import {WorkerSelect} from "../RequestForm";
 
 export default function Popup() {
     const {currentRequest, setCurrentRequest} = useKanbanContext();
+
+    const onKeyUp = (e) => {
+        if(e.key == 'Escape')
+            setCurrentRequest(null);
+    }
+
+    useEffect(() => {
+        window.addEventListener('keyup', onKeyUp);
+        return () => window.removeEventListener('keyup', onKeyUp);
+    }, []);
 
     return currentRequest && <div className="kanban-popup">
         <div className="kanban-popup__background" onClick={() => setCurrentRequest(null)}></div>
