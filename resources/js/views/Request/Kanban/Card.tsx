@@ -12,8 +12,8 @@ type KanbanItemProps = {
     colors: string,
 }
 
-function KanbanItem({id, children}) {
-    const {active, attributes, transition, listeners, setNodeRef, transform} = useSortable({id});
+function KanbanItem({id, data, children}) {
+    const {active, attributes, transition, listeners, setNodeRef, transform} = useSortable({id, data});
 
     return <div ref={setNodeRef} {...attributes} {...listeners} style={{
         transform: CSS.Transform.toString(transform),
@@ -40,7 +40,7 @@ export default function Card({id, item, colors}: KanbanItemProps) {
     const preventClick: PointerEventHandler = (e) => e.stopPropagation();
 
 
-    return <KanbanItem id={id}>
+    return <KanbanItem id={id} data={item}>
         <div className="rounded-md shadow bg-white text-gray-800 overflow-hidden flex mb-2">
             <div className={"kanban-card__color "+colors}></div>
             <div className="p-2 flex-1">
