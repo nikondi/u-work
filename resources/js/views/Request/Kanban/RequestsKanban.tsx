@@ -98,7 +98,7 @@ export default function RequestsKanban() {
 
     if(activeColumn.items[activeIndex].content.type != active.data.current.sortable.containerId) {
       activeColumn.items[activeIndex].content.type = active.data.current.sortable.containerId;
-      RequestsAPI.update(active.data.current.id, {type: active.data.current.sortable.containerId}).then(r => console.log(r));
+      RequestsAPI.update(active.data.current.id, {type: active.data.current.sortable.containerId}).then();
     }
 
     if (activeIndex !== overIndex) {
