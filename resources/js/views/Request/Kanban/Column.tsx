@@ -1,32 +1,25 @@
-import React, {useCallback, useEffect, useState} from "react";
-import RequestsAPI from "../../../API/RequestsAPI";
+import React from "react";
 import {Request} from "../Requests";
-import KanbanItem from "./Item";
+import {rectSortingStrategy, SortableContext} from "@dnd-kit/sortable";
+import Card from "./Card";
+import {useDroppable} from "@dnd-kit/core";
 
-type KanbanListProps = {
-    type: string,
-    name: string,
+export type Column = {
+    id: string,
     colors: string,
+    title: string,
+    items: {id: string, content: Request}[]
 }
-export default function KanbanColumn({type, name, colors}: KanbanListProps) {
-    const [list, setList] = useState([]);
-    const [page, setPage] = useState(1);
-    const [total, setTotal] = useState(0);
-    const fetchRequests = useCallback((page: number) => {
-        return RequestsAPI.get(30, page, {id: 'desc'}, {type});
-    }, [type]);
 
-    useEffect(() => {
-        fetchRequests(page).then(({data}) => {
-            setList(data.data);
-            setTotal(data.meta.total);
-        });
-    }, []);
+export default function KanbanColumn({id, title, colors, items}: Column) {
+    const { setNodeRef } = useDroppable({ id: id });
 
-    return <div className="w-[250px] min-w-[250px] px-2 flex flex-col">
-        <div className={"px-3 py-2 rounded flex text-white mb-5 "+colors}><div className="flex-1">{name}</div><span className="text-gray-300">({total})</span></div>
-        <div className="overflow-auto flex-1">
-            {list.map((request: Request) => <KanbanItem key={request.id} item={request} colors={colors}/>)}
+    return <SortableContext id={id} items={items} strategy={rectSortingStrategy}>
+        <div className="w-[250px] min-w-[250px] px-2 flex flex-col h-full" ref={setNodeRef}>
+            <div className={"px-3 py-2 rounded flex text-white mb-5 "+colors}><div className="flex-1">{title}</div><span className="text-gray-300">({items.length})</span></div>
+            <div className="flex-1">
+                {items.map((item) => <Card id={item.id} key={item.id} item={item.content} colors={colors}/>)}
+            </div>
         </div>
-    </div>;
+    </SortableContext>
 }
