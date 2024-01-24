@@ -1,6 +1,6 @@
 import {Request} from "../Requests";
 import {useKanbanContext} from "./KanbanContext";
-import React, {useMemo} from "react";
+import React, {useEffect, useMemo} from "react";
 import Icon from "../../../components/Icon";
 import {Link} from "react-router-dom";
 import {useSortable} from "@dnd-kit/sortable";
@@ -13,10 +13,12 @@ type KanbanItemProps = {
 }
 
 function KanbanItem({id, children}) {
-    const {attributes, listeners, setNodeRef, transform} = useSortable({id});
+    const {active, attributes, listeners, setNodeRef, transform} = useSortable({id});
 
     return <div ref={setNodeRef} {...attributes} {...listeners} style={{
         transform: CSS.Transform.toString(transform),
+        position: "relative",
+        zIndex: (active && active.id == id)?1000:"unset",
     }}>
         {children}
     </div>

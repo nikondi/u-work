@@ -7,12 +7,11 @@ import {
     DndContext,
     DragEndEvent,
     DragOverEvent,
-    KeyboardSensor,
     PointerSensor,
     useSensor,
     useSensors
 } from "@dnd-kit/core";
-import {arrayMove, sortableKeyboardCoordinates} from "@dnd-kit/sortable";
+import {arrayMove} from "@dnd-kit/sortable";
 import RequestsAPI from "../../../API/RequestsAPI";
 import {Request} from "../Requests";
 
@@ -111,9 +110,8 @@ export default function RequestsKanban() {
     };
 
     const sensors = useSensors(
-        useSensor(PointerSensor),
-        useSensor(KeyboardSensor, {
-            coordinateGetter: sortableKeyboardCoordinates
+        useSensor(PointerSensor, {
+            activationConstraint: { distance: 10, delay: 400 }
         })
     );
 
