@@ -13,12 +13,13 @@ type KanbanItemProps = {
 }
 
 function KanbanItem({id, children}) {
-    const {active, attributes, listeners, setNodeRef, transform} = useSortable({id});
+    const {active, attributes, transition, listeners, setNodeRef, transform} = useSortable({id});
 
     return <div ref={setNodeRef} {...attributes} {...listeners} style={{
         transform: CSS.Transform.toString(transform),
         position: "relative",
         zIndex: (active && active.id == id)?1000:"unset",
+        transition
     }}>
         {children}
     </div>
