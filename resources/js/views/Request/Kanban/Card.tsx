@@ -1,6 +1,6 @@
 import {Request} from "../Requests";
 import {useKanbanContext} from "./KanbanContext";
-import React, {useEffect, useMemo} from "react";
+import React, {PointerEventHandler, useMemo} from "react";
 import Icon from "../../../components/Icon";
 import {Link} from "react-router-dom";
 import {useSortable} from "@dnd-kit/sortable";
@@ -36,13 +36,15 @@ export default function Card({id, item, colors}: KanbanItemProps) {
         return {address, phone, contact_phone, email};
     }, [item.client, item.address, item.email]);
 
+    const preventClick: PointerEventHandler = (e) => e.stopPropagation();
+
 
     return <KanbanItem id={id}>
         <div className="rounded-md shadow bg-white text-gray-800 overflow-hidden flex mb-2">
             <div className={"kanban-card__color "+colors}></div>
             <div className="p-2 flex-1">
                 <div className="flex items-start">
-                    <div className="kanban-card__subject" onClick={() => setCurrentRequest(item)}>
+                    <div className="kanban-card__subject" onClick={() => setCurrentRequest(item)} onPointerDown={preventClick}>
                         {item.subject || 'Заявка #'+item.id}
                     </div>
                     <div className="kanban-card__icons">
@@ -50,18 +52,18 @@ export default function Card({id, item, colors}: KanbanItemProps) {
                             <Icon icon="locate" />
                         </span>
                         {(contact_phone || phone)
-                            ? <a href={'tel:'+(contact_phone || phone)}><Icon icon="phone"/></a>
+                            ? <a href={'tel:'+(contact_phone || phone)} onPointerDown={preventClick}><Icon icon="phone"/></a>
                             : <span><Icon icon="phone"/></span>
                         }
                         {email
-                            ? <a href={'mailto:'+email}><Icon icon="envelope"/></a>
+                            ? <a href={'mailto:'+email} onPointerDown={preventClick}><Icon icon="envelope"/></a>
                             : <span><Icon icon="envelope"/></span>
                         }
                     </div>
                 </div>
                 <div className="text-gray-400 text-xs">Ответственный</div>
                 {item.worker
-                    ? <Link target="_blank" to={`/workers/${item.worker.id}`} className="text-blue-600">{item.worker.name}</Link>
+                    ? <Link target="_blank" to={`/workers/${item.worker.id}`} className="text-blue-600" onPointerDown={preventClick}>{item.worker.name}</Link>
                     : <span className="dotted-btn" onClick={() => setCurrentRequest(item)}>Назначить</span>
                 }
             </div>

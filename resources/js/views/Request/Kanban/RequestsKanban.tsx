@@ -3,13 +3,13 @@ import {KanbanContextProvider} from "./KanbanContext";
 import Popup from "./Popup";
 import KanbanColumn, {Column} from "./Column";
 import {
-    closestCenter,
-    DndContext,
-    DragEndEvent,
-    DragOverEvent,
-    PointerSensor,
-    useSensor,
-    useSensors
+  closestCenter,
+  DndContext,
+  DragEndEvent,
+  DragOverEvent,
+  PointerSensor, TouchSensor,
+  useSensor,
+  useSensors
 } from "@dnd-kit/core";
 import {arrayMove} from "@dnd-kit/sortable";
 import RequestsAPI from "../../../API/RequestsAPI";
@@ -110,9 +110,8 @@ export default function RequestsKanban() {
     };
 
     const sensors = useSensors(
-        useSensor(PointerSensor, {
-            activationConstraint: { distance: 10, delay: 400 }
-        })
+        useSensor(PointerSensor),
+        useSensor(TouchSensor),
     );
 
     return <KanbanContextProvider>
