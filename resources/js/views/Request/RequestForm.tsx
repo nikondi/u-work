@@ -5,7 +5,7 @@ import LoadingArea from "../../components/LoadingArea";
 import Textarea from "../../components/Form/Textarea";
 import RequestsAPI from "../../API/RequestsAPI";
 import useFetching from "../../hooks/useFetching";
-import {Request, RequestStatus, requestTypes} from "./Requests";
+import {Request, RequestStatus} from "../../API/RequestsAPI";
 import {ErrorResponse, Response} from "../../types/LaravelResponse";
 import Select, {Option} from "../../components/Form/Select/Select";
 import {FormRow} from "../../components/Form/Form";
@@ -19,6 +19,7 @@ import UsersAPI from "../../API/UsersAPI";
 import {err} from "../../helpers";
 import AddressesAPI from "../../API/AddressesAPI";
 import {useSelectContext} from "../../components/Form/Select/SelectContextProvider";
+import {requestTypes} from "./Requests";
 
 const defaultRequest = {
   id: null,
@@ -233,7 +234,7 @@ export default function RequestForm({type}: { type: 'requestCreate' | 'requestUp
 }
 
 
-function ClientSelect({client}: {client: Client}) {
+export function ClientSelect({client}: {client: Client}) {
   const [word, setWord] = useState('');
   const [clients, setClients] = useState<Client[]>([]);
 
@@ -314,7 +315,7 @@ export function WorkerSelect({worker}: {worker: user}) {
   </>
 }
 
-function AddressSelect({address}: {address: Address}) {
+export function AddressSelect({address}: {address: Address}) {
   const [word, setWord] = useState('');
   const [addresses, setAddresses] = useState<Address[]>([]);
 

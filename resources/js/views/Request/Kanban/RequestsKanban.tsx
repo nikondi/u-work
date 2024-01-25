@@ -34,10 +34,10 @@ export default function RequestsKanban() {
 
 function RequestsKanbanInner() {
   const [columns, setColumns] = useState(default_columns);
-  const {setOverColumn, setDraggingItem, draggingItem} = useKanbanContext();
+  const {setOverColumn, setDraggingItem, draggingItem, currentRequest} = useKanbanContext();
 
   useEffect(() => {
-    RequestsAPI.get(-1, 0, {order: 'asc'}).then(({data}) => {
+    RequestsAPI.get(-1, 0, {order: 'asc', id: 'desc'}, {temp: false, archived: false}).then(({data}) => {
       columns.forEach((col) => {
         col.items = data.data.filter((item: Request) => item.type == col.id).map((item: Request) => ({id: 'id-'+item.id, content: item}))
       });
@@ -151,7 +151,7 @@ function RequestsKanbanInner() {
       onDragEnd={handleDragEnd}
       onDragOver={handleDragOver}
     >
-      <div className="flex overflow-auto px-4 sm:px-7 -mx-4 sm:-mx-7 h-full pt-2">
+      <div className="kanban tiny-scrollbar">
         {columns.map((column) => (
           <KanbanColumn key={column.id} {...column}/>
         ))}
@@ -160,6 +160,6 @@ function RequestsKanbanInner() {
           {draggingItem && <Card id={draggingItem.id} item={draggingItem.data} colors="bg-transparent" className="cursor-grabbing"/>}
       </DragOverlay>
     </DndContext>
-    <Popup/>
+    {currentRequest && <Popup/>}
   </>;
 }

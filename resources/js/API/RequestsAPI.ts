@@ -23,6 +23,25 @@ export type Request = {
     created: string,
 }
 
+export const empty_request: Request = {
+    id: 0,
+    type: 'simple',
+    order: 0,
+    source: 'uniwork',
+    subject: '',
+    client: null,
+    worker: null,
+    client_name: '',
+    client_phone: '',
+    client_phone_contact: '',
+    email: '',
+    addressDB: null,
+    address: '',
+    content: '',
+    status: 'new',
+    created: null,
+};
+
 export default class RequestsAPI {
   static get(count, page = 1, order = null, filter = {}) {
     if(order == null)
@@ -32,7 +51,7 @@ export default class RequestsAPI {
       limit: count, page, order, filter
     }
     return axiosClient.get(`/requests`, {params});
-  }
+  };
   static async single(id) {
     const response = await axiosClient.get(`/requests/${id}`);
     return response.data;
