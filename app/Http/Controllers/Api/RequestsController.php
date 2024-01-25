@@ -31,13 +31,24 @@ class RequestsController extends Controller
             }
         }
 
+        $item = null;
         if($request->user()->hasRole('tomoru')) {
             $data['source'] = empty($data['source'])?'tomoru':$data['source'];
             $data['type'] = empty($data['type'])?'call':$data['type'];
             $data['subject'] = empty($data['subject'])?($data['client_phone'].' - Входящий звонок'):$data['subject'];
+
+            if(!isset($data['client_id'])) {
+                $temp_request = RequestModel::where(['client_phone' => $data['client_phone'], 'temp' => true])->first();
+                if($temp_request) {
+                    $temp_request->update($data);
+                    $temp_request->save();
+                    $item = $temp_request;
+                }
+            }
         }
 
-        $item = RequestModel::create($data);
+        if(is_null($item))
+            $item = RequestModel::create($data);
 
         if($request->user()->hasRole('tomoru'))
             return response(new RequestProtectedResource($item), 200);

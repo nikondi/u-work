@@ -75,11 +75,14 @@ class Request extends Model
         'email',
         'address_id', 'address',
         'subject', 'content',
-        'status'
+        'status',
+        'archived', 'temp'
     ];
 
     protected $casts = [
         'status' => 'integer',
-        'order' => 'integer'
+        'order' => 'integer',
+        'archived' => 'boolean',
+        'temp' => 'boolean',
     ];
 }

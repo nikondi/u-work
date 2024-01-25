@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\ClientResource;
 use App\Models\Client;
+use App\Models\Request as RequestModel;
 use Illuminate\Http\Request;
 
 class ClientsController extends Controller
@@ -20,6 +21,14 @@ class ClientsController extends Controller
 
         if($client === null)
             return response(['error' => 'Client not found', 'errorCode' => 104], 404);
+
+        if($request->user()->hasRole('tomoru')) {
+            RequestModel::create([
+                'client_phone' => $request->get('client_phone'),
+                'client_id' => $request->get('id'),
+                'temp' => true
+            ]);
+        }
 
         return response(new ClientResource($client), 200);
     }
