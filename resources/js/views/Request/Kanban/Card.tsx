@@ -23,7 +23,7 @@ function KanbanItem({id, data, children}) {
       padding: "5px 0",
     }}>
       {(active && active.id == id) ?
-          <div className="border-2 border-red-500 bg-white bg-opacity-80 rounded"><div className="opacity-0">{children}</div></div>
+          <div className="kanban-card-placeholder"><div className="opacity-0">{children}</div></div>
       : children}
   </div>
 }

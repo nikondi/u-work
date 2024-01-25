@@ -406,6 +406,13 @@
         &__subject {
             @apply flex-1 transition-colors leading-4 duration-150 text-gray-800 hover:text-primary-500 cursor-pointer font-semibold;
         }
+        &-placeholder {
+            @apply relative;
+            &:before {
+                content: '';
+                @apply border-2 border-red-500 bg-white bg-opacity-80 rounded absolute inset-0;
+            }
+        }
     }
 
     .kanban-popup {
