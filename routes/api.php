@@ -34,6 +34,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::get('/requests', [RequestsController::class, 'index']);
     Route::put('/requests/{request}', [RequestsController::class, 'update']);
+    Route::post('/requests/updateOrder', [RequestsController::class, 'updateOrder']);
 });
 
 Route::middleware(['request.addJson', 'auth:sanctum', 'role:tomoru'])->group(function() {

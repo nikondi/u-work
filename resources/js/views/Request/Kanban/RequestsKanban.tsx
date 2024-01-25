@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import {KanbanContextProvider, useKanbanContext} from "./KanbanContext";
 import Popup from "./Popup";
 import KanbanColumn, {Column} from "./Column";
+import {Request} from "../../../API/RequestsAPI";
 import {
     closestCenter,
     DndContext,
@@ -15,7 +16,6 @@ import {
 } from "@dnd-kit/core";
 import {arrayMove} from "@dnd-kit/sortable";
 import RequestsAPI from "../../../API/RequestsAPI";
-import {Request} from "../Requests";
 import Card from "./Card";
 
 
@@ -37,7 +37,7 @@ function RequestsKanbanInner() {
   const {setOverColumn, setDraggingItem, draggingItem} = useKanbanContext();
 
   useEffect(() => {
-    RequestsAPI.get(-1, 0, {id: 'desc'}).then(({data}) => {
+    RequestsAPI.get(-1, 0, {order: 'asc'}).then(({data}) => {
       columns.forEach((col) => {
         col.items = data.data.filter((item: Request) => item.type == col.id).map((item: Request) => ({id: 'id-'+item.id, content: item}))
       });
@@ -113,17 +113,22 @@ function RequestsKanbanInner() {
 
     const activeIndex = activeColumn.items.findIndex((i) => i.id === activeId);
     const overIndex = overColumn.items.findIndex((i) => i.id === overId);
+    const changedColumn = activeColumn.items[activeIndex].content.type != active.data.current.sortable.containerId;
 
-    if(activeColumn.items[activeIndex].content.type != active.data.current.sortable.containerId) {
+    if(changedColumn) {
       activeColumn.items[activeIndex].content.type = active.data.current.sortable.containerId;
       RequestsAPI.update(active.data.current.id, {type: active.data.current.sortable.containerId}).then();
     }
 
-    if (activeIndex !== overIndex) {
+    if (activeIndex !== overIndex || changedColumn) {
       setColumns((prevState) => {
         return prevState.map((column) => {
           if(column.id === activeColumn.id) {
             column.items = arrayMove(overColumn.items, activeIndex, overIndex);
+            activeColumn.items.forEach((item, i) => {
+              item.content.order = i * 10;
+            });
+            RequestsAPI.updateOrder(activeColumn.items.map((item) => ({id: item.content.id, index: item.content.order}))).then();
             return column;
           }
           else

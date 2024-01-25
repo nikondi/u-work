@@ -2,33 +2,12 @@ import LoadingArea from "../../components/LoadingArea.jsx";
 import {Link} from "react-router-dom";
 import HasRole from "../../components/HasRole";
 import useResource, {PagiLink, useRowContext} from "../../components/Resource/hooks/useResource";
-import RequestsAPI from "../../API/RequestsAPI.js";
+import RequestsAPI, {Request} from "../../API/RequestsAPI.js";
 import React, {ReactElement, useCallback, useState} from "react";
-import {Client} from "../Client/Clients";
 import toast from "react-hot-toast";
 import Select, {Option} from "../../components/Form/Select/Select";
 import {useStateContext} from "../../contexts/ContextProvider";
 import {err} from "../../helpers";
-
-export type RequestStatus = 'new' | 'done' | 'important' | 'unknown';
-
-export type Request = {
-    id:number,
-    type: string,
-    source: "unisite" | "uniwork" | "tomoru" | string,
-    subject: string,
-    client?: Client,
-    worker: | user | null,
-    client_name?: string,
-    client_phone: number|string,
-    client_phone_contact?: number|string,
-    email: string,
-    addressDB?: Address,
-    address?: string,
-    content: string,
-    status: RequestStatus,
-    created: string,
-}
 
 export default function Requests() {
     const [filter, _setFilter] = useState<any>(null);

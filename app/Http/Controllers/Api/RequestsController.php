@@ -94,4 +94,10 @@ class RequestsController extends Controller
         $request->update($data);
         return new RequestResource($request);
     }
+
+    public function updateOrder(Request $request) {
+        foreach($request->toArray() as $item)
+            RequestModel::find($item['id'])->update(['order'=> $item['index']]);
+        return true;
+    }
 }

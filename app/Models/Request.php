@@ -68,7 +68,7 @@ class Request extends Model
     }
 
     protected $fillable = [
-        'type', 'source',
+        'type', 'source', 'order',
         'client_id', 'worker_id',
         'client_name',
         'client_phone', 'client_phone_contact',
@@ -79,6 +79,7 @@ class Request extends Model
     ];
 
     protected $casts = [
-        'status' => 'integer'
+        'status' => 'integer',
+        'order' => 'integer'
     ];
 }

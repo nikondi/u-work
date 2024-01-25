@@ -1,9 +1,9 @@
 import React from "react";
-import {Request} from "../Requests";
 import {rectSortingStrategy, SortableContext} from "@dnd-kit/sortable";
 import Card from "./Card";
 import {useDroppable} from "@dnd-kit/core";
 import {useKanbanContext} from "./KanbanContext";
+import {Request} from "../../../API/RequestsAPI";
 
 export type Column = {
   id: string,

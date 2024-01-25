@@ -1,4 +1,4 @@
-import {Request} from "../Requests";
+import {Request} from "../../../API/RequestsAPI";
 import {useKanbanContext} from "./KanbanContext";
 import React, {HTMLAttributes, PointerEventHandler, useMemo} from "react";
 import Icon from "../../../components/Icon";
