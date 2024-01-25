@@ -68,7 +68,7 @@ export default function Card({id, item, colors, className, ...props}: KanbanItem
         <div className="text-gray-400 text-xs">Ответственный</div>
         {item.worker
           ? <Link target="_blank" to={`/workers/${item.worker.id}`} className="text-blue-600" onPointerDown={preventClick}>{item.worker.name}</Link>
-          : <span className="dotted-btn" onClick={() => setCurrentRequest(item)}>Назначить</span>
+          : <span className="dotted-btn" onPointerDown={preventClick} onClick={() => setCurrentRequest(item)}>Назначить</span>
         }
       </div>
     </div>
