@@ -40,6 +40,7 @@ class RequestsController extends Controller
             if(!isset($data['client_id'])) {
                 $temp_request = RequestModel::where(['client_phone' => $data['client_phone'], 'temp' => true])->first();
                 if($temp_request) {
+                    $data['temp'] = false;
                     $temp_request->update($data);
                     $temp_request->save();
                     $item = $temp_request;
