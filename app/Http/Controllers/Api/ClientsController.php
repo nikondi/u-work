@@ -23,6 +23,7 @@ class ClientsController extends Controller
             return response(['error' => 'Client not found', 'errorCode' => 104], 404);
 
         if($request->user()->hasRole('tomoru')) {
+            RequestModel::where(['client_phone' => $request->get('client_phone'), 'temp' => true])->delete();
             RequestModel::create([
                 'client_phone' => $request->get('client_phone'),
                 'client_id' => $request->get('id'),
