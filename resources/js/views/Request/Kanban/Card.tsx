@@ -1,31 +1,34 @@
 import {Request} from "../Requests";
 import {useKanbanContext} from "./KanbanContext";
-import React, {PointerEventHandler, useMemo} from "react";
+import React, {HTMLAttributes, PointerEventHandler, useMemo} from "react";
 import Icon from "../../../components/Icon";
 import {Link} from "react-router-dom";
 import {useSortable} from "@dnd-kit/sortable";
 import {CSS} from "@dnd-kit/utilities";
+import {twMerge} from "tailwind-merge";
 
 type KanbanItemProps = {
   id: string,
   item: Request,
   colors: string,
-}
+} & HTMLAttributes<HTMLDivElement>;
 
 function KanbanItem({id, data, children}) {
   const {active, attributes, transition, listeners, setNodeRef, transform} = useSortable({id, data});
 
   return <div ref={setNodeRef} {...attributes} {...listeners} style={{
-    transform: CSS.Transform.toString(transform),
-    position: "relative",
-    zIndex: (active && active.id == id)?1000:"unset",
-    transition
-  }}>
-    {children}
+      transform: CSS.Transform.toString(transform),
+      position: "relative",
+      transition,
+      padding: "5px 0",
+    }}>
+      {(active && active.id == id) ?
+          <div className="border-2 border-red-500 rounded"><div className="opacity-0">{children}</div></div>
+      : children}
   </div>
 }
 
-export default function Card({id, item, colors}: KanbanItemProps) {
+export default function Card({id, item, colors, className, ...props}: KanbanItemProps) {
   const {setCurrentRequest} = useKanbanContext();
 
   const {address, phone, contact_phone, email} = useMemo(() => {
@@ -41,7 +44,7 @@ export default function Card({id, item, colors}: KanbanItemProps) {
 
 
   return <KanbanItem id={id} data={item}>
-    <div className="rounded-md shadow bg-white text-gray-800 overflow-hidden flex mb-2">
+    <div className={twMerge("rounded-md shadow bg-white text-gray-800 overflow-hidden flex cursor-grab ", className)} {...props}>
       <div className={"kanban-card__color "+colors}></div>
       <div className="p-2 flex-1">
         <div className="flex items-start">

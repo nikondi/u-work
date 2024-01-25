@@ -1,19 +1,22 @@
 import React, {useEffect, useState} from "react";
-import {KanbanContextProvider} from "./KanbanContext";
+import {KanbanContextProvider, useKanbanContext} from "./KanbanContext";
 import Popup from "./Popup";
 import KanbanColumn, {Column} from "./Column";
 import {
-  closestCenter,
-  DndContext,
-  DragEndEvent,
-  DragOverEvent,
-  PointerSensor, TouchSensor,
-  useSensor,
-  useSensors
+    closestCenter,
+    DndContext,
+    DragEndEvent,
+    DragOverEvent,
+    DragOverlay,
+    PointerSensor,
+    TouchSensor,
+    useSensor,
+    useSensors
 } from "@dnd-kit/core";
 import {arrayMove} from "@dnd-kit/sortable";
 import RequestsAPI from "../../../API/RequestsAPI";
 import {Request} from "../Requests";
+import Card from "./Card";
 
 
 const default_columns: Column[] = [
@@ -24,7 +27,14 @@ const default_columns: Column[] = [
 ];
 
 export default function RequestsKanban() {
+  return <KanbanContextProvider>
+    <RequestsKanbanInner/>
+  </KanbanContextProvider>
+}
+
+function RequestsKanbanInner() {
   const [columns, setColumns] = useState(default_columns);
+  const {setOverColumn, setDraggingItem, draggingItem} = useKanbanContext();
 
   useEffect(() => {
     RequestsAPI.get(-1, 0, {id: 'desc'}).then(({data}) => {
@@ -48,14 +58,20 @@ export default function RequestsKanban() {
     return columns.find((c) => c.id === columnId) ?? null;
   };
 
+  const handleDragStart = ({ active }: DragOverEvent) => {
+      setDraggingItem({id: active.id, data: active.data.current});
+  };
   const handleDragOver = ({ active, over, delta }: DragOverEvent) => {
     const activeId = String(active.id);
     const overId = over ? String(over.id) : null;
     const activeColumn = findColumn(activeId);
     const overColumn = findColumn(overId);
-    if (!activeColumn || !overColumn || activeColumn === overColumn) {
+
+    setOverColumn(overColumn);
+
+    if(!activeColumn || !overColumn || activeColumn === overColumn)
       return null;
-    }
+
     setColumns((prevState) => {
       const activeItems = activeColumn.items;
       const overItems = overColumn.items;
@@ -86,6 +102,8 @@ export default function RequestsKanban() {
   };
 
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
+    setOverColumn(null);
+    setDraggingItem(null);
     const activeId = String(active.id);
     const overId = over ? String(over.id) : null;
     const activeColumn = findColumn(activeId);
@@ -105,7 +123,7 @@ export default function RequestsKanban() {
       setColumns((prevState) => {
         return prevState.map((column) => {
           if(column.id === activeColumn.id) {
-            column.items = arrayMove(overColumn.items, activeIndex, (overIndex >= 0)?overIndex:0);
+            column.items = arrayMove(overColumn.items, activeIndex, overIndex);
             return column;
           }
           else
@@ -120,19 +138,23 @@ export default function RequestsKanban() {
     useSensor(TouchSensor),
   );
 
-  return <KanbanContextProvider>
+  return <>
     <DndContext
       sensors={sensors}
       collisionDetection={closestCenter}
+      onDragStart={handleDragStart}
       onDragEnd={handleDragEnd}
       onDragOver={handleDragOver}
     >
-      <div className="flex overflow-auto px-4 sm:px-7 -mx-4 sm:-mx-7 h-full">
+      <div className="flex overflow-auto px-4 sm:px-7 -mx-4 sm:-mx-7 h-full pt-2">
         {columns.map((column) => (
           <KanbanColumn key={column.id} {...column}/>
         ))}
       </div>
+      <DragOverlay zIndex={1000}>
+          {draggingItem && <Card id={draggingItem.id} item={draggingItem.data} colors="bg-transparent" className="cursor-grabbing"/>}
+      </DragOverlay>
     </DndContext>
     <Popup/>
-  </KanbanContextProvider>;
+  </>;
 }
