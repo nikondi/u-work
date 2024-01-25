@@ -1,5 +1,5 @@
 import React, {createContext, useContext, useState} from "react";
-import {Request} from "../Requests";
+import {Request} from "../../../API/RequestsAPI";
 import {Column} from "./Column";
 
 type KanbanContext = {
