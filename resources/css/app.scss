@@ -397,7 +397,7 @@
                 @apply text-primary-600;
             }
             span {
-                @apply text-gray-500;
+                @apply text-gray-500 cursor-default;
             }
         }
         &__color {
