@@ -5,21 +5,21 @@ import Card from "./Card";
 import {useDroppable} from "@dnd-kit/core";
 
 export type Column = {
-    id: string,
-    colors: string,
-    title: string,
-    items: {id: string, content: Request}[]
+  id: string,
+  colors: string,
+  title: string,
+  items: {id: string, content: Request}[]
 }
 
 export default function KanbanColumn({id, title, colors, items}: Column) {
-    const { setNodeRef } = useDroppable({ id: id });
+  const { setNodeRef } = useDroppable({ id: id });
 
-    return <SortableContext id={id} items={items} strategy={rectSortingStrategy}>
-        <div className="w-[250px] min-w-[250px] px-2 flex flex-col h-full" ref={setNodeRef}>
-            <div className={"px-3 py-2 rounded flex text-white mb-5 "+colors}><div className="flex-1">{title}</div><span className="text-gray-300">({items.length})</span></div>
-            <div className="flex-1">
-                {items.map((item) => <Card id={item.id} key={item.id} item={item.content} colors={colors}/>)}
-            </div>
-        </div>
-    </SortableContext>
+  return <SortableContext id={id} items={items} strategy={rectSortingStrategy}>
+    <div className="w-[250px] min-w-[250px] px-2 flex flex-col h-full" ref={setNodeRef}>
+      <div className={"px-3 py-2 rounded flex text-white mb-5 "+colors}><div className="flex-1">{title}</div><span className="text-gray-300">({items.length})</span></div>
+      <div className="flex-1">
+        {items.map((item) => <Card id={item.id} key={item.id} item={item.content} colors={colors}/>)}
+      </div>
+    </div>
+  </SortableContext>
 }
