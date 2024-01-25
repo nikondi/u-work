@@ -43,6 +43,7 @@ class RequestsController extends Controller
                     $temp_request->update($data);
                     $temp_request->save();
                     $item = $temp_request;
+                    RequestModel::where(['client_phone' => $data['client_phone'], 'temp' => true])->whereNot('id', $temp_request->id)->delete();
                 }
             }
         }
