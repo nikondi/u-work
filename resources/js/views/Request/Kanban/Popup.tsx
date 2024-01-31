@@ -4,14 +4,18 @@ import Icon from "../../../components/Icon";
 import React, {useEffect, useMemo, useState} from "react";
 import Select, {Option} from "../../../components/Form/Select/Select";
 import {AddressSelect, ClientSelect, WorkerSelect} from "../RequestForm";
-import axiosClient from "../../../axios-client";
 import toast from "react-hot-toast";
 import {err} from "../../../helpers";
 import {default_columns} from "./RequestsKanban";
+import RequestsAPI from "../../../API/RequestsAPI";
+import LoadingArea from "../../../components/LoadingArea";
 
 export default function Popup() {
   const {currentRequest, setCurrentRequest} = useKanbanContext();
-  const oldRequest = JSON.parse(JSON.stringify(currentRequest));
+  const [oldRequest, setOldRequest] = useState(JSON.parse(JSON.stringify(currentRequest)));
+  const [loading, setLoading] = useState(false);
+
+  const [editMode, setEditMode] = useState(false);
 
   const onKeyUp = (e: KeyboardEvent) => {
     if(e.key == 'Escape')
@@ -19,8 +23,8 @@ export default function Popup() {
   }
 
   const isEdit = useMemo(() => {
-    return currentRequest.id == 0;
-  }, [currentRequest.id]);
+    return currentRequest.id == 0 || editMode;
+  }, [currentRequest.id, editMode]);
 
   const save = (e) => {
     e.preventDefault();
@@ -31,18 +35,36 @@ export default function Popup() {
         worker_id: currentRequest.worker?.id || null
     };
 
+    setLoading(true);
+
     if(currentRequest.id == 0) {
-      axiosClient.post('/requests', data).then(r => {
-        toast.success('Заявка добавлена #'+r.data.id);
-        setCurrentRequest(r.data);
-      }).catch(e => err('Произошла ошибка: '+e.message));
+      RequestsAPI.create(data)
+          .then(r => {
+            toast.success('Заявка добавлена #'+r.data.id);
+            setCurrentRequest(r.data);
+          })
+          .catch(e => err('Произошла ошибка: '+e.message))
+          .finally(() => setLoading(false));
+    }
+    else {
+      RequestsAPI.update(currentRequest.id, data)
+          .then(r => {
+            toast.success('Заявка #'+r.data.id+' сохранена');
+            setCurrentRequest(r.data);
+            setEditMode(false);
+            setOldRequest(JSON.parse(JSON.stringify(r.data)))
+          })
+          .catch(e => err('Произошла ошибка: '+e.message))
+            .finally(() => setLoading(false));
     }
   }
   const discard = () => {
     if(currentRequest.id == 0)
       setCurrentRequest(null);
-    else
+    else {
       setCurrentRequest(oldRequest)
+      setEditMode(false);
+    }
   }
 
   const column = useMemo(() => {
@@ -56,7 +78,8 @@ export default function Popup() {
 
   return <div className="kanban-popup">
     <div className="kanban-popup__background" onClick={() => setCurrentRequest(null)}></div>
-    <form onSubmit={save} className="kanban-popup__content">
+    <form onSubmit={save} className="kanban-popup__content relative">
+      <LoadingArea show={loading}/>
       <div className="kanban-popup__close" onClick={() => setCurrentRequest(null)}>
         <svg width="1em" height="1em" viewBox="0 0 329.269 329"><path d="M194.8 164.77 323.013 36.555c8.343-8.34 8.343-21.825 0-30.164-8.34-8.34-21.825-8.34-30.164 0L164.633 134.605 36.422 6.391c-8.344-8.34-21.824-8.34-30.164 0-8.344 8.34-8.344 21.824 0 30.164l128.21 128.215L6.259 292.984c-8.344 8.34-8.344 21.825 0 30.164a21.266 21.266 0 0 0 15.082 6.25c5.46 0 10.922-2.09 15.082-6.25l128.21-128.214 128.216 128.214a21.273 21.273 0 0 0 15.082 6.25c5.46 0 10.922-2.09 15.082-6.25 8.343-8.34 8.343-21.824 0-30.164zm0 0" fill="currentColor"/></svg>
       </div>
@@ -64,7 +87,7 @@ export default function Popup() {
         <div className="text-2xl border-b border-gray-300 pb-2 mb-4">
           {isEdit
             ? <input value={currentRequest.subject} onChange={e => setCurrentRequest({...currentRequest, subject: e.target.value})} className="kanban-popup__input" placeholder="Название" />
-            : (currentRequest.subject || 'Заявка #'+currentRequest.id)
+            : <>{currentRequest.subject || 'Заявка #'+currentRequest.id} <button type="button" onClick={() => setEditMode(true)}><Icon icon="pencil" width="20" height="20"/></button></>
           }
         </div>
 
