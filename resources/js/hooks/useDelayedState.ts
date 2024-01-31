@@ -11,5 +11,5 @@ export default function useDelayedState<T = any>(setter: stateFunction<T> , time
             clearTimeout(timeoutRef.current);
             timeoutRef.current = setTimeout(() => setter(value), timeout);
         }
-    ]
+    ] as [T, stateFunction<T>]
 }

@@ -9,7 +9,7 @@ import {Request, RequestStatus} from "../../API/RequestsAPI";
 import {ErrorResponse, Response} from "../../types/LaravelResponse";
 import Select, {Option} from "../../components/Form/Select/Select";
 import {FormRow} from "../../components/Form/Form";
-import Input from "../../components/Form/InputRow";
+import Input from "../../components/Form/Input";
 import ClientsAPI from "../../API/ClientsAPI";
 import {Client} from "../Client/Clients";
 import useDelayedState from "../../hooks/useDelayedState";

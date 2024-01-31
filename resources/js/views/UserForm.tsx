@@ -1,9 +1,9 @@
 import {useNavigate, useParams} from "react-router-dom";
-import {useEffect, useState} from "react";
+import React, {ChangeEventHandler, FormEventHandler, useEffect, useState} from "react";
 import LoadingDiv from "../components/LoadingDiv.jsx";
 import toast from "react-hot-toast";
 import {FormRow} from "../components/Form/Form";
-import Input from "../components/Form/InputRow.jsx";
+import Input from "../components/Form/Input";
 import ErrorList from "../components/ErrorList.jsx";
 import UsersAPI from "../API/UsersAPI.js";
 
@@ -23,7 +23,7 @@ const userRoles = [
     ['manager', 'Менеджер'],
 ];
 
-export default function UserForm({type = null}) {
+export default function UserForm() {
     const {id} = useParams();
 
     const navigate = useNavigate();
@@ -52,7 +52,7 @@ export default function UserForm({type = null}) {
         }, []);
     }
 
-    const onSubmit = (ev) => {
+    const onSubmit: FormEventHandler<HTMLFormElement> = (ev) => {
         ev.preventDefault();
 
         setSubmitting(true);
@@ -61,7 +61,7 @@ export default function UserForm({type = null}) {
         if(user.id) {
           UsersAPI
               .update(user.id, user)
-              .then(() => toast.success((type === 'workers'?'Исполнитель':'Пользователь')+' успешно сохранен'))
+              .then(() => toast.success('Пользователь успешно сохранен'))
               .catch((err) => {
                 toast.error('Произошла ошибка');
                 const response = err.response;
@@ -75,8 +75,8 @@ export default function UserForm({type = null}) {
               .create(user)
               .then(({data}) => {
                 if(typeof data.id !== 'undefined') {
-                  toast.success((type === 'workers'?'Исполнитель':'Пользователь')+' успешно создан');
-                  navigate((type === 'workers'?'/workers/':'/users/')+data.id);
+                  toast.success('Пользователь успешно создан');
+                  navigate(`/users/${data.id}`);
                 }
                 else {
                   toast.error('Произошла ошибка');
@@ -93,7 +93,7 @@ export default function UserForm({type = null}) {
         }
     }
 
-    const changeRoles = (event) => {
+    const changeRoles: ChangeEventHandler<HTMLInputElement> = (event) => {
         const box = event.target;
         if(box.checked) {
             if(user.roles.indexOf(box.value) < 0)
@@ -106,14 +106,9 @@ export default function UserForm({type = null}) {
         }
     }
 
-    useEffect(() => {
-        if(type === 'workers')
-            setUser({...user, roles: ['worker']});
-    }, [type]);
-
     return (
         <>
-            <h1 className="heading">{user.id?'Изменить '+(type === 'workers'?'исполнителя':'пользователя')+` ${user.name} (${user.id})`:(type === 'workers'?'Новый исполнитель':'Новый пользователь')}</h1>
+            <h1 className="heading">{user.id?`Изменить пользователя ${user.name} (${user.id})`:'Новый пользователь'}</h1>
             <div className="h-3"></div>
             <div className="mx-auto" style={{maxWidth: '800px'}}>
                 {(loading || !user)
@@ -129,20 +124,18 @@ export default function UserForm({type = null}) {
                             <Input label="E-mail" type="email" value={user.email} onChange={(ev) => setUser({...user, email: ev.target.value})} required={true} />
                         </FormRow>
                         <FormRow label="Пароль" className="mb-4" required={passwordRequired}>
-                            <Input label="Пароль" type="password" onChange={(ev) => setUser({...user, password: ev.target.value})} required={passwordRequired} />
+                            <Input value="" label="Пароль" type="password" onChange={(ev) => setUser({...user, password: ev.target.value})} required={passwordRequired} />
                         </FormRow>
                         <FormRow label="Подтверждение пароля" className="mb-4" required={passwordRequired}>
-                            <Input label="Подтверждение пароля" type="password" onChange={(ev) => setUser({...user, password_confirmation: ev.target.value})} required={passwordRequired} />
+                            <Input value="" label="Подтверждение пароля" type="password" onChange={(ev) => setUser({...user, password_confirmation: ev.target.value})} required={passwordRequired} />
                         </FormRow>
-                        {type !== 'workers' &&
-                            <FormRow label="Роли" className="mb-5">
-                                {userRoles.map((role) =>
-                                    <label className="block mb-1 cursor-pointer" key={role[0]}>
-                                        <input type="checkbox" name="role" value={role[0]} onChange={changeRoles} checked={user.roles.indexOf(role[0]) >= 0} required={user.roles.length === 0} /> {role[1]}
-                                    </label>
-                                )}
-                            </FormRow>
-                        }
+                        <FormRow label="Роли" className="mb-5">
+                            {userRoles.map((role) =>
+                                <label className="block mb-1 cursor-pointer" key={role[0]}>
+                                    <input type="checkbox" name="role" value={role[0]} onChange={changeRoles} checked={user.roles.indexOf(role[0]) >= 0} required={user.roles.length === 0} /> {role[1]}
+                                </label>
+                            )}
+                        </FormRow>
                         {!submitting && <button type="submit" className="btn btn-primary py-3 px-7">{user.id?'Сохранить':'Добавить'}</button>}
                         <LoadingDiv loading={submitting}/>
                       </form>

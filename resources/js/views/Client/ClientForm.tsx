@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from "react";
-import Input from "../../components/Form/InputRow";
+import Input from "../../components/Form/Input";
 import {Client} from "./Clients";
 import {defaultAddress} from "../Address/AddressForm";
 import {FormRow} from "../../components/Form/Form";
