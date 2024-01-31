@@ -18,6 +18,7 @@ import {arrayMove} from "@dnd-kit/sortable";
 import RequestsAPI from "../../../API/RequestsAPI";
 import Card from "./Card";
 import useEcho from "../../../hooks/useEcho";
+import toast from "react-hot-toast";
 
 
 export const default_columns: Column[] = [
@@ -50,6 +51,7 @@ function RequestsKanbanInner() {
   });
   useEcho('requests', '.create', res => {
     setData([...data, res.data]);
+    toast.success(`Новая заявка #${res.data.id}`)
   });
 
   const columns = useMemo(() => {
