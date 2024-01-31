@@ -28,6 +28,13 @@ function KanbanItem({id, data, children}) {
   </div>
 }
 
+const monthes = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Ноя', 'Дек'];
+
+const getDate = (date_string: string) => {
+  const date = new Date(date_string);
+  return `${date.getDay()} ${monthes[date.getMonth()]} ${date.getFullYear()} ${('0'+date.getHours()).slice(-2)}:${('0'+date.getMinutes()).slice(-2)}`
+}
+
 export default function Card({id, item, colors, className, ...props}: KanbanItemProps) {
   const {setCurrentRequest} = useKanbanContext();
 
@@ -70,6 +77,9 @@ export default function Card({id, item, colors, className, ...props}: KanbanItem
           ? <Link target="_blank" to={`/workers/${item.worker.id}`} className="text-blue-600" onPointerDown={preventClick}>{item.worker.name}</Link>
           : <span className="dotted-btn" onPointerDown={preventClick} onClick={() => setCurrentRequest(item)}>Назначить</span>
         }
+        <div className="border-t border-gray-300 text-gray-400 text-right mt-1.5 pt-0.5">
+          {getDate(item.created)}
+        </div>
       </div>
     </div>
   </KanbanItem>;
