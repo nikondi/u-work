@@ -28,7 +28,7 @@ function KanbanItem({id, data, children}) {
   </div>
 }
 
-const monthes = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Ноя', 'Дек'];
+const monthes = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
 
 const getDate = (date_string: string) => {
   const date = new Date(date_string);
