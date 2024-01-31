@@ -114,7 +114,6 @@ export default function Popup() {
                 : currentRequest.content
               }
             </SubBlock>
-              {/* TODO: Сделать номер заявки, и в карточке тоже */}
             <SubBlock name="Источник">
               {currentRequest.source == 'uniwork' && 'Добавлено оператором'}
               {currentRequest.source == 'unisite' && 'С сайта uniphone.su'}
