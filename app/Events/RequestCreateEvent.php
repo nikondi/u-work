@@ -17,7 +17,7 @@ class RequestCreateEvent implements ShouldBroadcast
 
     public function __construct($data, $type = 'create')
     {
-//        $this->queue = 'peer';
+        $this->queue = 'requests';
 
         $this->data = ['type' => $type, 'data' => $data];
     }

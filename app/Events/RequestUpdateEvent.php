@@ -17,7 +17,7 @@ class RequestUpdateEvent implements ShouldBroadcast
 
     public function __construct($id, $data, $type = 'update')
     {
-//        $this->queue = 'peer';
+        $this->queue = 'requests';
 
         $this->data = ['id' => $id, 'type' => $type, 'data' => $data];
     }
