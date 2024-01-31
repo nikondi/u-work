@@ -115,6 +115,10 @@ class RequestsController extends Controller
         return new RequestResource($request);
     }
 
+    public function view(RequestModel $request) {
+        return new RequestResource($request);
+    }
+
     public function updateOrder(Request $request) {
         foreach($request->toArray() as $item)
             RequestModel::find($item['id'])->update(['order'=> $item['index']]);

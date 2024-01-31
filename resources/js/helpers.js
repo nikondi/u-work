@@ -69,8 +69,8 @@ export function formatMysqlDate(date_str) {
     return date.day+'.'+date.month+'.'+date.year+' '+date.hours+':'+date.minutes+':'+date.seconds;
 }
 
-export function err(text = 'Произошла ошибка') {
-    toast.error(text);
+export function err(text = 'Произошла ошибка', duration = 1000) {
+    toast.error(text, {duration});
 }
 
 export function uniqName(len = 8) {
