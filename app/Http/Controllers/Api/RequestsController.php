@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\RequestCreateEvent;
+use App\Events\RequestUpdateEvent;
+use App\Events\RequestUpdateOrderEvent;
 use App\Http\Requests\RequestStoreRequest;
 use App\Http\Resources\RequestProtectedResource;
 use App\Http\Resources\RequestResource;
@@ -59,6 +62,8 @@ class RequestsController extends Controller
         if(is_null($item))
             $item = RequestModel::create($data);
 
+        RequestCreateEvent::dispatch(new RequestResource($item));
+
         if($request->user()->hasRole('tomoru'))
             return response(new RequestProtectedResource($item), 200);
         else
@@ -112,6 +117,7 @@ class RequestsController extends Controller
             $data['status'] = RequestModel::convertStatusLabel($data['status']);
 
         $request->update($data);
+        RequestUpdateEvent::dispatch($request->id, new RequestResource($request));
         return new RequestResource($request);
     }
 
@@ -121,7 +127,8 @@ class RequestsController extends Controller
 
     public function updateOrder(Request $request) {
         foreach($request->toArray() as $item)
-            RequestModel::find($item['id'])->update(['order'=> $item['index']]);
+            RequestModel::find($item['id'])->update(['order'=> $item['order']]);
+        RequestUpdateOrderEvent::dispatch($request->toArray());
         return true;
     }
 }

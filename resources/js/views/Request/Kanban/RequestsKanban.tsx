@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {KanbanContextProvider, useKanbanContext} from "./KanbanContext";
 import Popup from "./Popup";
 import KanbanColumn, {Column} from "./Column";
@@ -17,6 +17,7 @@ import {
 import {arrayMove} from "@dnd-kit/sortable";
 import RequestsAPI from "../../../API/RequestsAPI";
 import Card from "./Card";
+import useEcho from "../../../hooks/useEcho";
 
 
 export const default_columns: Column[] = [
@@ -33,15 +34,37 @@ export default function RequestsKanban() {
 }
 
 function RequestsKanbanInner() {
-  const [columns, setColumns] = useState(default_columns);
+  const [data, setData] = useState([]);
   const {setOverColumn, setDraggingItem, draggingItem, currentRequest} = useKanbanContext();
+
+  useEcho('requests', '.update', res => {
+    setData(data.map(item => (item.id == res.id?{...item, ...res.data}:item)));
+  });
+  useEcho('requests', '.updateOrder', res => {
+    setData(data.map(item => {
+      const order_item = res.data.find((r) => r.id == item.id);
+      if(order_item)
+        item.order = order_item.order;
+      return item;
+    }));
+  });
+  useEcho('requests', '.create', res => {
+    setData([...data, res.data]);
+  });
+
+  const columns = useMemo(() => {
+    return default_columns.map((c) => {
+      c.items = data
+          .filter((item: Request) => item.type == c.id)
+          .map((item: Request) => ({id: 'id-'+item.id, content: item}))
+          .sort((i1, i2) => (i1.content.order - i2.content.order || i2.content.id - i1.content.id));
+      return c;
+    });
+  }, [data]);
 
   useEffect(() => {
     RequestsAPI.get(-1, 0, {order: 'asc', id: 'desc'}, {temp: false, archived: false}).then(({data}) => {
-      columns.forEach((col) => {
-        col.items = data.data.filter((item: Request) => item.type == col.id).map((item: Request) => ({id: 'id-'+item.id, content: item}))
-      });
-      setColumns([...columns]);
+      setData(data.data);
     });
   }, []);
 
@@ -72,32 +95,31 @@ function RequestsKanbanInner() {
     if(!activeColumn || !overColumn || activeColumn === overColumn)
       return null;
 
-    setColumns((prevState) => {
-      const activeItems = activeColumn.items;
-      const overItems = overColumn.items;
-      const activeIndex = activeItems.findIndex((i) => i.id === activeId);
-      const overIndex = overItems.findIndex((i) => i.id === overId);
-      const newIndex = () => {
-        const putOnBelowLastItem =
+    const activeItems = activeColumn.items;
+    const overItems = overColumn.items;
+    const activeIndex = activeItems.findIndex((i) => i.id === activeId);
+    const overIndex = overItems.findIndex((i) => i.id === overId);
+    const newIndex = () => {
+      const putOnBelowLastItem =
           overIndex === overItems.length - 1 && delta.y > 0;
-        const modifier = putOnBelowLastItem ? 1 : 0;
-        return overIndex >= 0 ? overIndex + modifier : overItems.length + 1;
-      };
-      return prevState.map((c) => {
-        if (c.id === activeColumn.id) {
-          c.items = activeItems.filter((i) => i.id !== activeId);
-          return c;
-        } else if (c.id === overColumn.id) {
-          c.items = [
-            ...overItems.slice(0, newIndex()),
-            activeItems[activeIndex],
-            ...overItems.slice(newIndex(), overItems.length)
-          ];
-          return c;
-        } else {
-          return c;
-        }
-      });
+      const modifier = putOnBelowLastItem ? 1 : 0;
+      return overIndex >= 0 ? overIndex + modifier : overItems.length + 1;
+    };
+
+    columns.map((c) => {
+      if (c.id === activeColumn.id) {
+        c.items = activeItems.filter((i) => i.id !== activeId);
+        return c;
+      } else if (c.id === overColumn.id) {
+        c.items = [
+          ...overItems.slice(0, newIndex()),
+          activeItems[activeIndex],
+          ...overItems.slice(newIndex(), overItems.length)
+        ];
+        return c;
+      } else {
+        return c;
+      }
     });
   };
 
@@ -121,22 +143,22 @@ function RequestsKanbanInner() {
     }
 
     if (activeIndex !== overIndex || changedColumn) {
-      setColumns((prevState) => {
-        return prevState.map((column) => {
-          if(column.id === activeColumn.id) {
-            column.items = arrayMove(overColumn.items, activeIndex, overIndex);
-            activeColumn.items.forEach((item, i) => {
-              item.content.order = i * 10;
-            });
-            RequestsAPI.updateOrder(activeColumn.items.map((item) => ({id: item.content.id, index: item.content.order}))).then();
-            return column;
-          }
-          else
-            return column;
-        });
+      columns.map((column) => {
+        if(column.id === activeColumn.id) {
+          column.items = arrayMove(overColumn.items, activeIndex, overIndex);
+          activeColumn.items.forEach((item, i) => {
+            item.content.order = i * 10;
+          });
+          RequestsAPI.updateOrder(activeColumn.items.map((item) => ({id: item.content.id, order: item.content.order}))).then();
+          return column;
+        }
+        else
+          return column;
       });
     }
   };
+
+
 
   const sensors = useSensors(
     useSensor(PointerSensor),

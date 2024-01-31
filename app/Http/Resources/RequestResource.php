@@ -31,6 +31,7 @@ class RequestResource extends JsonResource
             'address' => $this->address,
             'email' => $this->email,
             'content' => $this->content,
+            'order' => $this->order,
             'status' => $this->getStatusLabel(),
             'created' => $this->created_at,
         ];
