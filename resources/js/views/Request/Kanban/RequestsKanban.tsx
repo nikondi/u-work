@@ -40,6 +40,7 @@ function RequestsKanbanInner() {
 
   useEcho('requests', '.update', res => {
     setData(data.map(item => (item.id == res.id?{...item, ...res.data}:item)));
+    console.log(res);
   });
   useEcho('requests', '.updateOrder', res => {
     setData(data.map(item => {
@@ -48,10 +49,12 @@ function RequestsKanbanInner() {
         item.order = order_item.order;
       return item;
     }));
+    console.log(res);
   });
   useEcho('requests', '.create', res => {
     setData([...data, res.data]);
     toast.success(`Новая заявка #${res.data.id}`)
+    console.log(res);
   });
 
   const columns = useMemo(() => {
