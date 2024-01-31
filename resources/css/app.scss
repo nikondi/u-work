@@ -424,7 +424,7 @@
             width: 3px;
         }
         &__subject {
-            @apply flex-1 transition-colors leading-4 duration-150 text-gray-800 hover:text-primary-500 cursor-pointer font-semibold;
+            @apply flex-1 transition-colors leading-4 duration-150 text-gray-800 hover:text-primary-500 cursor-pointer font-semibold text-base;
         }
         &-placeholder {
             @apply relative;
