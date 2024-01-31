@@ -47,6 +47,14 @@ class RequestsController extends Controller
                 }
             }
         }
+        else {
+            if(empty($data['subject'])) {
+                if($data['type'] == 'call')
+                    $data['subject'] = $data['client_phone'].' - Входящий звонок';
+                else if($data['type'] == 'suggest')
+                    $data['subject'] = 'Предложение';
+            }
+        }
 
         if(is_null($item))
             $item = RequestModel::create($data);

@@ -55,7 +55,7 @@ export default function Card({id, item, colors, className, ...props}: KanbanItem
       <div className={"kanban-card__color "+colors}></div>
       <div className="p-2 flex-1">
         <div className="flex items-start">
-          <div className="kanban-card__subject" onClick={() => setCurrentRequest(item)} onPointerDown={preventClick}>
+          <div className="kanban-card__subject" onClick={() => setCurrentRequest({...item})} onPointerDown={preventClick}>
             {item.subject || 'Заявка #'+item.id}
           </div>
           <div className="kanban-card__icons">
@@ -75,7 +75,7 @@ export default function Card({id, item, colors, className, ...props}: KanbanItem
         <div className="text-gray-400 text-xs">Ответственный</div>
         {item.worker
           ? <Link target="_blank" to={`/workers/${item.worker.id}`} className="text-blue-600" onPointerDown={preventClick}>{item.worker.name}</Link>
-          : <span className="dotted-btn" onPointerDown={preventClick} onClick={() => setCurrentRequest(item)}>Назначить</span>
+          : <span className="dotted-btn" onPointerDown={preventClick} onClick={() => setCurrentRequest({...item})}>Назначить</span>
         }
         <div className="border-t border-gray-300 text-gray-500 text-right mt-1.5 pt-0.5">
           {getDate(item.created)}

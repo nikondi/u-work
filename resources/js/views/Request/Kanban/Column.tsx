@@ -18,11 +18,15 @@ export default function KanbanColumn({id, title, colors, items}: Column) {
   const {overColumn, setCurrentRequest} = useKanbanContext();
 
   const addItem = () => {
-    setCurrentRequest({...empty_request});
+    setCurrentRequest({...empty_request, type: id});
   }
 
   return <div className={"kanban-column"+(overColumn?.id === id?' bg-gray-500 bg-opacity-10':'')} ref={setNodeRef}>
-      <div className={"px-3 py-2 rounded flex text-white mb-5 "+colors}><div className="flex-1">{title}</div><span className="text-gray-300">({items.length})</span></div>
+      <div className={"px-3 py-2 rounded flex items-center text-white mb-5 "+colors} style={{height: '40px'}}>
+        <div className="flex-1">{title}</div>
+        <button onClick={addItem} className="mr-2 p-0.5"><Icon icon="plus" width=".85em" height=".85em"/></button>
+        <span className="text-gray-300">({items.length})</span>
+      </div>
       <div className="kanban-column__inner tiny-scrollbar">
         <SortableContext id={id} items={items} strategy={rectSortingStrategy}>
           {items.map((item) => <Card id={item.id} key={item.id} item={item.content} colors={colors}/>)}

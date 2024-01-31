@@ -237,6 +237,12 @@ export default function RequestForm({type}: { type: 'requestCreate' | 'requestUp
 export function ClientSelect({client}: {client: Client}) {
   const [word, setWord] = useState('');
   const [clients, setClients] = useState<Client[]>([]);
+  const {opened} = useSelectContext();
+  const searchInput = useRef<HTMLInputElement>();
+
+  useEffect(() => {
+    (opened)?searchInput.current.focus():searchInput.current.blur();
+  }, [opened]);
 
   useEffect(() => {
     if(word.trim() !== '') {
@@ -258,7 +264,7 @@ export function ClientSelect({client}: {client: Client}) {
       <div style={{height: '1px', backgroundColor: 'currentColor'}} className="text-gray-400 dark:text-gray-400 mt-0.5 mb-2"></div>
     </>}
     <div className="px-2">
-      <Input label="Поиск..." value={_word} setValue={_setWord} />
+      <Input label="Поиск..." value={_word} setValue={_setWord} inputRef={searchInput} />
     </div>
     {clients.length > 0 && <div className="h-2"></div>}
     {clients.map((_client: Client, i: number) => <Option index={i} key={i} value={_client}>
@@ -318,6 +324,12 @@ export function WorkerSelect({worker}: {worker: user}) {
 export function AddressSelect({address}: {address: Address}) {
   const [word, setWord] = useState('');
   const [addresses, setAddresses] = useState<Address[]>([]);
+  const {opened} = useSelectContext();
+  const searchInput = useRef<HTMLInputElement>();
+
+  useEffect(() => {
+    (opened)?searchInput.current.focus():searchInput.current.blur();
+  }, [opened]);
 
   useEffect(() => {
     if(word.trim() !== '') {
@@ -345,7 +357,7 @@ export function AddressSelect({address}: {address: Address}) {
       <div style={{height: '1px', backgroundColor: 'currentColor'}} className="text-gray-400 dark:text-gray-400 mt-0.5 mb-2"></div>
     </>}
     <div className="px-2">
-      <Input label="Поиск..." value={_word} setValue={_setWord} />
+      <Input label="Поиск..." value={_word} setValue={_setWord} inputRef={searchInput} />
     </div>
     {addresses.length > 0 && <div className="h-2"></div>}
     {addresses.map((_address: Address, i: number) => <Option index={i} key={i} value={_address}>

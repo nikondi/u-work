@@ -19,7 +19,7 @@ import RequestsAPI from "../../../API/RequestsAPI";
 import Card from "./Card";
 
 
-const default_columns: Column[] = [
+export const default_columns: Column[] = [
   {id: 'simple', colors: "bg-orange-500", title: "Новые обращения", items: [] },
   {id: 'call', colors: "bg-rose-400", title: "Звонки", items: [] },
   {id: 'done', colors: "bg-green-600", title: "Завершены", items: [] },
