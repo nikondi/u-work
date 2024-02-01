@@ -1,12 +1,11 @@
 /** @type {import('tailwindcss').Config} */
 /** @type {DefaultColors} */
-import colors from "tailwindcss/colors.js";
 
 export default {
     // darkMode: 'class',
     content: [
         "./resources/**/*.blade.php",
-        "./resources/**/*.{js,jsx,tsx}",
+        "./resources/**/*.{js,jsx,ts,tsx}",
     ],
     theme: {
         container: {
