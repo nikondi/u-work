@@ -60,7 +60,7 @@ function TableContextProvider({children}) {
 
 const useTableContext = () => useContext(TableContext);
 
-const Table = ({children, config}:PropsWithChildren<TableProps>) => {
+export const Table = ({children, config}:PropsWithChildren<TableProps>) => {
     return <TableContextProvider>
         <TableContent config={config}>{children}</TableContent>
     </TableContextProvider>
@@ -203,8 +203,6 @@ const TableContent = ({children, config = {}}) => {
         </>
     )
 }
-
-export default Table;
 
 const RowContext = createContext(null);
 
