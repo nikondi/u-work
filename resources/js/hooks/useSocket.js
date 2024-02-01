@@ -1,5 +1,4 @@
 import {useEffect, useRef, useState} from "react";
-import SocketApi from "../API/SocketApi.js";
 import toast from "react-hot-toast";
 
 export const useSocket = (URL = 'http://127.0.0.1:8000', options = {}) => {
@@ -53,3 +52,56 @@ export const useSocket = (URL = 'http://127.0.0.1:8000', options = {}) => {
 
     return socket;
 }
+
+
+class SocketApi {
+    socket;
+    options;
+    URL;
+
+    constructor(URL, options = {}) {
+        const default_options = {
+            name: URL,
+        };
+        this.options = {...default_options, ...options};
+        this.URL = URL;
+
+        if(!URL) {
+            console.error('SocketApi: Не указан url');
+            return null;
+        }
+
+        return this;
+    }
+
+    onConnect() {};
+    onDisconnect() {};
+    onMessage(message) {};
+
+    init() {
+        const instance = this;
+
+        this.socket = new WebSocket(this.URL);
+
+        this.socket.onconnecting = () => {
+            toast.loading('Подключение к вебсокет');
+        }
+        this.socket.onopen = () => this.onConnect.apply(instance);
+        this.socket.onclose = () => this.onDisconnect.apply(instance);
+        this.socket.onmessage = (message) => {
+            try {
+                this.onMessage.apply(this, [JSON.parse(message.data)]);
+            } catch (e) {
+                this.onMessage.apply(this, [message]);
+            }
+        };
+
+        return this;
+    }
+
+    disconnect() {
+        this.socket.close();
+    }
+}
+
+export default SocketApi;

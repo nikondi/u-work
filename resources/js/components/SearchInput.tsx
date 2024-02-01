@@ -1,4 +1,5 @@
 import React from "react";
+import {stateFunction} from "@/types";
 
 type SearchInputProps = {
     value?: string,

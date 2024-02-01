@@ -1,5 +1,6 @@
-import {twMerge} from "tailwind-merge";
 import React, {PropsWithChildren, useEffect} from "react";
+import {twMerge} from "tailwind-merge";
+import {stateFunction} from "@/types";
 
 type Props = {
     className?: string,

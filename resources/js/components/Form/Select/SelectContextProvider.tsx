@@ -15,7 +15,7 @@ type SelectContext = {
 
 const SelectContext = createContext<SelectContext>(null);
 
-export default function SelectContextProvider({children}) {
+export function SelectContextProvider({children}) {
     const [selectedOption, _setSelectedOption] = useState(null);
     const [opened, setOpened] = useState(false);
     const [selectedValue, setSelectedValue] = useState(null);

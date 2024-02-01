@@ -1,4 +1,5 @@
 import React, {createContext, PropsWithChildren, useCallback, useContext, useEffect, useMemo, useState} from "react";
+import {stateFunction} from "@/types";
 
 type RadioContext = {
     _value: any,
@@ -18,10 +19,10 @@ type SelectedRadio = {
     value: any
 }
 
+
 const RadioContext = createContext<RadioContext>(null);
 
-
-export default function RadioList({value = null, onChange = null, name, children}: PropsWithChildren<RadioListProps>) {
+export function RadioList({value = null, onChange = null, name, children}: PropsWithChildren<RadioListProps>) {
     return (
         <RadioContextProvider value={value} name={name}>
             <RadioListInner name={name} value={value} onChange={onChange}>{children}</RadioListInner>

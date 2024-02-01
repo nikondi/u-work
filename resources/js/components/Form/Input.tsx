@@ -1,6 +1,7 @@
 import React, {InputHTMLAttributes} from "react";
-import {uniqName} from "../../helpers.js";
 import {useMemo} from "react";
+import {uniqName} from "@/helpers";
+import {stateFunction} from "@/types";
 
 type Props = {
     inputRef?: React.Ref<HTMLInputElement>,
@@ -8,7 +9,7 @@ type Props = {
     setValue?: ((v:string) => void) | stateFunction
 }
 
-export default function Input({name, className, inputRef=null, label=null, setValue = null, ...attributes}: InputHTMLAttributes<any> & Props) {
+export function Input({name, className, inputRef=null, label=null, setValue = null, ...attributes}: InputHTMLAttributes<any> & Props) {
     const inputName = useMemo(() => {
         return name || uniqName();
     }, [name]);

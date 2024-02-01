@@ -1,6 +1,6 @@
 import {useEffect} from "react";
 
-export default function useEcho(channel, event, onMessage) {
+export function useEcho(channel, event, onMessage) {
     useEffect(() => {
         if (channel !== '')
             window.Echo.channel(channel).listen(event, onMessage);

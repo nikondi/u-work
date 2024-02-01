@@ -1,19 +1,10 @@
-import React, {
-    createContext, isValidElement,
-    PropsWithChildren,
-    ReactElement,
-    useCallback,
-    useContext,
-    useEffect,
-    useMemo,
-    useState
-} from "react";
-import {untranslit} from "../../helpers.js";
+import React, {createContext, isValidElement, PropsWithChildren, ReactElement, useCallback, useContext, useEffect, useMemo, useState} from "react";
+import {untranslit} from "@/helpers";
 import {Link} from "react-router-dom";
-import useResource, {ResourceConfig} from "../Resource/hooks/useResource";
+import {useResource, Pagination, ResourceConfig} from "@/hooks/useResource";
 import {twMerge} from "tailwind-merge";
-import {Pagination} from "../../views/Request/Requests";
-import SearchInput from "../SearchInput";
+import SearchInput from "@/components/SearchInput";
+import {stateFunction} from "@/types";
 
 type TableProps = {
     config: TableConfig

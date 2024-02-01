@@ -14,6 +14,6 @@
 <body class="bg-gray-50 dark:bg-gray-900">
     <div id="app"></div>
     @viteReactRefresh
-    @vite(['resources/js/app.jsx'])
+    @vite(['resources/js/index.tsx'])
 </body>
 </html>

@@ -1,5 +1,6 @@
 import React, {PropsWithChildren} from "react";
-import {useStateContext} from "../contexts/ContextProvider";
+import {useAuth} from "@/lib/auth";
+import {Role} from "@/features/auth";
 
 type HasRoleProps = {
     roles: Role[] | Role,
@@ -7,7 +8,7 @@ type HasRoleProps = {
 }
 
 export default function HasRole({roles = [], showAdmin = true, children}: PropsWithChildren<HasRoleProps>) {
-    const {user} = useStateContext();
+    const {user} = useAuth();
 
     if(typeof roles === 'string')
         roles = [roles];

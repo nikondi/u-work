@@ -1,16 +1,16 @@
-import {mergeClasses} from "../../../helpers.js";
 import React, {PropsWithChildren, useEffect} from "react";
-import SelectContextProvider, {OptionValue, useSelectContext} from "./SelectContextProvider";
-import useOutsideClick from "../../../hooks/useOutsideClick.js";
+import {mergeClasses} from "@/helpers";
+import {SelectContextProvider, OptionValue, useSelectContext} from "./SelectContextProvider";
+import useOutsideClick from "@/hooks/useOutsideClick.js";
 
-type SelectProps = {
+type Props = {
     onChange?: (v:OptionValue) => void,
     value?: OptionValue,
     label?: string|number,
     className?: string,
 }
 
-export default function Select({children, className = '', onChange=()=>{}, value, label, ...props}:PropsWithChildren<SelectProps>) {
+export function Select({children, className = '', onChange=()=>{}, value, label, ...props}:PropsWithChildren<Props>) {
     return (
         <SelectContextProvider>
             <SelectInner className={className} onChange={onChange} value={value} label={label} {...props}>
@@ -20,7 +20,7 @@ export default function Select({children, className = '', onChange=()=>{}, value
     )
 }
 
-function SelectInner({className, children, onChange=()=>{}, value, label}: PropsWithChildren<SelectProps>) {
+function SelectInner({className, children, onChange=()=>{}, value, label}: PropsWithChildren<Props>) {
     const {setSelectedValue, setInitialValue, selectedOption, setOpened, opened} = useSelectContext();
     const selectRef = useOutsideClick(() => setOpened(false));
 

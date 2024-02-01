@@ -1,6 +1,7 @@
 import {useRef, useState} from "react";
+import {stateFunction} from "@/types";
 
-export default function useDelayedState<T = any>(setter: stateFunction<T> , timeout = 100, defaultValue = null) {
+export function useDelayedState<T = any>(setter: stateFunction<T> , timeout = 100, defaultValue = null) {
     const timeoutRef = useRef<number|null>(null);
     const [_value, setValue] = useState<T>(defaultValue);
 

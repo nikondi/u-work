@@ -1,0 +1,22 @@
+import axiosClient from "@/lib/axios-client";
+
+export class UsersAPI {
+    static get(count, page=1, filter, pagination = true) {
+        return axiosClient.get('/users', {params: {limit: count, page, filter, pagination}});
+    }
+    static search(count, page, word, filter = null, params = {}, pagination = true) {
+        return axiosClient.get('/users/search', {params: {limit: count, word, page, pagination, filter, ...params}})
+    }
+    static getSingle(id) {
+        return axiosClient.get('/users/'+id);
+    }
+    static create(data) {
+        return axiosClient.post('/users/add', data);
+    }
+    static update(id, data) {
+        return axiosClient.put('/users/'+id, data);
+    }
+    static delete(id) {
+        return axiosClient.delete(`/users/${id}`);
+    }
+}
