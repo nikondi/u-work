@@ -8,14 +8,13 @@ type Props = {
     setValue?: ((v:string) => void) | stateFunction
 }
 
-export default function Input({inputRef=null, type = "text", name=null, label=null, value, setValue = null, required = false, className = '', ...attributes}: InputHTMLAttributes<any> & Props) {
+export default function Input({name, className, inputRef=null, label=null, setValue = null, ...attributes}: InputHTMLAttributes<any> & Props) {
     const inputName = useMemo(() => {
         return name || uniqName();
     }, [name]);
 
-    return <input ref={inputRef} name={inputName} type={type} placeholder={label}
+    return <input ref={inputRef} name={inputName} placeholder={label}
                   onChange={(e) => setValue && setValue(e.target.value)}
-                  value={value} required={required}
                   {...attributes}
                   className={'form-input-text '+className+(attributes.disabled?' opacity-70':'')} />
 }

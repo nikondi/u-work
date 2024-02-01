@@ -105,10 +105,10 @@ export default function WorkerForm() {
                         </FormRow>
                         <div className="flex gap-x-3">
                             <FormRow label="Пароль" className="mb-4 flex-1" required={passwordRequired}>
-                                <Input value="" label="Пароль" type="password" onChange={(ev) => setWorker({...worker, password: ev.target.value})} required={passwordRequired} />
+                                <Input label="Пароль" type="password" onChange={(ev) => setWorker({...worker, password: ev.target.value})} required={passwordRequired} />
                             </FormRow>
                             <FormRow label="Подтверждение пароля" className="mb-4 flex-1" required={passwordRequired}>
-                                <Input value="" label="Подтверждение пароля" type="password" onChange={(ev) => setWorker({...worker, password_confirmation: ev.target.value})} required={passwordRequired} />
+                                <Input label="Подтверждение пароля" type="password" onChange={(ev) => setWorker({...worker, password_confirmation: ev.target.value})} required={passwordRequired} />
                             </FormRow>
                         </div>
                         <FormRow label="Адреса" className="mb-4">

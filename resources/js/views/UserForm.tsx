@@ -125,10 +125,10 @@ export default function UserForm() {
                             <Input label="E-mail" type="email" value={user.email} onChange={(ev) => setUser({...user, email: ev.target.value})} required={true} />
                         </FormRow>
                         <FormRow label="Пароль" className="mb-4" required={passwordRequired}>
-                            <Input value="" label="Пароль" type="password" onChange={(ev) => setUser({...user, password: ev.target.value})} required={passwordRequired} />
+                            <Input label="Пароль" type="password" onChange={(ev) => setUser({...user, password: ev.target.value})} required={passwordRequired} />
                         </FormRow>
                         <FormRow label="Подтверждение пароля" className="mb-4" required={passwordRequired}>
-                            <Input value="" label="Подтверждение пароля" type="password" onChange={(ev) => setUser({...user, password_confirmation: ev.target.value})} required={passwordRequired} />
+                            <Input label="Подтверждение пароля" type="password" onChange={(ev) => setUser({...user, password_confirmation: ev.target.value})} required={passwordRequired} />
                         </FormRow>
                         <FormRow label="Роли" className="mb-5">
                             {userRoles.map((role) =>
