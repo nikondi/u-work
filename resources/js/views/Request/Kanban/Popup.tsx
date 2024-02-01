@@ -1,7 +1,7 @@
 import {useKanbanContext} from "./KanbanContext";
 import {Link} from "react-router-dom";
 import Icon from "../../../components/Icon";
-import React, {useEffect, useMemo, useState} from "react";
+import React, {FormEventHandler, useEffect, useMemo, useState} from "react";
 import Select, {Option} from "../../../components/Form/Select/Select";
 import {AddressSelect, ClientSelect, WorkerSelect} from "../RequestForm";
 import toast from "react-hot-toast";
@@ -36,7 +36,7 @@ export default function Popup() {
     }
   }, []);
 
-  const save = (e) => {
+  const save: FormEventHandler = (e) => {
     e.preventDefault();
 
     const data = {...currentRequest,
@@ -121,12 +121,12 @@ export default function Popup() {
             </SubBlock>
           </Block>
             <Block name="Ответственный">
-                <PopupWorker/>
+                <PopupWorker setEditMode={setEditMode}/>
             </Block>
 
             <Block name="Клиент">
                 <div className="mb-2">
-                  <PopupClient/>
+                  <PopupClient setEditMode={setEditMode}/>
                 </div>
                 {(!currentRequest.client || !isEdit) && <>
                   <SubBlock name="Имя" required={isEdit && !currentRequest.client_name}>{isEdit
@@ -149,7 +149,7 @@ export default function Popup() {
             </Block>
           <Block name="Адрес">
             <div className="mb-2">
-              <PopupAddress/>
+              <PopupAddress setEditMode={setEditMode}/>
             </div>
             {(isEdit && currentRequest.addressDB)
               ? <PopupAddressAdditional/>
@@ -212,7 +212,7 @@ function PopupAddressAdditional() {
   </>
 }
 
-function PopupWorker() {
+function PopupWorker({setEditMode}) {
   const [edit, setEdit] = useState(false);
   const {currentRequest, setCurrentRequest} = useKanbanContext();
 
@@ -221,7 +221,7 @@ function PopupWorker() {
         <div className="rounded-md bg-gray-50 border border-gray-300 p-2 mt-2">
           <Link target="_blank" to={`/workers/${currentRequest.worker.id}`} className="text-blue-600">{currentRequest.worker.name}</Link>
         </div>
-        <span className="dotted-btn" onClick={() => setEdit(true)}>Изменить</span>
+        <span className="dotted-btn" onClick={() => {setEdit(true); setEditMode(true)}}>Изменить</span>
       </div>
       : (edit
         ? <div className="mt-2">
@@ -233,12 +233,12 @@ function PopupWorker() {
         </div>
         : <div>
               <div className="text-gray-400 text-base">Не назначен</div>
-              <span className="dotted-btn" onClick={() => setEdit(true)}>Назначить</span>
+              <span className="dotted-btn" onClick={() => {setEdit(true); setEditMode(true)}}>Назначить</span>
           </div>)
 
 }
 
-function PopupClient() {
+function PopupClient({setEditMode}) {
   const [edit, setEdit] = useState(false);
   const {currentRequest, setCurrentRequest} = useKanbanContext();
 
@@ -247,7 +247,7 @@ function PopupClient() {
         <div className="rounded-md bg-gray-50 border border-gray-300 p-2 mt-2">
           <Link target="_blank" to={`/clients/${currentRequest.client.id}`} className="text-blue-600"><span className="text-orange-500">#{currentRequest.client.id}</span> {currentRequest.client.name} <span className="text-xs text-gray-400">{currentRequest.client.address.full}</span></Link>
         </div>
-        <span className="dotted-btn" onClick={() => setEdit(true)}>Изменить</span>
+        <span className="dotted-btn" onClick={() => {setEdit(true); setEditMode(true)}}>Изменить</span>
       </>
       : (edit
         ? <div className="mt-2">
@@ -265,7 +265,7 @@ function PopupClient() {
 
 }
 
-function PopupAddress() {
+function PopupAddress({setEditMode}) {
   const [edit, setEdit] = useState(false);
   const {currentRequest, setCurrentRequest} = useKanbanContext();
 
@@ -274,7 +274,7 @@ function PopupAddress() {
         <div className="rounded-md bg-gray-50 border border-gray-300 p-2 mt-2">
           <Link target="_blank" to={`/addresses/${currentRequest.addressDB.id}`} className="text-blue-600">{currentRequest.addressDB.full}</Link>
         </div>
-        <span className="dotted-btn" onClick={() => setEdit(true)}>Изменить</span>
+        <span className="dotted-btn" onClick={() => {setEdit(true); setEditMode(true)}}>Изменить</span>
       </>
       : (edit
         ? <div className="mt-2">
