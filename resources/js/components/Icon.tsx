@@ -2,10 +2,11 @@ import React, {SVGProps} from "react"
 
 type IconProps = {
     icon: 'phone' | 'phone-o' | 'envelope' | 'locate' | 'pencil' | 'check' | 'times' | 'plus' | string,
+    size?: string,
 } & SVGProps<any>;
 
-export default function Icon({width = '1em', height = '1em', icon, ...props}: IconProps) {
-    return <svg className="icon" width={width} height={height} {...props}>
+export default function Icon({width = null, height = null, size = '1em', icon, ...props}: IconProps) {
+    return <svg className="icon" width={width || size} height={height || size} {...props}>
         <use xlinkHref={`/assets/images/icons.svg#${icon}`} />
     </svg>
 }

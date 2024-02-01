@@ -18,8 +18,8 @@ import RadioList, {Radio} from "../../components/Form/RadioList";
 import UsersAPI from "../../API/UsersAPI";
 import {err} from "../../helpers";
 import AddressesAPI from "../../API/AddressesAPI";
-import {useSelectContext} from "../../components/Form/Select/SelectContextProvider";
 import {requestTypes} from "./Requests";
+import {useSelectContext} from "../../components/Form/Select/SelectContextProvider";
 
 const defaultRequest = {
   id: null,

@@ -31,6 +31,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::resource('/clients', ClientsController::class)->middleware('role:manager');
 
     Route::get('/addresses/search', [AddressesController::class, 'search'])->middleware('role:manager');
+    Route::get('/addresses', [AddressesController::class, 'index'])->middleware('role:manager');
+    Route::get('/addresses/worker', [AddressesController::class, 'indexWorker'])->middleware('role:manager');
 
     Route::get('/requests', [RequestsController::class, 'index']);
     Route::put('/requests/{request}', [RequestsController::class, 'update']);

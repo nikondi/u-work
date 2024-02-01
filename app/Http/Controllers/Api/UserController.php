@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Http\Resources\UserResource;
+use App\Http\Resources\WorkerResource;
+use App\Models\Address;
 use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -63,6 +65,9 @@ class UserController extends Controller
         $data = $request->validated();
         $user = User::create($data);
         $user->syncRoles($data['roles']);
+        if(isset($data['addresses']))
+            Address::whereIn('id', $data['addresses'])->update(['worker_id' => $user->id]);
+
         DB::commit();
 
         return response(new UserResource($user), 201);
@@ -73,6 +78,9 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
+        if($user->hasRole('worker'))
+            return new WorkerResource($user);
+
         return new UserResource($user);
     }
 
@@ -85,6 +93,8 @@ class UserController extends Controller
         $data = $request->validated();
         $user->update($data);
         $user->syncRoles($data['roles']);
+        if(isset($data['addresses']))
+            Address::whereIn('id', $data['addresses'])->update(['worker_id' => $user->id]);
         DB::commit();
 
         return new UserResource($user);

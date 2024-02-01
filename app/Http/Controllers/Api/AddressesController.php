@@ -28,4 +28,35 @@ class AddressesController extends Controller
 
         return AddressResource::collection($result);
     }
+
+    public function index(Request $request) {
+        $page = $request->exists('page')?intval($request->get('page')):1;
+        $limit = $request->exists('limit')?intval($request->get('limit')):-1;
+        $pagination = !$request->exists('pagination') || $request->get('pagination') == 'true';
+
+        $query = Address::query();
+
+        if($request->exists('filter'))
+            foreach($request->get('filter') as $key => $value)
+                $query->where($key, $value);
+
+        if($limit == -1)
+            $result = $query->get();
+        else {
+            if($pagination)
+                $result = $query->paginate($limit, ['*'], '', $page);
+            else
+                $result = $query->limit($limit)->get();
+        }
+
+        return AddressResource::collection($result);
+    }
+
+    public function indexWorker(Request $request) {
+        $query = Address::whereNull('worker_id');
+        if($request->exists('worker_id'))
+            $query->orWhere('worker_id', $request->get('worker_id'));
+
+        return AddressResource::collection($query->get());
+    }
 }

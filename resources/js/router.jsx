@@ -10,6 +10,7 @@ import RequestForm from "./views/Request/RequestForm";
 import Users from "./views/Users";
 import UserForm from "./views/UserForm.tsx";
 import RequestsKanban from "./views/Request/Kanban/RequestsKanban";
+import WorkerForm from "./views/Worker/WorkerForm";
 
 const router = createBrowserRouter([
   {
@@ -38,11 +39,11 @@ const router = createBrowserRouter([
       },
       {
         path: '/workers/new',
-        element: <UserForm key="workerCreate" type="workers"/>
+        element: <WorkerForm key="create"/>
       },
       {
         path: '/workers/:id',
-        element: <UserForm key="workerUpdate" type="workers"/>
+        element: <WorkerForm key="edit"/>
       },
       {
         path: '/clients',

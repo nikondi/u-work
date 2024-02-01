@@ -7,12 +7,13 @@ import Input from "../components/Form/Input";
 import ErrorList from "../components/ErrorList.jsx";
 import UsersAPI from "../API/UsersAPI.js";
 
-const defaultUser = {
+export const defaultUser = {
     id: null,
     name: '',
     email: '',
     login: '',
     roles: [],
+    roleLabels: [],
     password: '',
     password_confirmation: '',
 }
