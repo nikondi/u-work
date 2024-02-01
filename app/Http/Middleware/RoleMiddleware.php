@@ -12,15 +12,15 @@ class RoleMiddleware
      * Handle an incoming request.
      * @param Request $request
      * @param Closure $next
-     * @param string $role
+     * @param string[] $roles
      * @return mixed
      */
-    public function handle(Request $request, Closure $next, string $role): mixed
+    public function handle(Request $request, Closure $next, ...$roles): mixed
     {
         if(auth()->user()->hasRole('admin'))
             return $next($request);
 
-        if(!auth()->user()->hasRole($role))
+        if(!auth()->user()->hasRole(...$roles))
             abort(403);
 
         return $next($request);

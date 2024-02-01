@@ -15,7 +15,7 @@ trait HasRoles
     }
 
     /**
-     * @param string ...$roles
+     * @param string[] | string ...$roles
      * @return bool
      */
     public function hasRole(...$roles): bool

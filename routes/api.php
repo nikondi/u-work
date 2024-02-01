@@ -40,7 +40,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('/requests/updateOrder', [RequestsController::class, 'updateOrder']);
 });
 
-Route::middleware(['request.addJson', 'auth:sanctum', 'role:tomoru'])->group(function() {
+Route::middleware(['request.addJson', 'auth:sanctum', 'role:tomoru,manager'])->group(function() {
     Route::post('/clients/search', [ClientsController::class, 'search']);
     Route::post('/requests', [RequestsController::class, 'store']);
 });
