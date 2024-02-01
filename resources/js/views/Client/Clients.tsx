@@ -1,11 +1,10 @@
 import {TableServer} from "../../components/Table/Table.jsx";
-import React, {Fragment, KeyboardEventHandler, useCallback, useMemo, useRef, useState} from "react";
+import React, {Fragment, useCallback, useRef, useState} from "react";
 import ClientsAPI from "../../API/ClientsAPI.js";
 import LoadingArea from "../../components/LoadingArea.jsx";
-import {ResourceFetchFunction, useRowContext} from "../../components/Resource/hooks/useResource";
+import {ResourceFetchFunction} from "../../components/Resource/hooks/useResource";
 import SearchInput from "../../components/SearchInput";
 import toast from "react-hot-toast";
-import Icon from "../../components/Icon";
 import useDelayedState from "../../hooks/useDelayedState";
 
 export type Client = {
@@ -35,10 +34,6 @@ export default function Clients() {
             return ClientsAPI.get(30, page);
     }, [word]);
 
-    const updateClient = (id: number, data: Partial<Client>) => {
-        return ClientsAPI.update(id, data);
-    }
-
     return (
         <div className="relative">
             <SearchInput value={_word} setValue={_setWord} />
@@ -53,14 +48,15 @@ export default function Clients() {
                         }
                     },
                     tableConfig: {
+                        linkTo: value => `/clients/${value.id}`,
                         columns: [
-                            { key: 'id', label: 'Номер лицевого счёта' },
-                            { key: 'name', label: 'ФИО',
+                            { key: 'id', label: 'Номер лицевого счёта', linked: true },
+                            { key: 'name', label: 'ФИО', linked: true,
                                 filter(value: string) {
                                     return value || <span className="text-gray-400 dark:text-gray-500">Пусто</span>;
                                 }
                             },
-                            { key: 'address', label: 'Адрес',
+                            { key: 'address', label: 'Адрес', linked: true,
                                 filter(value: Address) {
                                     if(!value)
                                         return (<span className="text-gray-400 dark:text-gray-500">Пусто</span>)
@@ -74,7 +70,7 @@ export default function Clients() {
                                         return (<span className="text-gray-400 dark:text-gray-500">Пусто</span>)
 
                                     return <>
-                                        {value.map((tel:number|string, i:number) => <Fragment key={i}><a className="underline text-blue-600 dark:text-blue-300" href={'tel:'+tel}>{tel}</a>{i < value.length - 1?', ':''}</Fragment>)}
+                                        {value.map((tel:number|string, i:number) => <Fragment key={i}><a className="underline text-blue-600 dark:text-blue-300" onClick={event => event.stopPropagation()} href={'tel:'+tel}>{tel}</a>{i < value.length - 1?', ':''}</Fragment>)}
                                     </>;
                                 }
                             }
