@@ -1,8 +1,9 @@
 import React, {createContext, ReactElement, useContext, useEffect, useRef, useState} from "react";
 
 type renderRowFunction<T> = (elem: T, index:number) => ReactElement;
+export type ResourceFetchFunction = (page:number, setPage: (page: number, silently: boolean) => void) => Promise<any>;
 export type ResourceConfig<T = any> = {
-    fetch: (page:number, setPage: (page: number, silently: boolean) => void) => Promise<any>,
+    fetch: ResourceFetchFunction,
     fetchCallback?: (result:any) => any,
     onFetchError?: (error:any) => any,
     onFetchFinally?: () => any,

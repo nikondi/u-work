@@ -247,14 +247,14 @@ function Row({item}) {
 
 type TableServerConfig = {
     tableConfig: Partial<TableConfig>,
-    resourceConfig: ResourceConfig | Partial<ResourceConfig>,
+    resourceConfig: Partial<ResourceConfig>,
     pagination?: boolean
 }
 
 type TableServerProps = {
     config: TableServerConfig,
     className?: string,
-    setLoading?: (v:boolean) => any
+    setLoading?: stateFunction<boolean>
 };
 
 const default_tableServer_config = {pagination: false} as Partial<TableServerConfig>;
