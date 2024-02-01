@@ -1,22 +1,24 @@
 import LoadingArea from "../../components/LoadingArea.jsx";
 import {Link} from "react-router-dom";
 import HasRole from "../../components/HasRole";
-import useResource, {PagiLink, useRowContext} from "../../components/Resource/hooks/useResource";
+import useResource, {PaginationLink, useRowContext} from "../../components/Resource/hooks/useResource";
 import RequestsAPI, {Request} from "../../API/RequestsAPI.js";
 import React, {ReactElement, useCallback, useState} from "react";
 import toast from "react-hot-toast";
 import Select, {Option} from "../../components/Form/Select/Select";
 import {useStateContext} from "../../contexts/ContextProvider";
 import {err} from "../../helpers";
+import useEcho from "../../hooks/useEcho";
 
 export default function Requests() {
     const [filter, _setFilter] = useState<any>(null);
+    const {user} = useStateContext();
 
     const fetchRequests = useCallback((page: number) => {
         return RequestsAPI.get(30, page, {status: 'desc', created_at: 'desc', id: 'desc'}, filter);
     }, [filter]);
 
-    const [requests, pagination, loading]:any[] = useResource({
+    const {list: requestsList, pagination, loading, setPage, page} = useResource<Request>({
         fetch: fetchRequests,
         onFetchError(e) {
             toast.error(`Ошибка при получении заявок ${e?.response?.data?.message?e.response.data.message:''}`);
@@ -27,6 +29,14 @@ export default function Requests() {
         pagination: true,
         renderPagination(list, setPage) {
             return <Pagination list={list} setPage={setPage}/>;
+        }
+    });
+
+    useEcho('requests', '.create', ({data}: {data: Request}) => {
+        if(!data.worker || data.worker.id == user.id) {
+            if(page == 1)
+                setPage(0);
+            toast.success(`Новая заявка #${data.id}`)
         }
     });
 
@@ -58,7 +68,7 @@ export default function Requests() {
             <div className="relative">
                 <LoadingArea show={loading}/>
                 <div className="requests">
-                    {requests.map((row: ReactElement) => row)}
+                    {requestsList.map((row: ReactElement) => row)}
                 </div>
                 {pagination}
             </div>
@@ -68,7 +78,7 @@ export default function Requests() {
 
 export type PaginationProps = {
     setPage: (page:number) => void,
-    list: PagiLink[],
+    list: PaginationLink[],
     className?: string
 };
 
@@ -126,9 +136,11 @@ function RequestRow() {
                 <span className="request-phone text-gray-800 dark:text-white">
                     <svg height=".95em" viewBox="0 0 24 24"><g><path d="M12 0C7.038 0 3 4.066 3 9.065c0 7.103 8.154 14.437 8.501 14.745a.749.749 0 0 0 .998.001C12.846 23.502 21 16.168 21 9.065 21 4.066 16.962 0 12 0zm0 14c-2.757 0-5-2.243-5-5s2.243-5 5-5 5 2.243 5 5-2.243 5-5 5z" fill="currentColor"></path></g></svg>
                     <div>{
-                        (request.client && request.client.address?.full)
-                        || request.addressDB?.full
-                        || request.address
+                        ((request.addressDB && request.client && request.addressDB.id == request.client.address.id)?request.client.address.full:null)
+                        || ((request.addressDB || request.address)
+                            ? ((request.addressDB?(request.addressDB.full):'') + (request.addressDB && request.address?', ':'') + (request.address || ''))
+                            : null
+                        )
                         || <span className="text-gray-300">-</span>
                     }</div>
                 </span>
@@ -210,7 +222,7 @@ export const requestTypes = {
 export function Pagination({setPage, list, className = '', ...attributes}: PaginationProps) {
     const classes = 'pagination '+className;
 
-    const changePage = (page:PagiLink) => {
+    const changePage = (page:PaginationLink) => {
         if(!page.url || page.active)
             return;
         setPage(parseInt(page.label));

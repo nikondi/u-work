@@ -1,22 +1,20 @@
 import React, {createContext, ReactElement, useContext, useEffect, useRef, useState} from "react";
 
-type renderRowFunction = (elem:string|object|number, index:number) => ReactElement;
-export type ResourceConfig = {
+type renderRowFunction<T> = (elem: T, index:number) => ReactElement;
+export type ResourceConfig<T = any> = {
     fetch: (page:number, setPage: (page: number, silently: boolean) => void) => Promise<any>,
     fetchCallback?: (result:any) => any,
     onFetchError?: (error:any) => any,
     onFetchFinally?: () => any,
 
     pagination?: boolean,
-    renderPagination?: (list: PagiLink[], setPage:(page:number) => void) => ReactElement,
+    renderPagination?: (list: PaginationLink[], setPage:(page:number) => void) => ReactElement,
     page?:number,
 
-    renderRow: renderRowFunction
+    renderRow: renderRowFunction<T>
 };
 
-type Row = any | object | string | number | null;
-
-export type PagiLink = {
+export type PaginationLink = {
     url: string|null,
     active: boolean,
     label: string,
@@ -25,15 +23,15 @@ export type PagiLink = {
 const default_config = {
     pagination: false,
     page: 1,
-} as ResourceConfig;
+} as Partial<ResourceConfig>;
 
 
-export default function useResource(config: ResourceConfig) {
+export default function useResource<Row = any>(config: ResourceConfig<Row>) {
     config = {...default_config, ...config};
 
     const [page, _setPage] = useState(config.page);
     const [setPageSilent, setSetPageSilent] = useState(false);
-    const [pageList, setPageList] = useState<PagiLink[]>([]);
+    const [pageList, setPageList] = useState<PaginationLink[]>([]);
     const [loading, setLoading] = useState(false);
     const [content, setContent] = useState<Row[]>([]);
 
@@ -91,22 +89,16 @@ export default function useResource(config: ResourceConfig) {
         setList(content.map((row, i) => <RowContextProvider key={i} initial={row}>{config.renderRow(row, i)}</RowContextProvider>));
     }, [content]);
 
-    return [
-        list, pagination, loading, setPage
-    ];
+    return {
+        list, content, pagination, loading, setPage, page
+    };
 }
 
 
-
-type RowContext = {
-    row: Row,
-    setRow: stateFunction,
-}
-
-const RowContext = createContext<RowContext>(null);
+const RowContext = createContext(null);
 
 function RowContextProvider({children, initial = null}) {
-    const [row, setRow] = useState<Row>(initial);
+    const [row, setRow] = useState<typeof initial>(initial);
 
     return <RowContext.Provider value={{
         row, setRow

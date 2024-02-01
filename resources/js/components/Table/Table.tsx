@@ -265,7 +265,7 @@ export function TableServer({config, className = '', setLoading, children} : Pro
     config = {...default_tableServer_config, ...config};
     config.tableConfig = {...default_tableConfig, ...config.tableConfig};
 
-    const [rows, pagination, resourceLoading]: any = useResource({
+    const {list: rows, pagination, loading: resourceLoading}: any = useResource({
         ...config.resourceConfig,
         renderRow: (row :any, i: number) => {
             return <tr className="tbl-row relative" key={i}>
