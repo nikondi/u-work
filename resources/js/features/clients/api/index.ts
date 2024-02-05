@@ -13,4 +13,7 @@ export class ClientsAPI {
     static update(id, data) {
         return axiosClient.put('/clients/'+id, data);
     }
+    static create(data) {
+        return axiosClient.post(`/clients`, data);
+    }
 }

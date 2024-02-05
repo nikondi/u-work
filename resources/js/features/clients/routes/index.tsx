@@ -3,14 +3,14 @@ import {Route, Routes} from 'react-router-dom';
 import {lazyImport} from "@/utils/lazyImport";
 
 const { Clients } = lazyImport(() => import('../components/Clients'), "Clients");
-const { ClientForm } = lazyImport(() => import('../components/ClientForm'), "ClientForm");
+const { ClientFormPage } = lazyImport(() => import('../components/ClientForm'), "ClientFormPage");
 
 export const ClientsRoutes = () => {
     return (
         <Routes>
             <Route path="/" element={<Clients/>}/>
-            <Route path="/new" element={<ClientForm key="create"/>}/>
-            <Route path="/:id" element={<ClientForm key="edit"/>}/>
+            <Route path="/new" element={<ClientFormPage key="create"/>}/>
+            <Route path="/:id" element={<ClientFormPage key="edit"/>}/>
         </Routes>
     );
 };

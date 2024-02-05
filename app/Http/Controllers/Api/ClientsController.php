@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Requests\StoreClientRequest;
+use App\Http\Requests\UpdateClientRequest;
 use App\Http\Resources\ClientResource;
 use App\Models\Client;
 use App\Models\Request as RequestModel;
@@ -66,11 +68,15 @@ class ClientsController extends Controller
             return ClientResource::collection(Client::paginate($limit, ['*'], '', $page));
     }
 
+    public function store(StoreClientRequest $data) {
+        $client = Client::create($data->validated());
+        return new ClientResource($client);
+    }
     public function show(Client $client) {
         return new ClientResource($client);
     }
-    public function update(Request $request, Client $client) {
-        $client->update($request->toArray());
+    public function update(UpdateClientRequest $request, Client $client) {
+        $client->update($request->validated());
         $client->save();
         return new ClientResource($client);
     }
