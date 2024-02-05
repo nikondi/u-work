@@ -10,6 +10,7 @@ import LoadingArea from "@/components/LoadingArea";
 import Icon from "@/components/Icon";
 import {Select, Option} from "@/components/Form";
 import {AddressSelect} from "@/features/search_selects";
+import Save from "@/components/Save";
 
 export default function Popup() {
   const {currentRequest, setCurrentRequest} = useKanbanContext();
@@ -89,7 +90,7 @@ export default function Popup() {
 
   return <form onSubmit={save}>
       <LoadingArea show={loading}/>
-      <div className="text-2xl border-b border-gray-300 pb-2 mb-4 flex gap-x-2">
+      <div className="text-2xl dark:text-white border-b border-gray-300 pb-2 mb-4 flex gap-x-2">
         <div className="flex-1">{isEdit
           ? <input value={currentRequest.subject || ''} onChange={e => setCurrentRequest({...currentRequest, subject: e.target.value})} className="kanban-popup__input" placeholder="Название" />
           : <>{currentRequest.subject || 'Заявка #'+currentRequest.id} <button type="button" onClick={() => setEditMode(true)}><Icon icon="pencil" width="20" height="20"/></button></>
@@ -171,14 +172,6 @@ function SubBlock({name, contentClassName = "", required = false, children}) {
   return <div>
     <div className="text-xs text-gray-500">{name} {required && <span className="text-red-500 text-2xl" style={{lineHeight: '7px'}}>•</span>}</div>
     <div className={"text-base "+contentClassName}>{children || <span className="text-gray-400">Пусто</span>}</div>
-  </div>
-}
-
-function Save({children}) {
-  return <div className="h-20">
-    <div className="absolute shadow-md bottom-0 left-0 right-0 p-4 bg-white flex justify-end gap-x-3">
-      {children}
-    </div>
   </div>
 }
 
