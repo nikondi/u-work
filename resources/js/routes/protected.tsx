@@ -7,25 +7,21 @@ import {UsersRoutes} from "@/features/users";
 import {WorkerRoutes} from "@/features/workers";
 import {ClientsRoutes} from "@/features/clients";
 import {RequestRoutes} from "@/features/requests/routes";
+import SidePopup from "@/components/SidePopup";
 
 const { Dashboard } = lazyImport(() => import('@/features/dashboard'), 'Dashboard');
-/*import Users from "@/views/Users";
-import UserForm from "@/views/UserForm";
-import WorkerForm from "@/views/Worker/WorkerForm";
-import Clients from "@/views/Client/Clients";
-import ClientForm from "@/views/Client/ClientForm";
-import RequestsKanban from "@/views/Request/Kanban/RequestsKanban";
-import Requests from "@/views/Request/Requests";
-import RequestForm from "@/views/Request/RequestForm";*/
+
 
 
 const App = () => {
     return (
-        <DashboardLayout>
-            <Suspense fallback={<div className="relative"><LoadingArea/></div>}>
-                <Outlet />
-            </Suspense>
-        </DashboardLayout>
+        <SidePopup>
+            <DashboardLayout>
+                <Suspense fallback={<div className="relative"><LoadingArea/></div>}>
+                    <Outlet />
+                </Suspense>
+            </DashboardLayout>
+        </SidePopup>
     );
 };
 

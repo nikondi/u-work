@@ -14,9 +14,11 @@ type TableConfig = {
     columns: ColumnConfig[],
     content: any[],
     linkTo?: (value: any) => string | null,
+    onClick?: (value: any) => void,
     buttons?: ReactElement[],
     primaryKey?: string,
     rowModules?: ReactElement[],
+    rowClass?: string,
 };
 
 type ColumnConfig = {
@@ -34,7 +36,7 @@ type Sort = {
     order: 'asc' | 'desc',
 };
 
-const default_tableConfig = {columns: [], content: [], primaryKey: null, linkTo: null, buttons: [], rowModules: []} as TableConfig;
+const default_tableConfig = {columns: [], content: [], primaryKey: null, linkTo: null, buttons: [], rowModules: [], onClick: () => {}} as TableConfig;
 const default_config_column = {key: '', label: null, sortable: false, searchable: false, filter: (value:any) => value?value:null, sortFiltered: false, linked: true} as ColumnConfig;
 
 const TableContext = createContext(null);
@@ -51,13 +53,13 @@ function TableContextProvider({children}) {
 
 const useTableContext = () => useContext(TableContext);
 
-export const Table = ({children, config}:PropsWithChildren<TableProps>) => {
+export function Table({children, config}:PropsWithChildren<TableProps>) {
     return <TableContextProvider>
         <TableContent config={config}>{children}</TableContent>
     </TableContextProvider>
 }
 
-const TableContent = ({children, config = {}}) => {
+function TableContent({children, config = {}}) {
     const [sort, _setSort] = useState<Sort>(null);
     const [content, setContent] = useState([]);
     const [searchPhrase, setSearchPhrase] = useState('');
@@ -224,12 +226,12 @@ function Row({item}) {
         setRow(item);
     }, [item]);
 
-    return <tr className="tbl-row relative">
+    return <tr className={"tbl-row relative "+tableConfig.rowClass}>
         {tableConfig.columns.map((column: ColumnConfig) => tableConfig.linkTo && column.linked
             ? <td key={column.key}><Link className="tbl-column" to={tableConfig.linkTo(row)}>{column.filter(row[column.key]?row[column.key]:'')}</Link></td>
-            : <td key={column.key} className="tbl-column">{column.filter(row[column.key]?row[column.key]:'')}</td>
+            : <td key={column.key} className="tbl-column" onClick={() => tableConfig.onClick(row)}>{column.filter(row[column.key]?row[column.key]:'')}</td>
         )}
-        {tableConfig.rowModules.map((module: ReactElement) => module)}
+        {tableConfig.rowModules.map((mod: ReactElement) => mod)}
     </tr>
 }
 
@@ -257,7 +259,7 @@ export function TableServer({config, className = '', setLoading, children} : Pro
     const {list: rows, pagination, loading: resourceLoading}: any = useResource({
         ...config.resourceConfig,
         renderRow: (row :any, i: number) => {
-            return <tr className="tbl-row relative" key={i}>
+            return <tr className={"tbl-row relative "+config.tableConfig.rowClass} key={i}>
                 {config.tableConfig.columns.map((column) => {
                     let val = row[column.key];
                     if(column.filter)
@@ -267,9 +269,9 @@ export function TableServer({config, className = '', setLoading, children} : Pro
 
                     return config.tableConfig.linkTo && column.linked
                             ? <td key={column.key}><Link className="tbl-column" to={config.tableConfig.linkTo(row)}>{val}</Link></td>
-                            : <td key={column.key} className="tbl-column">{val}</td>;
+                            : <td key={column.key} className="tbl-column" onClick={() => config.tableConfig.onClick(row)}>{val}</td>;
                 })}
-                {config.tableConfig.rowModules.map((module: ReactElement) => module)}
+                {config.tableConfig.rowModules.map((mod: ReactElement) => mod)}
             </tr>
         },
         renderPagination: (list, setPage) => <Pagination setPage={setPage} list={list}/>,

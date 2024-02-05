@@ -510,7 +510,30 @@
     }
 
     .repeater-input {
-        @apply transition-colors rounded p-1 bg-transparent w-full outline-none dark:bg-gray-800 hover:bg-gray-200 focus:bg-gray-200 dark:hover:bg-gray-700 dark:focus:bg-gray-700;
+        @apply transition-colors rounded p-1 bg-transparent w-full outline-none bg-gray-200 dark:bg-gray-800 hover:bg-gray-100 focus:bg-gray-100 dark:hover:bg-gray-700 dark:focus:bg-gray-700;
+    }
+
+    .sidepopup {
+        @apply fixed inset-0;
+        z-index: 1001;
+        &__background {
+            @apply absolute bg-black bg-opacity-35 w-full h-full;
+            backdrop-filter: blur(5px);
+            z-index: 0;
+        }
+        &__content {
+            @apply absolute right-0 text-gray-800 shadow-lg bg-sky-50 dark:bg-sky-950 flex flex-col;
+            width: calc(100% - 77px);
+            height: 100%;
+            max-width: 900px;
+        }
+        &__close {
+            @apply absolute text-white py-3.5 pl-4 pr-5 cursor-pointer transition-colors duration-300 bg-primary-600 hover:bg-primary-700 rounded-l-full;
+            left: 0;
+            font-size: 14px;
+            top: 20px;
+            transform: translateX(-100%);
+        }
     }
 
 }
