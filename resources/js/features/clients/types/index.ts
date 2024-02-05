@@ -1,14 +1,19 @@
 import {Address} from "@/features/addresses";
 
+type ClientAddress = {
+    floor: number | string,
+    apartment: number | string,
+} & Address;
+
 export type Client = {
     id: number,
     name: string,
-    address: Address,
-    floor: number | string,
-    apartment: number | string,
+    address: ClientAddress,
     comment: string,
     phone?: string,
     email?: string,
     status: string,
     phones?: string[],
+    floor: number | string,
+    apartment: number | string,
 }

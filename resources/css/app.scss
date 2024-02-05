@@ -67,7 +67,7 @@
         }
     }
     .form-input-text {
-        @apply bg-gray-50 border-2 border-gray-300 text-gray-900 text-sm rounded-lg outline-none focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500
+        @apply bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg outline-none focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500
     }
     .form-select {
         &-heading {
@@ -83,7 +83,7 @@
             }
         }
         &-options {
-            @apply w-full hidden absolute bg-gray-50 dark:bg-gray-600 dark:text-white;
+            @apply w-full hidden absolute bg-gray-50 dark:bg-gray-600 dark:text-white text-sm;
             top: 0;
             z-index: 20;
             padding-top: 45px;
@@ -91,7 +91,9 @@
             padding-bottom: 10px;
             max-height: 350px;
             overflow: auto;
-
+        }
+        &-heading--opened {
+            z-index: 23;
         }
         &-heading--opened svg {
             transform: rotate(-180deg);
@@ -99,6 +101,7 @@
         &-heading--opened + &-options {
             box-shadow: 0 0 5px 2px rgba(29, 78,216, .6);
             @apply block;
+            z-index: 22;
         }
         &-option {
             @apply transition-colors duration-300 bg-inherit hover:bg-gray-200 hover:dark:bg-gray-700 px-4 py-2 cursor-pointer;

@@ -7,7 +7,7 @@ import {useDelayedState} from "@/hooks";
 export function AddressSelect({address}: {address: Address}) {
   const [word, setWord] = useState('');
   const [addresses, setAddresses] = useState<Address[]>([]);
-  const {opened} = useSelectContext();
+  const {opened, setSelectedOption} = useSelectContext();
   const searchInput = useRef<HTMLInputElement>();
 
   useEffect(() => {
@@ -26,8 +26,13 @@ export function AddressSelect({address}: {address: Address}) {
   }, [word]);
 
   const addressLabel = (address: Address) => {
-    return address.full;
+    return address?address.full:'Не выбрано';
   }
+
+  useEffect(() => {
+    setSelectedOption({value: address, label: addressLabel(address)}, false);
+  }, []);
+
 
   const [_word, _setWord] = useDelayedState(setWord, 400, '');
 
