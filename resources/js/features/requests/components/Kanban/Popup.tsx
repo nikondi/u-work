@@ -87,87 +87,79 @@ export default function Popup() {
     return () => window.removeEventListener('keyup', onKeyUp);
   }, []);
 
-  return <div className="kanban-popup">
-    <div className="kanban-popup__background" onClick={() => setCurrentRequest(null)}></div>
-    <form onSubmit={save} className="kanban-popup__content relative">
+  return <form onSubmit={save}>
       <LoadingArea show={loading}/>
-      <div className="kanban-popup__close" onClick={() => setCurrentRequest(null)}>
-        <svg width="1em" height="1em" viewBox="0 0 329.269 329"><path d="M194.8 164.77 323.013 36.555c8.343-8.34 8.343-21.825 0-30.164-8.34-8.34-21.825-8.34-30.164 0L164.633 134.605 36.422 6.391c-8.344-8.34-21.824-8.34-30.164 0-8.344 8.34-8.344 21.824 0 30.164l128.21 128.215L6.259 292.984c-8.344 8.34-8.344 21.825 0 30.164a21.266 21.266 0 0 0 15.082 6.25c5.46 0 10.922-2.09 15.082-6.25l128.21-128.214 128.216 128.214a21.273 21.273 0 0 0 15.082 6.25c5.46 0 10.922-2.09 15.082-6.25 8.343-8.34 8.343-21.824 0-30.164zm0 0" fill="currentColor"/></svg>
+      <div className="text-2xl border-b border-gray-300 pb-2 mb-4 flex gap-x-2">
+        <div className="flex-1">{isEdit
+          ? <input value={currentRequest.subject || ''} onChange={e => setCurrentRequest({...currentRequest, subject: e.target.value})} className="kanban-popup__input" placeholder="Название" />
+          : <>{currentRequest.subject || 'Заявка #'+currentRequest.id} <button type="button" onClick={() => setEditMode(true)}><Icon icon="pencil" width="20" height="20"/></button></>
+        }</div>
+        {currentRequest.id && <div className="text-orange-500 text-xl">#{currentRequest.id}</div>}
       </div>
-      <div className="overflow-auto py-4 px-6 h-full">
-        <div className="text-2xl border-b border-gray-300 pb-2 mb-4 flex gap-x-2">
-          <div className="flex-1">{isEdit
-            ? <input value={currentRequest.subject || ''} onChange={e => setCurrentRequest({...currentRequest, subject: e.target.value})} className="kanban-popup__input" placeholder="Название" />
-            : <>{currentRequest.subject || 'Заявка #'+currentRequest.id} <button type="button" onClick={() => setEditMode(true)}><Icon icon="pencil" width="20" height="20"/></button></>
-          }</div>
-          {currentRequest.id && <div className="text-orange-500 text-xl">#{currentRequest.id}</div>}
-        </div>
 
-        {column && <div className={"mt-0.5 mb-2 py-2 px-3 text-white rounded "+column.colors}>{column.title}</div>}
+      {column && <div className={"mt-0.5 mb-2 py-2 px-3 text-white rounded "+column.colors}>{column.title}</div>}
 
-        <div className="flex flex-col flex-1 gap-y-3">
-          <Block name="О заявке">
-            <SubBlock name="Комментарий" contentClassName="whitespace-pre-wrap">
-              {isEdit
-                ? <div className="mt-2">
-                  <textarea value={currentRequest.content || ''} onChange={e => setCurrentRequest({...currentRequest, content: e.target.value})} placeholder="Комментарий" className="kanban-popup__textarea"/>
-                </div>
-                : currentRequest.content
-              }
-            </SubBlock>
-            <SubBlock name="Источник">
-              {currentRequest.source == 'uniwork' && 'Добавлено оператором'}
-              {currentRequest.source == 'unisite' && 'С сайта uniphone.su'}
-              {currentRequest.source == 'tomoru' && 'Звонок Tomoru'}
-            </SubBlock>
-          </Block>
-            <Block name="Ответственный">
-                <PopupWorker setEditMode={setEditMode}/>
-            </Block>
-
-            <Block name="Клиент">
-                <div className="mb-2">
-                  <PopupClient setEditMode={setEditMode}/>
-                </div>
-                {(!currentRequest.client || !isEdit) && <>
-                  <SubBlock name="Имя" required={isEdit && !currentRequest.client_name}>{isEdit
-                    ? <input className="kanban-popup__input mt-1" value={currentRequest.client_name || ''} onChange={e => setCurrentRequest({...currentRequest, client_name: e.target.value})} placeholder="Имя" required={true} />
-                    : currentRequest.client_name
-                  }</SubBlock>
-                  <SubBlock name="Телефон" required={isEdit && !currentRequest.client_phone && !currentRequest.email}>{isEdit
-                    ? <input className="kanban-popup__input mt-1" value={currentRequest.client_phone} onChange={e => setCurrentRequest({...currentRequest, client_phone: e.target.value})} placeholder="Телефон" required={!currentRequest.client_phone && !currentRequest.email} />
-                    : (currentRequest.client_phone?<a href={"tel:"+currentRequest.client_phone || ''} className="link"><Icon icon="phone"/> {currentRequest.client_phone}</a>:null)
-                  }</SubBlock>
-                  <SubBlock name="E-mail" required={isEdit && !currentRequest.client_phone && !currentRequest.email}>{isEdit
-                    ? <input className="kanban-popup__input mt-1" value={currentRequest.email || ''} onChange={e => setCurrentRequest({...currentRequest, email: e.target.value})} placeholder="E-mail" required={!currentRequest.client_phone && !currentRequest.email}/>
-                    : (currentRequest.email?<a href={"mailto:"+currentRequest.email} className="link"><Icon icon="envelope"/> {currentRequest.email}</a>:null)
-                  }</SubBlock>
-                </>}
-                <SubBlock name="Контактный телефон">{isEdit
-                    ? <input className="kanban-popup__input mt-1" value={currentRequest.client_phone_contact || ''} onChange={e => setCurrentRequest({...currentRequest, client_phone_contact: e.target.value})} placeholder="Контактный телефон" />
-                    : (currentRequest.client_phone_contact?<a href={"tel:"+currentRequest.client_phone_contact} className="link"><Icon icon="phone"/> {currentRequest.client_phone_contact}</a>:null)
-                }</SubBlock>
-            </Block>
-          <Block name="Адрес">
-            <div className="mb-2">
-              <PopupAddress setEditMode={setEditMode}/>
-            </div>
-            {(isEdit && currentRequest.addressDB)
-              ? <PopupAddressAdditional/>
-              : <SubBlock name="Адрес">{isEdit
-                ? <input className="kanban-popup__input mt-1" value={currentRequest.address || ''} onChange={e => setCurrentRequest({...currentRequest, address: e.target.value})} placeholder="Адрес" />
-                : currentRequest.address
-              }</SubBlock>
+      <div className="flex flex-col flex-1 gap-y-3">
+        <Block name="О заявке">
+          <SubBlock name="Комментарий" contentClassName="whitespace-pre-wrap">
+            {isEdit
+              ? <div className="mt-2">
+                <textarea value={currentRequest.content || ''} onChange={e => setCurrentRequest({...currentRequest, content: e.target.value})} placeholder="Комментарий" className="kanban-popup__textarea"/>
+              </div>
+              : currentRequest.content
             }
+          </SubBlock>
+          <SubBlock name="Источник">
+            {currentRequest.source == 'uniwork' && 'Добавлено оператором'}
+            {currentRequest.source == 'unisite' && 'С сайта uniphone.su'}
+            {currentRequest.source == 'tomoru' && 'Звонок Tomoru'}
+          </SubBlock>
+        </Block>
+          <Block name="Ответственный">
+              <PopupWorker setEditMode={setEditMode}/>
           </Block>
-        </div>
+
+          <Block name="Клиент">
+              <div className="mb-2">
+                <PopupClient setEditMode={setEditMode}/>
+              </div>
+              {(!currentRequest.client || !isEdit) && <>
+                <SubBlock name="Имя" required={isEdit && !currentRequest.client_name}>{isEdit
+                  ? <input className="kanban-popup__input mt-1" value={currentRequest.client_name || ''} onChange={e => setCurrentRequest({...currentRequest, client_name: e.target.value})} placeholder="Имя" required={true} />
+                  : currentRequest.client_name
+                }</SubBlock>
+                <SubBlock name="Телефон" required={isEdit && !currentRequest.client_phone && !currentRequest.email}>{isEdit
+                  ? <input className="kanban-popup__input mt-1" value={currentRequest.client_phone} onChange={e => setCurrentRequest({...currentRequest, client_phone: e.target.value})} placeholder="Телефон" required={!currentRequest.client_phone && !currentRequest.email} />
+                  : (currentRequest.client_phone?<a href={"tel:"+currentRequest.client_phone || ''} className="link"><Icon icon="phone"/> {currentRequest.client_phone}</a>:null)
+                }</SubBlock>
+                <SubBlock name="E-mail" required={isEdit && !currentRequest.client_phone && !currentRequest.email}>{isEdit
+                  ? <input className="kanban-popup__input mt-1" value={currentRequest.email || ''} onChange={e => setCurrentRequest({...currentRequest, email: e.target.value})} placeholder="E-mail" required={!currentRequest.client_phone && !currentRequest.email}/>
+                  : (currentRequest.email?<a href={"mailto:"+currentRequest.email} className="link"><Icon icon="envelope"/> {currentRequest.email}</a>:null)
+                }</SubBlock>
+              </>}
+              <SubBlock name="Контактный телефон">{isEdit
+                  ? <input className="kanban-popup__input mt-1" value={currentRequest.client_phone_contact || ''} onChange={e => setCurrentRequest({...currentRequest, client_phone_contact: e.target.value})} placeholder="Контактный телефон" />
+                  : (currentRequest.client_phone_contact?<a href={"tel:"+currentRequest.client_phone_contact} className="link"><Icon icon="phone"/> {currentRequest.client_phone_contact}</a>:null)
+              }</SubBlock>
+          </Block>
+        <Block name="Адрес">
+          <div className="mb-2">
+            <PopupAddress setEditMode={setEditMode}/>
+          </div>
+          {(isEdit && currentRequest.addressDB)
+            ? <PopupAddressAdditional/>
+            : <SubBlock name="Адрес">{isEdit
+              ? <input className="kanban-popup__input mt-1" value={currentRequest.address || ''} onChange={e => setCurrentRequest({...currentRequest, address: e.target.value})} placeholder="Адрес" />
+              : currentRequest.address
+            }</SubBlock>
+          }
+        </Block>
       </div>
       {isEdit && <Save>
         <button className="btn btn-gray px-3 py-2" type="button" onClick={discard}>Отменить</button>
         <button className="btn btn-primary px-3 py-2" type="submit">Сохранить</button>
       </Save>}
-    </form>
-  </div>;
+    </form>;
 }
 function Block({name, children}) {
   return <div className="bg-gray-100 rounded-md p-4">

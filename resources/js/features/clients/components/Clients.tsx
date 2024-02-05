@@ -4,18 +4,19 @@ import LoadingArea from "@/components/LoadingArea";
 import {ResourceFetchFunction} from "@/hooks/useResource";
 import SearchInput from "@/components/SearchInput";
 import toast from "react-hot-toast";
-import {ClientForm, ClientsAPI} from "@/features/clients";
+import {Client, ClientForm, ClientsAPI} from "@/features/clients";
 import {useDelayedState} from "@/hooks";
 import {Address} from "@/features/addresses";
-import {useSidePopupContext} from "@/components/SidePopup";
+import SidePopup, {CloseButton, PopupContent} from "@/components/SidePopup";
 
 export function Clients() {
     const [loading, setLoading] = useState(false);
-    const {openPopup} = useSidePopupContext();
 
     const [word, setWord] = useState('');
     const [_word, _setWord] = useDelayedState(setWord, 500, '');
     const lastWord = useRef('');
+
+    const [currentClient, setCurrentClient] = useState<Client>(null);
 
     const fetchClients: ResourceFetchFunction = useCallback((page, setPage) => {
         if(word.trim() !== '') {
@@ -29,53 +30,61 @@ export function Clients() {
     }, [word]);
 
     return (
-        <div className="relative">
-            <SearchInput value={_word} setValue={_setWord} />
+        <div>
+            {currentClient && <SidePopup onClose={() => setCurrentClient(null)}>
+                <PopupContent>
+                    <CloseButton onClose={() => setCurrentClient(null)}/>
+                    <ClientForm id={currentClient.id}/>
+                </PopupContent>
+            </SidePopup>}
             <div className="relative">
-                <LoadingArea show={loading}/>
-                <TableServer config={{
-                    pagination: true,
-                    resourceConfig: {
-                        fetch: fetchClients,
-                        onFetchError: (e) => {
-                            toast.error('Произошла ошибка: '+e.message);
-                        }
-                    },
-                    tableConfig: {
-                        // linkTo: value => `/clients/${value.id}`,
-                        onClick(row) {
-                            openPopup(<ClientForm id={row.id}/>)
-                        },
-                        rowClass: 'cursor-pointer',
-                        columns: [
-                            { key: 'id', label: 'Номер лицевого счёта', linked: true },
-                            { key: 'name', label: 'ФИО', linked: true,
-                                filter(value: string) {
-                                    return value || <span className="text-gray-400 dark:text-gray-500">Пусто</span>;
-                                }
-                            },
-                            { key: 'address', label: 'Адрес', linked: true,
-                                filter(value: Address) {
-                                    if(!value)
-                                        return (<span className="text-gray-400 dark:text-gray-500">Пусто</span>)
-
-                                    return value.full;
-                                }
-                            },
-                            { key: 'phones', label: 'Номер телефона',
-                                filter(value: string[] | number[]) {
-                                    if(!value || value.length == 0)
-                                        return (<span className="text-gray-400 dark:text-gray-500">Пусто</span>)
-
-                                    return <>
-                                        {value.map((tel:number|string, i:number) => <Fragment key={i}><a className="underline text-blue-600 dark:text-blue-300" onClick={event => event.stopPropagation()} href={'tel:'+tel}>{tel}</a>{i < value.length - 1?', ':''}</Fragment>)}
-                                    </>;
-                                }
+                <SearchInput value={_word} setValue={_setWord} />
+                <div className="relative">
+                    <LoadingArea show={loading}/>
+                    <TableServer config={{
+                        pagination: true,
+                        resourceConfig: {
+                            fetch: fetchClients,
+                            onFetchError: (e) => {
+                                toast.error('Произошла ошибка: '+e.message);
                             }
-                        ],
-                    }
-                }}
-                 setLoading={setLoading}/>
+                        },
+                        tableConfig: {
+                            // linkTo: value => `/clients/${value.id}`,
+                            onClick(row) {
+                                setCurrentClient(row);
+                            },
+                            rowClass: 'cursor-pointer',
+                            columns: [
+                                { key: 'id', label: 'Номер лицевого счёта', linked: true },
+                                { key: 'name', label: 'ФИО', linked: true,
+                                    filter(value: string) {
+                                        return value || <span className="text-gray-400 dark:text-gray-500">Пусто</span>;
+                                    }
+                                },
+                                { key: 'address', label: 'Адрес', linked: true,
+                                    filter(value: Address) {
+                                        if(!value)
+                                            return (<span className="text-gray-400 dark:text-gray-500">Пусто</span>)
+
+                                        return value.full;
+                                    }
+                                },
+                                { key: 'phones', label: 'Номер телефона',
+                                    filter(value: string[] | number[]) {
+                                        if(!value || value.length == 0)
+                                            return (<span className="text-gray-400 dark:text-gray-500">Пусто</span>)
+
+                                        return <>
+                                            {value.map((tel:number|string, i:number) => <Fragment key={i}><a className="underline text-blue-600 dark:text-blue-300" onClick={event => event.stopPropagation()} href={'tel:'+tel}>{tel}</a>{i < value.length - 1?', ':''}</Fragment>)}
+                                        </>;
+                                    }
+                                }
+                            ],
+                        }
+                    }}
+                     setLoading={setLoading}/>
+                </div>
             </div>
         </div>
     )

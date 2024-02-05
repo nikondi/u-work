@@ -3,15 +3,15 @@ import {KanbanContextProvider, useKanbanContext} from "./KanbanContext";
 import Popup from "./Popup";
 import {KanbanColumn} from "./Column";
 import {
-    closestCenter,
-    DndContext,
-    DragEndEvent,
-    DragOverEvent,
-    DragOverlay,
-    PointerSensor,
-    TouchSensor,
-    useSensor,
-    useSensors
+  closestCenter,
+  DndContext,
+  DragEndEvent,
+  DragOverEvent,
+  DragOverlay,
+  PointerSensor,
+  TouchSensor,
+  useSensor,
+  useSensors
 } from "@dnd-kit/core";
 import {arrayMove} from "@dnd-kit/sortable";
 import Card from "./Card";
@@ -20,8 +20,7 @@ import {useEcho} from "@/hooks";
 import {default_columns} from "../../const";
 import {Request} from "../../types";
 import {RequestsAPI} from "../../api";
-
-
+import SidePopup, {CloseButton, PopupContent} from "@/components/SidePopup";
 
 
 export function RequestsKanban() {
@@ -32,7 +31,7 @@ export function RequestsKanban() {
 
 function RequestsKanbanInner() {
   const [data, setData] = useState([]);
-  const {setOverColumn, setDraggingItem, draggingItem, currentRequest} = useKanbanContext();
+  const {setOverColumn, setDraggingItem, draggingItem, currentRequest, setCurrentRequest} = useKanbanContext();
 
   useEcho('requests', '.update', (res: {data: Request, id: number, type: string}) => {
     setData(data.map(item => (item.id == res.id?{...item, ...res.data}:item)));
@@ -180,6 +179,11 @@ function RequestsKanbanInner() {
           {draggingItem && <Card id={draggingItem.id} item={draggingItem.data} colors="bg-transparent" className="cursor-grabbing"/>}
       </DragOverlay>
     </DndContext>
-    {currentRequest && <Popup/>}
+    {currentRequest && <SidePopup onClose={() => setCurrentRequest(null)}>
+        <PopupContent>
+            <CloseButton onClose={() => setCurrentRequest(null)}/>
+            <Popup/>
+        </PopupContent>
+    </SidePopup>}
   </>;
 }

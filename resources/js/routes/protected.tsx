@@ -7,7 +7,6 @@ import {UsersRoutes} from "@/features/users";
 import {WorkerRoutes} from "@/features/workers";
 import {ClientsRoutes} from "@/features/clients";
 import {RequestRoutes} from "@/features/requests/routes";
-import SidePopup from "@/components/SidePopup";
 
 const { Dashboard } = lazyImport(() => import('@/features/dashboard'), 'Dashboard');
 
@@ -15,13 +14,11 @@ const { Dashboard } = lazyImport(() => import('@/features/dashboard'), 'Dashboar
 
 const App = () => {
     return (
-        <SidePopup>
-            <DashboardLayout>
-                <Suspense fallback={<div className="relative"><LoadingArea/></div>}>
-                    <Outlet />
-                </Suspense>
-            </DashboardLayout>
-        </SidePopup>
+        <DashboardLayout>
+            <Suspense fallback={<div className="relative"><LoadingArea/></div>}>
+                <Outlet />
+            </Suspense>
+        </DashboardLayout>
     );
 };
 
@@ -36,15 +33,6 @@ export const protectedRoutes = [
             {path: '/workers/*', element: <WorkerRoutes/>},
             {path: '/clients/*', element: <ClientsRoutes/>},
             {path: '/requests/*', element: <RequestRoutes/>},
-
-
-
-/*            ,
-
-            {path: '/kanban', element: <RequestsKanban/>},
-            {path: '/requests', element: <Requests/>},
-            {path: '/requests/new', element: <RequestForm type="requestCreate"/>},
-            {path: '/requests/:id', element: <RequestForm type="requestUpdate"/>},*/
         ],
     },
 ];
