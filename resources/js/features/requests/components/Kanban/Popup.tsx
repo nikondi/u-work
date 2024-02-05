@@ -1,7 +1,7 @@
 import {useKanbanContext} from "./KanbanContext";
 import {Link} from "react-router-dom";
 import React, {FormEventHandler, useEffect, useMemo, useState} from "react";
-import {AddressSelect, ClientSelect, WorkerSelect} from "../RequestForm";
+import {ClientSelect, WorkerSelect} from "../RequestForm";
 import toast from "react-hot-toast";
 import {err} from "@/helpers";
 import {RequestsAPI} from "../../api";
@@ -9,6 +9,7 @@ import {default_columns} from "../../const";
 import LoadingArea from "@/components/LoadingArea";
 import Icon from "@/components/Icon";
 import {Select, Option} from "@/components/Form";
+import {AddressSelect} from "@/features/search_selects";
 
 export default function Popup() {
   const {currentRequest, setCurrentRequest} = useKanbanContext();
