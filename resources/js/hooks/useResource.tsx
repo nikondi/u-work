@@ -1,10 +1,11 @@
 import React, {createContext, ReactElement, useContext, useEffect, useRef, useState} from "react";
+import {stateFunction} from "@/types";
 
 type renderRowFunction<T> = (elem: T, index:number) => ReactElement;
-export type ResourceFetchFunction = (page:number, setPage: (page: number, silently: boolean) => void) => Promise<any>;
+export type ResourceFetchFunction = (page:number, setPage: (page: number, silently: boolean) => void) => (Promise<any> | (false | undefined | null));
 export type ResourceConfig<T = any> = {
     fetch: ResourceFetchFunction,
-    fetchCallback?: (result:any) => any,
+    fetchCallback?: (result:any, page: number) => any,
     onFetchError?: (error:any) => any,
     onFetchFinally?: () => any,
 
@@ -12,7 +13,7 @@ export type ResourceConfig<T = any> = {
     renderPagination?: (list: PaginationLink[], setPage:(page:number) => void) => ReactElement,
     page?:number,
 
-    renderRow: renderRowFunction<T>
+    renderRow?: renderRowFunction<T>
 };
 
 export type PaginationLink = {
@@ -38,7 +39,7 @@ export function useResource<Row = any>(config: ResourceConfig<Row>) {
     const [content, setContent] = useState<Row[]>([]);
 
     const [pagination, setPagination] = useState<ReactElement>(null)
-    const [list, setList] = useState<ReactElement[]>([]);
+    const [list, setList] = useState<ReactElement[] | Row>([]);
     const timeoutRef = useRef<null | ReturnType<typeof setTimeout>>(null);
 
     const setPage = (page:number, silently: boolean = false) => {
@@ -61,13 +62,19 @@ export function useResource<Row = any>(config: ResourceConfig<Row>) {
         clearTimeout(timeoutRef.current);
         timeoutRef.current = setTimeout(() => {
             setLoading(true);
-            config.fetch(page, setPage).then(({data}) => {
+            const fetch = config.fetch(page, setPage);
+            if(!fetch) {
+              setLoading(false);
+              return;
+            }
+
+            fetch.then(({data}) => {
                 setContent(data.data)
                 if(config.pagination && data.meta?.links)
                     setPageList(data.meta.links);
                 else
                     setPageList([]);
-                if(config.fetchCallback) config.fetchCallback(data);
+                if(config.fetchCallback) config.fetchCallback(data, page);
             }).catch((e:object) => {
                 if(config.onFetchError) config.onFetchError(e);
 
@@ -88,7 +95,11 @@ export function useResource<Row = any>(config: ResourceConfig<Row>) {
         if(!content)
             return;
 
-        setList(content.map((row, i) => <RowContextProvider key={i} initial={row}>{config.renderRow(row, i)}</RowContextProvider>));
+        setList(content.map((row: Row, i) => {
+          return config.renderRow
+            ? <RowContextProvider key={i} initial={row}>{config.renderRow(row, i)}</RowContextProvider>
+            : null;
+        }));
     }, [content]);
 
     return {
@@ -109,7 +120,8 @@ function RowContextProvider({children, initial = null}) {
     </RowContext.Provider>;
 }
 
-export const useRowContext = () => useContext(RowContext);
+type RowContext = {row: any, setRow: stateFunction};
+export const useRowContext = () => useContext<RowContext>(RowContext);
 
 
 type PaginationProps = {
