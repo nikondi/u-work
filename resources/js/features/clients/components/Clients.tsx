@@ -4,12 +4,14 @@ import LoadingArea from "@/components/LoadingArea";
 import {ResourceFetchFunction} from "@/hooks/useResource";
 import SearchInput from "@/components/SearchInput";
 import toast from "react-hot-toast";
-import {ClientsAPI} from "@/features/clients";
+import {ClientForm, ClientsAPI} from "@/features/clients";
 import {useDelayedState} from "@/hooks";
 import {Address} from "@/features/addresses";
+import {useSidePopupContext} from "@/components/SidePopup";
 
 export function Clients() {
     const [loading, setLoading] = useState(false);
+    const {openPopup} = useSidePopupContext();
 
     const [word, setWord] = useState('');
     const [_word, _setWord] = useDelayedState(setWord, 500, '');
@@ -40,7 +42,11 @@ export function Clients() {
                         }
                     },
                     tableConfig: {
-                        linkTo: value => `/clients/${value.id}`,
+                        // linkTo: value => `/clients/${value.id}`,
+                        onClick(row) {
+                            openPopup(<ClientForm id={row.id}/>)
+                        },
+                        rowClass: 'cursor-pointer',
                         columns: [
                             { key: 'id', label: 'Номер лицевого счёта', linked: true },
                             { key: 'name', label: 'ФИО', linked: true,
