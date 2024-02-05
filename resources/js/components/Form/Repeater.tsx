@@ -59,7 +59,7 @@ export function Repeater({value, setValue, separator = ',', config = {}}: Repeat
 export function RepeaterSimpleRow({row, onChange, addRow, removeRow}) {
   return <div className="flex gap-x-2">
     <input value={row} onChange={onChange} className="repeater-input" />
-    <button className="icon-btn" onClick={() => addRow('')}>+</button>
-    <button className="icon-btn" onClick={removeRow}>-</button>
+    <button className="icon-btn" type="button" onClick={() => addRow('')}>+</button>
+    <button className="icon-btn" type="button" onClick={removeRow}>-</button>
   </div>
 }
