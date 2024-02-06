@@ -525,7 +525,7 @@
             z-index: 0;
         }
         &__content {
-            @apply absolute right-0 text-gray-800 shadow-lg bg-sky-50 dark:bg-sky-950 flex flex-col;
+            @apply absolute right-0 text-gray-800 shadow-lg bg-sky-50 dark:bg-sky-950 flex flex-col min-h-16;
             width: calc(100% - 77px);
             height: 100%;
             max-width: 900px;
