@@ -48,7 +48,7 @@ export function WorkerForm() {
         ev.preventDefault();
         setSubmitting(true);
         setErrors(null);
-        const data = {...worker, addresses: worker.addresses.map(a => a.id)};
+        const data = {...worker, addresses: worker.addresses.map(a => a.id), roles: ['worker']};
         if(worker.id) {
           UsersAPI
               .update(worker.id, data)
