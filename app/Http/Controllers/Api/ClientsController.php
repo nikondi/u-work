@@ -7,10 +7,15 @@ use App\Http\Requests\UpdateClientRequest;
 use App\Http\Resources\ClientResource;
 use App\Models\Client;
 use App\Models\Request as RequestModel;
+use App\Traits\GetResult;
+use App\Traits\ParseResourceRequest;
 use Illuminate\Http\Request;
 
 class ClientsController extends Controller
 {
+    use GetResult,
+        ParseResourceRequest;
+
     public function search(Request $request) {
         if(!$request->exists('phone') && !$request->exists('id'))
             return response(['error' => 'Expected phone or ID of client', 'errorCode' => 101], 400);
@@ -37,35 +42,25 @@ class ClientsController extends Controller
     }
 
     public function searchAny(Request $request) {
-        $page = $request->exists('page')?intval($request->get('page')):1;
-        $limit = $request->exists('limit')?intval($request->get('limit')):-1;
-        $pagination = !$request->exists('pagination') || $request->get('pagination') == 'true';
+        [$page, $limit, $pagination] = $this->parseResourceRequest($request);
 
         $query = Client::query();
         $columns = ['id', 'phone', 'name', 'comment'];
         foreach($columns as $column)
             $query->orWhere($column, 'LIKE', '%'.$request->get('word').'%');
 
-        if($limit == -1)
-            $result = $query->get();
-        else {
-            if($pagination)
-                $result = $query->paginate($limit, ['*'], '', $page);
-            else
-                $result = $query->limit($limit)->get();
-        }
-
-        return ClientResource::collection($result);
+        return ClientResource::collection($this->getResult($query, $limit, $page, $pagination));
     }
 
     public function index(Request $request) {
-        $page = $request->exists('page')?intval($request->get('page')):1;
-        $limit = $request->exists('limit')?intval($request->get('limit')):-1;
+        [$page, $limit, $pagination] = $this->parseResourceRequest($request);
 
-        if($limit == -1)
-            return ClientResource::collection(Client::all());
-        else
-            return ClientResource::collection(Client::paginate($limit, ['*'], '', $page));
+        $query = Client::query();
+
+        if($request->exists('filter'))
+            $this->filterRequest($query, $request->get('filter'));
+
+        return ClientResource::collection($this->getResult($query, $limit, $page, $pagination));
     }
 
     public function store(StoreClientRequest $data) {
@@ -79,5 +74,10 @@ class ClientsController extends Controller
         $client->update($request->validated());
         $client->save();
         return new ClientResource($client);
+    }
+
+    private function filterRequest($query, $filter) {
+        foreach($filter as $key => $value)
+            $query->where($key, $value);
     }
 }
