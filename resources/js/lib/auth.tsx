@@ -1,7 +1,7 @@
 import React, {createContext, useContext, useEffect, useState} from "react";
 import {LoginedUser} from "@/features/auth";
 import storage from "@/utils/storage";
-import axiosClient from "@/lib/axios-client";
+import AxiosClient from "@/lib/axios-client";
 import toast from "react-hot-toast";
 import {stateFunction} from "@/types";
 
@@ -28,14 +28,14 @@ export const AuthProvider = ({children}) => {
 
     useEffect(() => {
         if(storage.getToken()) {
-            axiosClient.get('/user')
+            AxiosClient.get('/user')
                 .then(({data}) => setUser(data))
                 .catch((e) => toast.error(`Произошла ошибка: ${e.message}`));
         }
     }, []);
 
     const logout = () => {
-        axiosClient
+        AxiosClient
             .post('/logout').then(() => {
                 storage.clearToken();
                 setUser(null);

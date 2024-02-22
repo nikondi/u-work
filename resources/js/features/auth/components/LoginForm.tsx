@@ -1,6 +1,6 @@
 import {FormEventHandler, useRef, useState} from "react";
 import toast from "react-hot-toast";
-import axiosClient from "@/lib/axios-client";
+import AxiosClient from "@/lib/axios-client";
 import {useAuth} from "@/lib/auth";
 import storage from "@/utils/storage";
 import LoadingArea from "@/components/LoadingArea";
@@ -28,7 +28,7 @@ export default function LoginForm({onSuccess}) {
 
     setErrors(null);
 
-    axiosClient.post('/login', payload)
+    AxiosClient.post('/login', payload)
         .then(({data}) => {
           setUser(data.user);
           storage.setToken(data.token);

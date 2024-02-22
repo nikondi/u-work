@@ -4,32 +4,32 @@ import storage from "@/utils/storage";
 // @ts-ignore
 const base_url = `${import.meta.env.VITE_API_BASE_URL}/api`;
 
-const axiosClient = axios.create({
-    baseURL: base_url,
-	headers: {
-		common: {
-			'X-Requested-With': 'XMLHttpRequest'
-		}
-	}
+const AxiosClient = axios.create({
+  baseURL: base_url,
+  headers: {
+    common: {
+      'X-Requested-With': 'XMLHttpRequest'
+    }
+  }
 });
 
-axiosClient.interceptors.request.use((config) => {
-    const token = storage.getToken();
-    config.headers.Authorization = `Bearer ${token}`;
-    // config.headers.Accept = 'application/json';
+AxiosClient.interceptors.request.use((config) => {
+  const token = storage.getToken();
+  config.headers.Authorization = `Bearer ${token}`;
+  // config.headers.Accept = 'application/json';
 
-    return config;
+  return config;
 });
 
-axiosClient.interceptors.response.use((response) => {
-    return response;
+AxiosClient.interceptors.response.use((response) => {
+  return response;
 }, (error) => {
-    const {response} = error;
+  const {response} = error;
 
-    if(response.status == 401)
-        storage.clearToken();
+  if (response.status == 401)
+    storage.clearToken();
 
-    throw error;
+  throw error;
 });
 
-export default axiosClient;
+export default AxiosClient;
