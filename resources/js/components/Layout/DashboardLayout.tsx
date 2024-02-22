@@ -100,6 +100,10 @@ function Sidebar({mobileOpenedSidebar, setMobileOpenedSidebar}) {
                 </SidebarNavLink>
                 <SidebarNavLink to="/addresses" activeOn="/addresses/.*" onClick={() => setMobileOpenedSidebar(false)}>
                     <Icon icon="locate" size="20" className="h-5"/>
+                    <span>Адреса</span>
+                </SidebarNavLink>
+                <SidebarNavLink to="/objects" activeOn="/objects/.*" onClick={() => setMobileOpenedSidebar(false)}>
+                    <Icon icon="objects" size="20" className="h-5"/>
                     <span>Объекты</span>
                 </SidebarNavLink>
             </HasRole>

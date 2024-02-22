@@ -1,7 +1,7 @@
 import React, {SVGProps} from "react"
 
 type IconProps = {
-    icon: 'phone' | 'phone-o' | 'envelope' | 'locate' | 'pencil' | 'check' | 'times' | 'plus' | string,
+    icon: 'phone' | 'phone-o' | 'envelope' | 'locate' | 'pencil' | 'check' | 'times' | 'plus' | 'objects' | string,
     size?: string,
 } & SVGProps<any>;
 
