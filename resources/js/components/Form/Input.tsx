@@ -1,7 +1,6 @@
 import React, {InputHTMLAttributes} from "react";
-import {useMemo} from "react";
-import {uniqName} from "@/helpers";
 import {stateFunction} from "@/types";
+import {useFormRowContext} from "@/components/Form/FormRow";
 
 type Props = {
     inputRef?: React.Ref<HTMLInputElement>,
@@ -9,13 +8,15 @@ type Props = {
     setValue?: ((v:string) => void) | stateFunction
 }
 
-export function Input({name, className, inputRef=null, label=null, setValue = null, ...attributes}: InputHTMLAttributes<any> & Props) {
-    const inputName = useMemo(() => {
-        return name || uniqName();
-    }, [name]);
+export function Input({className = '', inputRef=null, label='', setValue = null, required = null, ...attributes}: InputHTMLAttributes<any> & Props) {
+    const rowContext = useFormRowContext();
+    label = (label || (label == '' && label)) || rowContext?.label;
+    required = (required == null)?rowContext?.required:required;
 
-    return <input ref={inputRef} name={inputName} placeholder={label}
+    return <input ref={inputRef}
+                  placeholder={label}
                   onChange={(e) => setValue && setValue(e.target.value)}
+                  required={required}
                   {...attributes}
                   className={'form-input-text '+className+(attributes.disabled?' opacity-70':'')} />
 }

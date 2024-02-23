@@ -2,6 +2,7 @@ import React, {PropsWithChildren, useEffect} from "react";
 import {mergeClasses} from "@/helpers";
 import {SelectContextProvider, OptionValue, useSelectContext} from "./SelectContextProvider";
 import useOutsideClick from "@/hooks/useOutsideClick.js";
+import {useFormRowContext} from "@/components/Form";
 
 type Props = {
     onChange?: (v:OptionValue) => void,
@@ -23,6 +24,9 @@ export function Select({children, className = '', onChange=()=>{}, value, label,
 function SelectInner({className, children, onChange=()=>{}, value, label}: PropsWithChildren<Props>) {
     const {setSelectedValue, setInitialValue, selectedOption, setOpened, opened} = useSelectContext();
     const selectRef = useOutsideClick(() => setOpened(false));
+
+    const rowContext = useFormRowContext();
+    label = (label || (label == '' && label)) || rowContext?.label;
 
     useEffect(() => {
         if(!selectedOption)
