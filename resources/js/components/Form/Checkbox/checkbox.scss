@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+    .checkbox-wrap {
+        @apply flex items-start relative cursor-pointer;
+        input {
+            @apply absolute opacity-0;
+            left: 4px;
+            top: 4px;
+        }
+        span {
+            @apply text-white;
+        }
+        &:hover input:not(:checked) + .checkbox-mark {
+            @apply text-orange-400;
+        }
+    }
+
+    .checkbox-mark {
+        @apply inline-flex items-center justify-center rounded mt-1 transition-colors duration-300 overflow-hidden;
+        margin-right: 10px;
+        border: 1px solid currentColor;
+        min-width: 1.1em;
+        width: 1.1em;
+        height: 1.1em;
+        svg {
+            transition: transform .2s;
+            transform: translateY(20px);
+        }
+    }
+
+    input:checked + .checkbox-mark {
+        @apply text-orange-400;
+        svg {
+            transform: translate3d(0, 1px, 0);
+        }
+    }
+}
