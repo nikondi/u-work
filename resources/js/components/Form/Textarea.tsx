@@ -1,14 +1,22 @@
-import React from "react";
+import React, {ChangeEventHandler, TextareaHTMLAttributes} from "react";
+import {useFormRowContext} from "@/components/Form/FormRow";
 
-export function Textarea({name='', value='', setValue = null, onChange = null, label='', ...attributes}) {
-    if(onChange == null) {
-        onChange = (e) => {
-            if(setValue)
-                setValue(e.target.value);
-        }
-    }
+type Props = {
+  setValue?: (v: string) => void,
+  label?: string,
+} & TextareaHTMLAttributes<HTMLTextAreaElement>
 
-    return (
-        <textarea name={name} placeholder={label} onChange={onChange} {...attributes} className={'form-input-textarea'+(attributes.disabled?' opacity-70':'')} />
-    )
+export function Textarea({name = '', value = '', setValue, label = '', ...props}: Props) {
+  const rowContext = useFormRowContext();
+  label = (label || (label == '' && label)) || rowContext?.label;
+
+  const onChange: ChangeEventHandler<HTMLTextAreaElement> = (e) => {
+    if (props.onChange)
+      props.onChange(e);
+    setValue(e.target.value);
+  }
+
+  return (
+      <textarea name={name} placeholder={label} onChange={onChange} className={'form-input-textarea ' + props.className + (props.disabled ? ' opacity-70' : '')}/>
+  )
 }
