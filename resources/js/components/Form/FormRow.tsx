@@ -4,6 +4,7 @@ type Props = {
     label?: string,
     className?: string,
     required?: boolean|undefined
+    showLabel?: boolean
 };
 
 type FormRowContext = {
@@ -11,10 +12,10 @@ type FormRowContext = {
     required: boolean
 }
 
-function FormRowInner({className, children}) {
+function FormRowInner({className, showLabel, children}) {
     const {label, required} = useFormRowContext();
     return <div className={'form-row '+className}>
-        {label && <div className="mb-2 text-sm font-medium text-gray-900 dark:text-white">{label} {required && <span className="text-red-600 dark:text-red-400">*</span>}</div>}
+        {showLabel && label && <div className="mb-2 text-sm font-medium text-gray-900 dark:text-white">{label} {required && <span className="text-red-600 dark:text-red-400">*</span>}</div>}
         {children}
     </div>
 }
@@ -22,12 +23,12 @@ function FormRowInner({className, children}) {
 const FormRowContext = createContext<FormRowContext>(null);
 export const useFormRowContext = () => useContext(FormRowContext);
 
-export function FormRow({children, label, className = '', required = null}: PropsWithChildren<Props>) {
+export function FormRow({children, label, className = '', showLabel = true, required = null}: PropsWithChildren<Props>) {
     return <FormRowContext.Provider value={{
         label: label || '',
         required: required !== null && required
     }}>
-        <FormRowInner className={className}>
+        <FormRowInner className={className} showLabel={showLabel}>
             {children}
         </FormRowInner>
     </FormRowContext.Provider>
