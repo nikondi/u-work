@@ -13,8 +13,8 @@ use Illuminate\Http\Request;
 
 class ClientsController extends Controller
 {
-    use GetResult,
-        ParseResourceRequest;
+    use GetResult;
+    use ParseResourceRequest;
 
     public function search(Request $request) {
         if(!$request->exists('phone') && !$request->exists('id'))
