@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite';
+import {defineConfig} from 'vite';
 import laravel from 'laravel-vite-plugin';
 import react from "@vitejs/plugin-react";
 
@@ -15,7 +15,7 @@ export default defineConfig({
             refresh: true,
         }),
     ],
-   css: {
-       postcss: 'resources/js/postcss.config.js'
+    css: {
+        postcss: 'resources/js/postcss.config.js'
     },
 });
