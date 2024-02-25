@@ -39,7 +39,7 @@ function SelectInner({className, children, onChange=()=>{}, value, label}: Props
     useEffect(() => {
         if(value || value === null)
             setInitialValue(value);
-    }, []);
+    }, [value]);
 
     useEffect(() => {
         const handleKeydown = (e:KeyboardEvent) => {
