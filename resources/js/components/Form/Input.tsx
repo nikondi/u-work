@@ -5,7 +5,7 @@ import {useFormRowContext} from "@/components/Form/FormRow";
 type Props = {
     inputRef?: React.Ref<HTMLInputElement>,
     label?: string,
-    setValue?: ((v:string) => void) | stateFunction
+    setValue?: ((v:string) => void)
 }
 
 export function Input({className = '', inputRef=null, label='', setValue = null, required = null, ...attributes}: InputHTMLAttributes<any> & Props) {
