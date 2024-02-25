@@ -1,0 +1,45 @@
+<?php
+
+namespace App\Http\Requests;
+
+use Illuminate\Foundation\Http\FormRequest;
+
+class CreateObjectRequest extends FormRequest
+{
+    static public function getRules(): array {
+        return [
+            'type' => 'required',
+            'router' => '',
+            'internet' => '',
+            'nets' => 'array|nullable',
+            'nets.*.subnet' => 'required',
+            'nets.*.wan' => 'required_unless:net.*.subnet,null',
+            'nets.*.pppoe_cred' => 'required_unless:net.*.subnet,null',
+            'cameras' => 'array|nullable',
+            'cameras.*.ip' => '',
+            'cameras.*.model' => '',
+            'sip' => 'nullable|numeric|min:111|max:999999|unique:objects,sip',
+            'cubic_ip' => '',
+            'minipc_model' => '',
+            'intercom_model' => '',
+            'comment' => '',
+        ];
+    }
+    /**
+     * Determine if the user is authorized to make this request.
+     */
+    public function authorize(): bool
+    {
+        return true;
+    }
+
+    /**
+     * Get the validation rules that apply to the request.
+     *
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
+     */
+    public function rules(): array
+    {
+        return static::getRules();
+    }
+}
