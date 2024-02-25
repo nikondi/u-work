@@ -6,7 +6,7 @@ type Props = {
   label?: string,
 } & TextareaHTMLAttributes<HTMLTextAreaElement>
 
-export function Textarea({name = '', value = '', setValue, label = '', ...props}: Props) {
+export function Textarea({setValue, label = '', ...props}: Props) {
   const rowContext = useFormRowContext();
   label = (label || (label == '' && label)) || rowContext?.label;
 
@@ -16,7 +16,6 @@ export function Textarea({name = '', value = '', setValue, label = '', ...props}
     setValue(e.target.value);
   }
 
-  return (
-      <textarea name={name} placeholder={label} onChange={onChange} className={'form-input-textarea ' + props.className + (props.disabled ? ' opacity-70' : '')}/>
-  )
+  return <textarea {...props} placeholder={label} onChange={onChange} className={'form-input-textarea ' + props.className + (props.disabled ? ' opacity-70' : '')}/>;
+
 }
