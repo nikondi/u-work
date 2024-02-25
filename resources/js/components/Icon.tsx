@@ -7,6 +7,6 @@ type IconProps = {
 
 export default function Icon({width = null, height = null, size = '1em', icon, ...props}: IconProps) {
     return <svg className="icon" width={width || size} height={height || size} {...props}>
-        <use xlinkHref={`/assets/images/icons.svg#${icon}`} />
+        <use xlinkHref={`/assets/images/icons.svg?ver=1.1#${icon}`} />
     </svg>
 }
