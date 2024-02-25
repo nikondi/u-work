@@ -6,8 +6,9 @@ import {lazyImport} from "@/utils/lazyImport";
 import {UsersRoutes} from "@/features/users";
 import {WorkerRoutes} from "@/features/workers";
 import {ClientsRoutes} from "@/features/clients";
-import {RequestRoutes} from "@/features/requests/routes";
-import {AddressesRoutes} from "@/features/addresses/routes";
+import {RequestRoutes} from "@/features/requests";
+import {AddressesRoutes} from "@/features/addresses";
+import {ObjectsRoutes} from "@/features/objects";
 
 const { Dashboard } = lazyImport(() => import('@/features/dashboard'), 'Dashboard');
 
@@ -35,6 +36,7 @@ export const protectedRoutes = [
             {path: '/clients/*', element: <ClientsRoutes/>},
             {path: '/requests/*', element: <RequestRoutes/>},
             {path: '/addresses/*', element: <AddressesRoutes/>},
+            {path: '/objects/*', element: <ObjectsRoutes/>},
         ],
     },
 ];
