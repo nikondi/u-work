@@ -24,6 +24,7 @@ type TableConfig = {
 type ColumnConfig = {
     key: string,
     label?: string,
+    column?: string,
     sortable?: boolean,
     searchable?: boolean,
     filter?: (value: any) => any|null,
@@ -36,8 +37,8 @@ type Sort = {
     order: 'asc' | 'desc',
 };
 
-const default_tableConfig = {columns: [], content: [], primaryKey: null, linkTo: null, buttons: [], rowModules: [], onClick: () => {}} as TableConfig;
-const default_config_column = {key: '', label: null, sortable: false, searchable: false, filter: (value:any) => value?value:null, sortFiltered: false, linked: true} as ColumnConfig;
+const default_tableConfig: TableConfig = {columns: [], content: [], primaryKey: null, linkTo: null, buttons: [], rowModules: [], onClick: () => {}};
+const default_config_column: ColumnConfig = {key: '', label: null, sortable: false, column: null, searchable: false, filter: (value:any) => value?value:null, sortFiltered: false, linked: true};
 
 const TableContext = createContext(null);
 
@@ -261,7 +262,7 @@ export function TableServer({config, className = '', setLoading, children} : Pro
         renderRow: (row :any, i: number) => {
             return <tr className={"tbl-row relative "+config.tableConfig.rowClass} key={i}>
                 {config.tableConfig.columns.map((column) => {
-                    let val = row[column.key];
+                    let val = row[column.column || column.key];
                     if(column.filter)
                         val = column.filter(val);
                     if(typeof val != 'string' && !isValidElement(val))
