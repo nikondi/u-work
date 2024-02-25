@@ -1,4 +1,5 @@
 import toast from "react-hot-toast";
+import {AxiosError} from "axios";
 
 export function mergeClasses(...args: string[]) {
     const classes = [];
@@ -57,8 +58,11 @@ export function formatDate(date) {
     return day+'.'+month+'.'+date.getFullYear()+' '+hours+':'+minutes+':'+seconds
 }
 
-export function err(text = 'Произошла ошибка', duration = 1000) {
-    toast.error(text, {duration});
+export function err(text: any = 'Произошла ошибка', duration = 1000) {
+  if(text.message)
+    text = text.message;
+
+  toast.error(text, {duration});
 }
 
 export function uniqName(len = 8) {
@@ -68,4 +72,8 @@ export function uniqName(len = 8) {
         password += symbols.charAt(Math.floor(Math.random() * symbols.length));
 
     return password;
+}
+
+export function getInputInt(input: string) {
+    return parseInt(input.replace(/\D/, '')) || null;
 }
