@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AddressesController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ClientsController;
 use App\Http\Controllers\Api\RequestsController;
+use App\Http\Controllers\Api\SimpleObjectController;
 use App\Http\Controllers\Api\UserController;
 use Illuminate\Support\Facades\Route;
 
@@ -33,6 +34,12 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/addresses/search', [AddressesController::class, 'search'])->middleware('role:manager');
     Route::get('/addresses', [AddressesController::class, 'index'])->middleware('role:manager');
     Route::get('/addresses/worker', [AddressesController::class, 'indexWorker'])->middleware('role:manager');
+    Route::get('/addresses/getCities', [AddressesController::class, 'getCities']);
+    Route::get('/addresses/{address}', [AddressesController::class, 'show']);
+    Route::get('/addresses/{address_id}/entrances', [AddressesController::class, 'showEntrances']);
+
+    Route::resource('/objects', SimpleObjectController::class);
+
 
     Route::get('/requests', [RequestsController::class, 'index']);
     Route::put('/requests/{request}', [RequestsController::class, 'update']);

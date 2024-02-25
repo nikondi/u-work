@@ -4,10 +4,12 @@ import LoadingArea from "@/components/LoadingArea";
 import {ResourceFetchFunction} from "@/hooks/useResource";
 import SearchInput from "@/components/SearchInput";
 import toast from "react-hot-toast";
-import {Client, ClientForm, ClientsAPI} from "@/features/clients";
 import {useDelayedState} from "@/hooks";
 import {Address} from "@/features/addresses";
 import SidePopup, {CloseButton, PopupContent} from "@/components/SidePopup";
+import {ClientForm} from "@/features/clients";
+import {Client} from "../types";
+import {ClientsAPI} from "../api";
 
 export function Clients() {
     const [loading, setLoading] = useState(false);

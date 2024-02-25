@@ -3,36 +3,37 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\AddressResource;
+use App\Http\Resources\EntranceResource;
 use App\Models\Address;
+use App\Models\Entrance;
+use App\Traits\GetResult;
+use App\Traits\ParseResourceRequest;
 use Illuminate\Http\Request;
 
 class AddressesController extends Controller
 {
+    use GetResult;
+    use ParseResourceRequest;
+
     public function search(Request $request) {
-        $page = $request->exists('page')?intval($request->get('page')):1;
-        $limit = $request->exists('limit')?intval($request->get('limit')):-1;
-        $pagination = !$request->exists('pagination') || $request->get('pagination') == 'true';
+        [$page, $limit, $pagination] = $this->parseResourceRequest($request);
         $word = str_replace(' ', '', $request->get('word'));
 
         $query = Address::query();
-        $query->whereRaw("REPLACE(CONCAT(city,street,house,entrance), ' ', '') LIKE '%".$word."%'");
+        $query->whereRaw("REPLACE(CONCAT(city,street,house), ' ', '') LIKE '%".$word."%'")->orderByRaw('house+0');
 
-        if($limit == -1)
-            $result = $query->get();
-        else {
-            if($pagination)
-                $result = $query->paginate($limit, ['*'], '', $page);
-            else
-                $result = $query->limit($limit)->get();
-        }
+        if($request->exists('filter'))
+            foreach($request->get('filter') as $key => $value)
+                $query->where($key, $value);
 
-        return AddressResource::collection($result);
+        return AddressResource::collection($this->getResult($query, $limit, $page, $pagination));
+    }
+    public function getCities() {
+        return Address::select('city')->groupBy('city')->get();
     }
 
     public function index(Request $request) {
-        $page = $request->exists('page')?intval($request->get('page')):1;
-        $limit = $request->exists('limit')?intval($request->get('limit')):-1;
-        $pagination = !$request->exists('pagination') || $request->get('pagination') == 'true';
+        [$page, $limit, $pagination] = $this->parseResourceRequest($request);
 
         $query = Address::query();
 
@@ -40,16 +41,7 @@ class AddressesController extends Controller
             foreach($request->get('filter') as $key => $value)
                 $query->where($key, $value);
 
-        if($limit == -1)
-            $result = $query->get();
-        else {
-            if($pagination)
-                $result = $query->paginate($limit, ['*'], '', $page);
-            else
-                $result = $query->limit($limit)->get();
-        }
-
-        return AddressResource::collection($result);
+        return AddressResource::collection($this->getResult($query, $limit, $page, $pagination));
     }
 
     public function indexWorker(Request $request) {
@@ -58,5 +50,12 @@ class AddressesController extends Controller
             $query->orWhere('worker_id', $request->get('worker_id'));
 
         return AddressResource::collection($query->get());
+    }
+
+    public function show(Address $address) {
+        return new AddressResource($address);
+    }
+    public function showEntrances(int $address_id) {
+        return EntranceResource::collection(Entrance::where('address_id', $address_id)->get());
     }
 }

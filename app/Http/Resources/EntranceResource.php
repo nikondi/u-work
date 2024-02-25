@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class AddressResource extends JsonResource
+class EntranceResource extends JsonResource
 {
     public static $wrap = false;
     /**
@@ -16,14 +16,13 @@ class AddressResource extends JsonResource
     public function toArray(Request $request): array
     {
         /**
-         * @var \App\Models\Address $this
+         * @var \App\Models\Entrance $this
         */
         return [
             'id' => $this->id,
-            'city' => $this->city,
-            'street' => $this->street,
-            'house' => $this->house,
-            'full' => $this->city.', '.$this->street.', д. '.$this->house,
+            'entrance' => $this->entrance,
+            'per_floor' => $this->per_floor,
+            'worker' => new UserResource($this->worker),
         ];
     }
 }

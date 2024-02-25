@@ -1,4 +1,5 @@
 export * from './api'
 export * from './types'
 export * from './const'
-export * from './components/Addresses'
+export * from './routes'
+export {AddressForm} from './components/AddressForm'

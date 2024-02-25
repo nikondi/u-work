@@ -19,7 +19,7 @@ class ClientResource extends JsonResource
         /**
          * @var \App\Models\Client $this
          */
-        $address_resource = (new AddressResource($this->address))->toArray($request);
+        $address_resource = $this->address?(new AddressResource($this->address))->toArray($request):null;
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -29,11 +29,14 @@ class ClientResource extends JsonResource
             'status' => $this->getStatusName(),
             'floor' => $this->floor,
             'apartment' => $this->apartment,
-            'address' => [
+            'address' => $address_resource?[
                 ...$address_resource,
                 'floor' => $this->floor,
                 'apartment' => $this->apartment,
                 'full' => $address_resource['full'].($this->apartment?', кв. '.$this->apartment:'').($this->floor?', этаж '.$this->floor:'')
+            ]:[
+                'floor' => $this->floor,
+                'apartment' => $this->apartment,
             ],
         ];
     }

@@ -8,14 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Address extends Model
 {
-    public function worker(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'worker_id', 'id');
-    }
-
     protected $fillable = [
-        'worker_id',
-        'city', 'street', 'house', 'entrance',
+        'city', 'street', 'house'
     ];
 
     protected $casts = [
