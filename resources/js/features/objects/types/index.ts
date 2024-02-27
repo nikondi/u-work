@@ -22,7 +22,7 @@ export type ObjectNet = {
 
 export type Objects = {
   id: number,
-  type: string,
+  type: '112-stand' | '112-button' | 'intercom' | 'house',
   router: string,
   internet: boolean,
   nets: ObjectNet[],

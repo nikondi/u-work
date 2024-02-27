@@ -5,7 +5,7 @@ import {ResourceFetchFunction} from "@/hooks/useResource";
 import SearchInput from "@/components/SearchInput";
 import {useDelayedState} from "@/hooks";
 import SidePopup, {CloseButton, PopupContent} from "@/components/SidePopup";
-import {ObjectsAPI} from "../api";
+import {SimpleObjectsAPI} from "../api";
 import {Objects as ObjectType} from "../types";
 import Icon from "@/components/Icon";
 import {ObjectForm} from "@/features/objects/components/ObjectForm";
@@ -26,10 +26,10 @@ export function Objects() {
       const pg = word == lastWord.current?page:1;
       setPage(pg, pg != page);
       lastWord.current = word.trim();
-      return ObjectsAPI.search(30, pg, word);
+      return SimpleObjectsAPI.search(30, pg, word);
     }
     else
-      return ObjectsAPI.get(30, page);
+      return SimpleObjectsAPI.get(30, page);
   }, [word]);
 
   return (

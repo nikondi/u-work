@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useState} from "react";
+import React, {FormEventHandler, useEffect, useMemo, useState} from "react";
 import {useParams} from "react-router-dom";
 import LoadingArea from "@/components/LoadingArea";
 import {Address, Entrance} from "../types";
@@ -7,10 +7,70 @@ import {AddressesAPI} from "../api";
 import Icon from "@/components/Icon";
 import {err, getInputInt} from "@/helpers";
 import {EntrancesAPI} from "@/features/addresses/api/EntrancesAPI";
+import {ObjectFields} from "@/features/objects";
+import {Objects} from "@/features/objects/types";
+import {defaultObject} from "@/features/objects/const";
+import SidePopup, {CloseButton, PopupContent} from "@/components/SidePopup";
+import Save from "@/components/Save";
+import toast from "react-hot-toast";
+import {ObjectsAPI} from "@/features/objects/api/ObjectsAPI";
 
 export function AddressFormPage() {
   const {id} = useParams();
   return <AddressForm id={id}/>;
+}
+
+function AddressObject({object, setObject, address}: { object: Objects, setObject: (v: Objects) => void, address: Address }) {
+  const [opened, setOpened] = useState(false);
+  const [loading, setLoading] = useState(false);
+
+  const onSave: FormEventHandler = (e) => {
+    e.preventDefault();
+
+    setLoading(true);
+
+    const d = {
+      ...object,
+      city: address.city,
+      type: 'house',
+      nets: object.nets || [],
+      cameras: []
+    }
+
+    console.log(d);
+
+    if(object.id) {
+      ObjectsAPI.saveAddress(address.id, d)
+        .then(({data}) => toast.success(`Объект ${data.id} сохранён`))
+        .catch(err)
+        .finally(() => setLoading(false));
+    }
+    else {
+      ObjectsAPI.createAddress(address.id, d)
+        .then(({data}) => {
+          toast.success(`Объект ${data.id} добавлен`)
+          setObject(data);
+        })
+        .catch(err)
+        .finally(() => setLoading(false));
+    }
+
+  }
+  return <div>
+    <button className="btn btn-rose" onClick={() => setOpened(!opened)}>Объект</button>
+    {opened && <SidePopup onClose={() => setOpened(false)}>
+      <PopupContent>
+        <CloseButton onClose={() => setOpened(false)}/>
+        <form onSubmit={onSave}>
+          <LoadingArea show={loading} />
+          <ObjectFields object={object} setObject={setObject} page="address"/>
+          <Save>
+            <button type="submit" className="btn btn-primary">{object.id?'Сохранить':'Создать'}</button>
+          </Save>
+        </form>
+      </PopupContent>
+    </SidePopup>}
+  </div>
 }
 
 export function AddressForm({id}) {
@@ -36,20 +96,19 @@ export function AddressForm({id}) {
 
   return (
     <div className="relative min-h-16">
-      {(loading || !address)
-        ? <LoadingArea />
-        : <div>
-          <h1 className="text-2xl mb-8">{address?.full || 'Новый адрес'}</h1>
-          <div className="tab_triggers">
-            {address.entrances.map((entrance) =>
-                entrance.entrance?<div key={entrance.id} className={"tab_trigger "+(currentEntrance?.id == entrance.id?'current':'')} onClick={() => setCurrentEntrance(entrance)}>{entrance.entrance}</div>:null
-            )}
-            <div className="tab_trigger leading-4"><Icon icon="plus"/></div>
-            {nullEntrance && <div className={"tab_trigger ml-3 "+(currentEntrance?.id == nullEntrance.id?'current':'')} onClick={() => setCurrentEntrance(nullEntrance)}>Не указан</div>}
-          </div>
-          {currentEntrance && <EntranceForm entrance={currentEntrance}/>}
+      {loading && <LoadingArea />}
+      <div>
+        <h1 className="text-2xl mb-4">{address?.full || 'Новый адрес'}</h1>
+        <AddressObject object={address.object || defaultObject} setObject={(v) => setAddress({...address, object: v})} address={address} />
+        <div className="tab_triggers mt-4">
+          {address.entrances.map((entrance) =>
+              entrance.entrance?<div key={entrance.id} className={"tab_trigger "+(currentEntrance?.id == entrance.id?'current':'')} onClick={() => setCurrentEntrance(entrance)}>{entrance.entrance}</div>:null
+          )}
+          <div className="tab_trigger leading-4"><Icon icon="plus"/></div>
+          {nullEntrance && <div className={"tab_trigger ml-3 "+(currentEntrance?.id == nullEntrance.id?'current':'')} onClick={() => setCurrentEntrance(nullEntrance)}>Не указан</div>}
         </div>
-      }
+        {currentEntrance && <EntranceForm entrance={currentEntrance}/>}
+      </div>
     </div>
   )
 }

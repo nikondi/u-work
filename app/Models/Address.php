@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Address extends Model
 {
@@ -14,11 +15,12 @@ class Address extends Model
         return $this->hasMany(Entrance::class, 'address_id');
     }
 
+    public function object(): MorphOne
+    {
+        return $this->morphOne(Objects::class, 'objectable');
+    }
+
     protected $fillable = [
         'city', 'street', 'house'
-    ];
-
-    protected $casts = [
-        'entrance' => 'integer',
     ];
 }

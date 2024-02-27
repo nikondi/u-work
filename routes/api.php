@@ -4,6 +4,7 @@ use App\Http\Controllers\Api\AddressesController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ClientsController;
 use App\Http\Controllers\Api\EntranceController;
+use App\Http\Controllers\Api\ObjectsController;
 use App\Http\Controllers\Api\RequestsController;
 use App\Http\Controllers\Api\SimpleObjectController;
 use App\Http\Controllers\Api\UserController;
@@ -38,6 +39,10 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/addresses/getCities', [AddressesController::class, 'getCities']);
     Route::get('/addresses/{address}', [AddressesController::class, 'show']);
 
+    Route::put('/addresses/{address}/object', [ObjectsController::class, 'updateAddress']);
+    Route::post('/addresses/{address}/object', [ObjectsController::class, 'storeAddress']);
+
+    Route::resource('/simple_objects', SimpleObjectController::class);
     Route::resource('/objects', SimpleObjectController::class);
 
     Route::get('/entrances/{entrance}/clients', [EntranceController::class, 'getClients']);

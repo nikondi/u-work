@@ -1,7 +1,7 @@
 import React, {FormEventHandler, useEffect, useState} from "react";
 import {Objects, SimpleObject} from "../types";
 import {ObjectFields} from "./ObjectFields";
-import {ObjectsAPI} from "../api";
+import {SimpleObjectsAPI} from "../api";
 import LoadingArea from "@/components/LoadingArea";
 import {defaultObject, defaultSimpleObject} from "../const";
 import Save from "@/components/Save";
@@ -16,7 +16,7 @@ export function ObjectForm({id}) {
   useEffect(() => {
     if(id) {
       setLoading(true);
-      ObjectsAPI.getSingle(id)
+      SimpleObjectsAPI.getSingle(id)
           .then(({data}) => setSimpleObject(data))
           .catch(err)
           .finally(() => setLoading(false));
@@ -28,13 +28,13 @@ export function ObjectForm({id}) {
     setLoading(true);
 
     if(simpleObject.id) {
-      ObjectsAPI.save(simpleObject.id, simpleObject)
+      SimpleObjectsAPI.save(simpleObject.id, simpleObject)
           .then(() => toast.success(`Объект ${id} сохранён`))
           .catch(err)
           .finally(() => setLoading(false));
     }
     else {
-      ObjectsAPI.create(simpleObject)
+      SimpleObjectsAPI.create(simpleObject)
           .then(({data}) => {
             toast.success(`Объект ${data.id} добавлен`)
             setSimpleObject(data);

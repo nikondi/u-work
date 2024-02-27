@@ -1,17 +1,16 @@
-import React, {useEffect, useMemo, useRef, useState} from "react";
+import React, {useMemo} from "react";
 import {ObjectCamera, ObjectNet, Objects} from "../types";
-import {stateFunction} from "@/types";
 import {Checkbox, FormRow, Input, Option, Select, Textarea} from "@/components/Form";
 import Icon from "@/components/Icon";
 
 type Props = {
   object: Objects
-  setObject: stateFunction<Objects>,
-  page: 'simple_object' | 'entrance'
+  setObject: (v: Objects) => void,
+  page: 'simple_object' | 'entrance' | 'address'
 }
 
 export function ObjectFields({object, setObject, page}: Props) {
-  return <>
+  return <div>
     <div className="flex gap-x-3 mb-4 items-end">
       {page == 'simple_object' &&
         <FormRow label="Тип объекта" required>
@@ -31,10 +30,10 @@ export function ObjectFields({object, setObject, page}: Props) {
 
 
     <ObjectNets nets={object.nets || []} setNets={(v) => setObject({...object, nets: v})}/>
-    <ObjectCameras cameras={object.cameras || []} setCameras={(v) => setObject({...object, cameras: v})}/>
+    {page != 'address' && <ObjectCameras cameras={object.cameras || []} setCameras={(v) => setObject({...object, cameras: v})}/>}
     {page == 'entrance' && <ObjectIntercoms intercom={object.intercom_model || ''} setIntercom={(v) => setObject({...object, intercom_model: v})}/>}
 
-    <div className="flex gap-x-3 mb-4 items-center">
+    {page != 'address' && <div className="flex gap-x-3 mb-4 items-center">
       <FormRow label="IP адрес кубика">
         <Input value={object.cubic_ip || ''} setValue={(v) => setObject({...object, cubic_ip: v})}/>
       </FormRow>
@@ -42,16 +41,16 @@ export function ObjectFields({object, setObject, page}: Props) {
         <Input value={object.sip || ''} setValue={(v) => setObject({...object, sip: v})}/>
       </FormRow>
       <FormRow label="Модель МиниПК">
-        <Select value={object.minipc_model} onChange={(v) => setObject({...object, minipc_model: v})}>
+        <Select value={object.minipc_model || ''} onChange={(v) => setObject({...object, minipc_model: v})}>
           <Option value="Cubieboard2" index={0}>Cubieboard 2</Option>
           <Option value="OrangePi" index={1}>OrangePi</Option>
         </Select>
       </FormRow>
-    </div>
+    </div>}
     <FormRow label="Примечание">
-      <Textarea value={object.comment} setValue={(v) => setObject({...object, comment: v})}/>
+      <Textarea value={object.comment || ''} setValue={(v) => setObject({...object, comment: v})}/>
     </FormRow>
-  </>
+  </div>
 }
 
 function ObjectNets({nets, setNets}: {nets: ObjectNet[], setNets: (v: ObjectNet[]) => void}) {

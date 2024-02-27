@@ -1,5 +1,6 @@
 import {user} from "@/features/auth";
 import {Client} from "@/features/clients";
+import {Objects} from "@/features/objects/types";
 
 export type Address = {
   id: number,
@@ -8,6 +9,7 @@ export type Address = {
   street: string,
   house: string,
   entrances: Entrance[],
+  object: Objects
 }
 
 export type Entrance = {

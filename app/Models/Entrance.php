@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Entrance extends Model
 {
@@ -18,6 +19,11 @@ class Entrance extends Model
     public function clients(): HasMany
     {
         return $this->hasMany(Client::class, 'address_id');
+    }
+
+    public function object(): MorphOne
+    {
+        return $this->morphOne(Objects::class, 'objectable');
     }
 
     protected $fillable = [
