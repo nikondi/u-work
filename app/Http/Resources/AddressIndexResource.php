@@ -6,13 +6,12 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * Class AddressResource
+ * Class AddressIndexResource
  *
  * @mixin \App\Models\Address
  * */
-class AddressResource extends JsonResource
+class AddressIndexResource extends JsonResource
 {
-    public static $wrap = false;
     /**
      * Transform the resource into an array.
      *
@@ -22,10 +21,6 @@ class AddressResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'city' => $this->city,
-            'street' => $this->street,
-            'house' => $this->house,
-            'entrances' => EntranceResource::collection($this->entrances),
             'full' => $this->city.', '.$this->street.', д. '.$this->house,
         ];
     }

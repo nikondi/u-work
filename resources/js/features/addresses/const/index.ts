@@ -5,5 +5,6 @@ export const defaultAddress: Address = {
   city: null,
   street: null,
   house: null,
-  full: ''
+  full: '',
+  entrances: []
 };

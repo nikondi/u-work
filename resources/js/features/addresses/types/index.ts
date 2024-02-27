@@ -1,4 +1,5 @@
 import {user} from "@/features/auth";
+import {Client} from "@/features/clients";
 
 export type Address = {
   id: number,
@@ -6,6 +7,7 @@ export type Address = {
   city: string,
   street: string,
   house: string,
+  entrances: Entrance[],
 }
 
 export type Entrance = {
@@ -14,6 +16,7 @@ export type Entrance = {
   entrance: number,
   per_floor: number,
   floors: number,
+  clients: Client[],
   worker: user
 }
 export type AddressWithEntrance = Address & {

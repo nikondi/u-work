@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\AddressIndexResource;
 use App\Http\Resources\AddressResource;
-use App\Http\Resources\EntranceResource;
 use App\Models\Address;
-use App\Models\Entrance;
 use App\Traits\GetResult;
 use App\Traits\ParseResourceRequest;
 use Illuminate\Http\Request;
@@ -41,7 +40,7 @@ class AddressesController extends Controller
             foreach($request->get('filter') as $key => $value)
                 $query->where($key, $value);
 
-        return AddressResource::collection($this->getResult($query, $limit, $page, $pagination));
+        return AddressIndexResource::collection($this->getResult($query, $limit, $page, $pagination));
     }
 
     public function indexWorker(Request $request) {
@@ -54,8 +53,5 @@ class AddressesController extends Controller
 
     public function show(Address $address) {
         return new AddressResource($address);
-    }
-    public function showEntrances(int $address_id) {
-        return EntranceResource::collection(Entrance::where('address_id', $address_id)->get());
     }
 }

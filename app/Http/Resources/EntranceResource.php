@@ -22,6 +22,7 @@ class EntranceResource extends JsonResource
             'id' => $this->id,
             'entrance' => $this->entrance,
             'per_floor' => $this->per_floor,
+            'clients' => [],
             'worker' => new UserResource($this->worker),
         ];
     }

@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AddressesController;
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\ClientsController;
+use App\Http\Controllers\Api\EntranceController;
 use App\Http\Controllers\Api\RequestsController;
 use App\Http\Controllers\Api\SimpleObjectController;
 use App\Http\Controllers\Api\UserController;
@@ -36,9 +37,10 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/addresses/worker', [AddressesController::class, 'indexWorker'])->middleware('role:manager');
     Route::get('/addresses/getCities', [AddressesController::class, 'getCities']);
     Route::get('/addresses/{address}', [AddressesController::class, 'show']);
-    Route::get('/addresses/{address_id}/entrances', [AddressesController::class, 'showEntrances']);
 
     Route::resource('/objects', SimpleObjectController::class);
+
+    Route::get('/entrances/{entrance}/clients', [EntranceController::class, 'getClients']);
 
 
     Route::get('/requests', [RequestsController::class, 'index']);
