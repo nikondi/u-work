@@ -5,14 +5,14 @@ import {ResourceFetchFunction} from "@/hooks/useResource";
 import SearchInput from "@/components/SearchInput";
 import {useDelayedState} from "@/hooks";
 import SidePopup, {CloseButton, PopupContent} from "@/components/SidePopup";
+import Icon from "@/components/Icon";
+import {err} from "@/helpers";
 import {SimpleObjectsAPI} from "../api";
 import {Objects as ObjectType} from "../types";
-import Icon from "@/components/Icon";
-import {ObjectForm} from "@/features/objects/components/ObjectForm";
-import {err} from "@/helpers";
-import {objectTypeLabel} from "@/features/objects/const";
+import {objectTypeLabel} from "../const";
+import {ObjectForm} from "../components/ObjectForm";
 
-export function Objects() {
+export function ObjectsPage() {
   const [loading, setLoading] = useState(false);
 
   const [word, setWord] = useState('');

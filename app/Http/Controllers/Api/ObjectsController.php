@@ -7,6 +7,7 @@ use App\Http\Requests\CreateObjectRequest;
 use App\Http\Requests\UpdateObjectRequest;
 use App\Http\Resources\ObjectResource;
 use App\Models\Address;
+use App\Models\Entrance;
 use App\Models\ObjectCamera;
 use App\Models\ObjectNet;
 use App\Models\Objects;
@@ -41,10 +42,23 @@ class ObjectsController extends Controller
     }
 
     public function storeAddress(CreateObjectRequest $request, Address $address) {
+        return $this->storeMorphed($request, $address);
+    }
+    public function updateAddress(UpdateObjectRequest $request, Address $address) {
+        return $this->updateMorphed($request, $address);
+    }
+    public function storeEntrance(CreateObjectRequest $request, Entrance $entrance) {
+        return $this->storeMorphed($request, $entrance);
+    }
+    public function updateEntrance(UpdateObjectRequest $request, Entrance $entrance) {
+        return $this->updateMorphed($request, $entrance);
+    }
+
+    public function storeMorphed(CreateObjectRequest $request, Entrance|Address $item) {
         $data = $request->validated();
-        $object = DB::transaction(function() use ($request, $address, $data) {
+        $object = DB::transaction(function() use ($request, $item, $data) {
             $object = new Objects($data);
-            $object->objectable()->associate($address);
+            $object->objectable()->associate($item);
             $object->save();
             $object->hasManySync(ObjectCamera::class, $data['cameras'], 'cameras');
             $object->hasManySync(ObjectNet::class, $data['nets'], 'nets');
@@ -54,12 +68,12 @@ class ObjectsController extends Controller
         return new ObjectResource($object);
     }
 
-    public function updateAddress(UpdateObjectRequest $request, Address $address) {
+    public function updateMorphed(UpdateObjectRequest $request, Entrance|Address $item) {
         $data = $request->validated();
-        $object = $address->object;
-        DB::transaction(function() use ($request, $address, $data, $object) {
+        $object = $item->object;
+        DB::transaction(function() use ($request, $item, $data, $object) {
             $object->update($data);
-            $object->objectable()->associate($address);
+            $object->objectable()->associate($item);
             $object->save();
             $object->hasManySync(ObjectCamera::class, $data['cameras'], 'cameras');
             $object->hasManySync(ObjectNet::class, $data['nets'], 'nets');

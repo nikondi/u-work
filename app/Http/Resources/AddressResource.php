@@ -26,7 +26,7 @@ class AddressResource extends JsonResource
             'street' => $this->street,
             'house' => $this->house,
             'object' => new ObjectResource($this->object),
-            'entrances' => EntranceResource::collection($this->entrances),
+            'entrances' => EntranceResource::collection($this->entrances()->with('object')->get()),
             'full' => $this->city.', '.$this->street.', д. '.$this->house,
         ];
     }

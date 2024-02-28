@@ -42,6 +42,9 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::put('/addresses/{address}/object', [ObjectsController::class, 'updateAddress']);
     Route::post('/addresses/{address}/object', [ObjectsController::class, 'storeAddress']);
 
+    Route::put('/entrances/{entrance}/object', [ObjectsController::class, 'updateEntrance']);
+    Route::post('/entrances/{entrance}/object', [ObjectsController::class, 'storeEntrance']);
+
     Route::resource('/simple_objects', SimpleObjectController::class);
     Route::resource('/objects', SimpleObjectController::class);
 

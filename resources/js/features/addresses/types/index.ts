@@ -19,7 +19,8 @@ export type Entrance = {
   per_floor: number,
   floors: number,
   clients: Client[],
-  worker: user
+  worker: user,
+  object: Objects
 }
 export type AddressWithEntrance = Address & {
   entrances: Entrance[]

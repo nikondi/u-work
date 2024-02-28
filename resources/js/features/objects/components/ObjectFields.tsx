@@ -1,7 +1,8 @@
 import React, {useMemo} from "react";
-import {ObjectCamera, ObjectNet, Objects} from "../types";
 import {Checkbox, FormRow, Input, Option, Select, Textarea} from "@/components/Form";
 import Icon from "@/components/Icon";
+import {ObjectCamera, ObjectNet, Objects} from "../types";
+import {defaultObject} from "../const";
 
 type Props = {
   object: Objects
@@ -9,7 +10,8 @@ type Props = {
   page: 'simple_object' | 'entrance' | 'address'
 }
 
-export function ObjectFields({object, setObject, page}: Props) {
+export function ObjectFields({object = null, setObject, page}: Props) {
+  object = object || defaultObject;
   return <div>
     <div className="flex gap-x-3 mb-4 items-end">
       {page == 'simple_object' &&
@@ -56,7 +58,7 @@ export function ObjectFields({object, setObject, page}: Props) {
 function ObjectNets({nets, setNets}: {nets: ObjectNet[], setNets: (v: ObjectNet[]) => void}) {
   const updateNet = (index: number, value: ObjectNet) => setNets(nets.map((item, i) => (index == i)?value:item));
   const addNet = () => setNets([...nets, {id: null, wan: '', pppoe_cred: '', subnet: ''}]);
-  const removeNet = (index: number) => setNets(nets.filter((item, i) => i != index));
+  const removeNet = (index: number) => setNets(nets.filter((_item, i) => i != index));
 
 
   return <div className="mb-6">
@@ -89,7 +91,7 @@ function ObjectNets({nets, setNets}: {nets: ObjectNet[], setNets: (v: ObjectNet[
 function ObjectCameras({cameras, setCameras}: {cameras: ObjectCamera[], setCameras: (v: ObjectCamera[]) => void}) {
   const updateCamera = (index: number, value: ObjectCamera) => setCameras(cameras.map((item, i) => (index == i)?value:item));
   const addCamera = () => setCameras([...cameras, {id: null, ip: '', model: ''}]);
-  const removeCamera = (index: number) => setCameras(cameras.filter((item, i) => i != index));
+  const removeCamera = (index: number) => setCameras(cameras.filter((_item, i) => i != index));
 
 
   return <div className="mb-6">
@@ -123,7 +125,7 @@ function ObjectIntercoms({intercom, setIntercom}: {intercom: string, setIntercom
 
   const updateIntercom = (index: number, value: string) => setIntercom(intercoms.map((item, i) => (index == i)?value:item).join(','));
   const addIntercom = () => setIntercom([...intercoms, ''].join(','));
-  const removeIntercom = (index: number) => setIntercom(intercoms.filter((item, i) => i != index).join(','));
+  const removeIntercom = (index: number) => setIntercom(intercoms.filter((_item, i) => i != index).join(','));
 
   return <div className="mb-6">
     <div className="text-2xl mb-1">Домофоны</div>

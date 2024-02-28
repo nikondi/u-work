@@ -1,4 +1,5 @@
 import {Address} from "../types";
+import {defaultObject} from "@/features/objects";
 
 export const defaultAddress: Address = {
   id: 0,
@@ -6,5 +7,6 @@ export const defaultAddress: Address = {
   street: null,
   house: null,
   full: '',
-  entrances: []
+  entrances: [],
+  object: defaultObject
 };

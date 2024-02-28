@@ -2,6 +2,8 @@ import AxiosClient from "@/lib/axios-client";
 import {AxiosResponse} from "axios";
 import {SimpleObject} from "../types";
 
+export * from './ObjectsAPI'
+
 export class SimpleObjectsAPI {
   static search(count: number, page: number, word: string, pagination = true, filter: Partial<SimpleObject> = {}) : Promise<AxiosResponse<SimpleObject[]>> {
     return AxiosClient.get('/simple_objects/search', {params: {limit: count, word, page, pagination, filter}})

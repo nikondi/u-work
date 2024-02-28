@@ -2,7 +2,7 @@ import {Objects, SimpleObject} from "../types";
 
 export const defaultObject: Objects = {
   id: null,
-  type: '',
+  type: 'intercom',
   router: '',
   internet: false,
   nets: [],
@@ -30,6 +30,6 @@ const objectTypeLabels = {
   'intercom': 'Домофон'
 }
 
-export const objectTypeLabel = (type: string) => {
+export function objectTypeLabel(type: string) {
   return objectTypeLabels[type] || type;
 }

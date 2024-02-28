@@ -12,7 +12,7 @@ class Address extends Model
 {
     public function entrances(): HasMany
     {
-        return $this->hasMany(Entrance::class, 'address_id');
+        return $this->hasMany(Entrance::class, 'address_id')->orderBy('entrance');
     }
 
     public function object(): MorphOne
