@@ -4,13 +4,16 @@ import {err} from "@/helpers";
 import Icon from "@/components/Icon";
 import SidePopup, {CloseButton, PopupContent} from "@/components/SidePopup";
 import LoadingArea from "@/components/LoadingArea";
-import {ObjectFields, ObjectsAPI, Objects} from "@/features/objects";
+import {ObjectFields, Objects, ObjectsAPI} from "@/features/objects";
 import Save from "@/components/Save";
-import {Address} from "../types";
+import {useAddressContext} from "@/features/addresses/contexts/AddressForm";
 
-export function AddressObject({object, setObject, address}: { object: Objects, setObject: (v: Objects) => void, address: Address }) {
+export function AddressObject() {
+  const {address, setAddress} = useAddressContext();
   const [opened, setOpened] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  const setObject = (v: Objects) => setAddress({...address, object: v});
 
   const onSave: FormEventHandler = (e) => {
     e.preventDefault();
@@ -18,14 +21,14 @@ export function AddressObject({object, setObject, address}: { object: Objects, s
     setLoading(true);
 
     const d = {
-      ...object,
+      ...address.object,
       city: address.city,
       type: 'house',
-      nets: object.nets || [],
+      nets: address.object.nets || [],
       cameras: []
     }
 
-    if(object.id) {
+    if(address.object.id) {
       ObjectsAPI.saveMorphed(address.id, 'addresses', d)
         .then(({data}) => toast.success(`Объект ${data.id} сохранён`))
         .catch(err)
@@ -49,9 +52,9 @@ export function AddressObject({object, setObject, address}: { object: Objects, s
         <CloseButton onClose={() => setOpened(false)}/>
         <form onSubmit={onSave}>
           <LoadingArea show={loading} />
-          <ObjectFields object={object} setObject={setObject} page="address"/>
+          <ObjectFields object={address.object} setObject={setObject} page="address"/>
           <Save>
-            <button type="submit" className="btn btn-primary">{object.id?'Сохранить':'Создать'}</button>
+            <button type="submit" className="btn btn-primary">{address.object?.id?'Сохранить':'Создать'}</button>
           </Save>
         </form>
       </PopupContent>

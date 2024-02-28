@@ -27,7 +27,6 @@ export function AddressFormPage() {
       AddressesAPI.getSingle(id)
         .then(({data}: {data: Address}) => {
           setAddress(data);
-          console.log(data);
           setCurrentEntrance(data.entrances.find((e) => e.entrance !== null) || null);
         })
         .catch(err)
@@ -44,7 +43,7 @@ export function AddressFormPage() {
       <div className="relative min-h-16">
         <div>
           <h1 className="text-2xl mb-4">{address?.full || 'Новый адрес'}</h1>
-          <AddressObject object={address.object} setObject={(v) => setAddress({...address, object: v})} address={address} />
+          <AddressObject />
           <div className="tab_triggers mt-4">
             {address.entrances.map((entrance) =>
                 entrance.entrance?<div key={entrance.id} className={"tab_trigger "+(currentEntrance?.id == entrance.id?'current':'')} onClick={() => setCurrentEntrance(entrance)}>{entrance.entrance}</div>:null
