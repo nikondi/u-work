@@ -1,13 +1,16 @@
 import React, {useEffect, useState} from "react";
 import {err, getInputInt} from "@/helpers";
 import LoadingArea from "@/components/LoadingArea";
+import SidePopup, {CloseButton, PopupContent} from "@/components/SidePopup";
 import {EntrancesAPI} from "../api";
 import {EntranceObject} from "./EntranceObject";
 import {useAddressContext} from "../contexts/AddressForm";
+import {Client, ClientForm} from "@/features/clients";
 
 export function EntranceForm() {
   const {currentEntrance: entrance, setCurrentEntrance: setEntrance} = useAddressContext();
   const [loading, setLoading] = useState(false);
+  const [currentClient, setCurrentClient] = useState<Client>(null);
 
   useEffect(() => {
     setLoading(true);
@@ -20,6 +23,12 @@ export function EntranceForm() {
   return <div className="relative">
     {loading && <LoadingArea/>}
     {entrance.entrance && <EntranceObject />}
+    {currentClient && <SidePopup onClose={() => setCurrentClient(null)}>
+        <PopupContent>
+            <CloseButton onClose={() => setCurrentClient(null)}/>
+            <ClientForm id={currentClient.id}/>
+        </PopupContent>
+    </SidePopup>}
     <div className="p-3">
       <table>
         <tbody>
@@ -46,7 +55,7 @@ export function EntranceForm() {
           <tbody>
           {entrance.clients && entrance.clients.map(((client) => <tr key={client.id}>
                 <td className="p-1.5">{client.apartment}</td>
-                <td className="p-1.5">{client.name}</td>
+                <td className="p-1.5"><span className="underline text-blue-600 cursor-pointer" onClick={() => setCurrentClient(client)}>{client.name}</span></td>
                 <td className="p-1.5">{client.floor}</td>
               </tr>
           ))}
