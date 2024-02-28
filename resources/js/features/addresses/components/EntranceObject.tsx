@@ -43,7 +43,7 @@ export function EntranceObject() {
         .finally(() => setLoading(false));
     }
   }
-  return <div>
+  return <div className="pt-6">
     <button className="btn btn-rose !inline-flex gap-x-2.5" onClick={() => setOpened(!opened)}><Icon icon="objects" size="1.4em"/> Объект</button>
     {opened && <SidePopup onClose={() => setOpened(false)}>
       <PopupContent>

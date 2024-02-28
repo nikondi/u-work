@@ -17,9 +17,9 @@ export function EntranceForm() {
         .finally(() => setLoading(false));
   }, [entrance.id]);
 
-  return <div className="relative pt-6">
+  return <div className="relative">
     {loading && <LoadingArea/>}
-    <EntranceObject />
+    {entrance.entrance && <EntranceObject />}
     <div className="p-3">
       <table>
         <tbody>
