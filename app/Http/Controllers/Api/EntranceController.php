@@ -43,7 +43,7 @@ class EntranceController extends Controller
     }
 
     public function getClients(Entrance $entrance) {
-        return ClientResource::collection($entrance->clients);
+        return ClientResource::collection($entrance->clients()->orderByRaw('cast(apartment as unsigned)')->get());
     }
 
     /**
