@@ -21,9 +21,9 @@ export function EntranceObject() {
     const d = {
       ...entrance.object,
       city: address.city,
-      type: 'house',
+      type: 'entrance',
       nets: entrance.object.nets || [],
-      cameras: []
+      cameras: entrance.object.cameras || []
     }
 
 
