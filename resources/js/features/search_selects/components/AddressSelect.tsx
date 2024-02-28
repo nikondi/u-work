@@ -1,4 +1,5 @@
-import {Address, AddressesAPI} from "@/features/addresses";
+import {Address} from "@/features/addresses/types";
+import {AddressesAPI} from "@/features/addresses/api";
 import React, {useEffect, useRef, useState} from "react";
 import {Input, Option, useSelectContext} from "@/components/Form";
 import {err} from "@/helpers";
