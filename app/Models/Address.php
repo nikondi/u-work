@@ -20,6 +20,15 @@ class Address extends Model
         return $this->morphOne(Objects::class, 'objectable');
     }
 
+    public function getFull(Entrance|int $entrance = null, $apartment = null, $floor = null): string
+    {
+        if($entrance instanceof Entrance)
+            $entrance = $entrance->entrance;
+
+
+        return $this->city.', '.$this->street.', д. '.$this->house.($entrance?", п. $entrance":'').($apartment?", кв. $apartment":'').($floor?", $floor этаж":'');
+    }
+
     protected $fillable = [
         'city', 'street', 'house'
     ];
