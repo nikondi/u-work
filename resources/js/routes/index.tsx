@@ -4,16 +4,18 @@ import {protectedRoutes} from "@/routes/protected";
 import {publicRoutes} from "@/routes/public";
 import {useRoutes} from "react-router-dom";
 import {lazyImport} from "@/utils/lazyImport";
-const { NotFound } = lazyImport(() => import('@/features/notFound'), 'NotFound');
+
+const {NotFound} = lazyImport(() => import('@/features/notFound'), 'NotFound');
 
 export const AppRoutes = () => {
-    const {user} = useAuth();
+  const {user} = useAuth();
 
-    const commonRoutes = [];
+  const commonRoutes = [];
 
-    const routes = user?protectedRoutes:publicRoutes;
+  const routes = user ? protectedRoutes : publicRoutes;
+  console.log(routes);
 
-    const element = useRoutes([...routes, ...commonRoutes, {path: '*', element: <NotFound/>}]);
+  const element = useRoutes([...routes, ...commonRoutes, {path: '*', element: <NotFound/>}]);
 
-    return <>{element}</>;
+  return <>{element}</>;
 }
