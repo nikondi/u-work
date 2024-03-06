@@ -168,6 +168,7 @@ class Request extends Model
             foreach($row as $j => $col) {
                 $coords = $letters[$j].($i + 1);
                 $sheet->setCellValueExplicit($coords, $col, DataType::TYPE_STRING2);
+                $sheet->getStyle($coords)->getAlignment()->setWrapText(true)->setVertical(Alignment::VERTICAL_TOP);
                 if($col == '__Пусто__')
                     $sheet->getStyle($coords)->getFont()->getColor()->setRGB('CCCCCC');
             }
@@ -191,8 +192,12 @@ class Request extends Model
         $sheet->setTitle('Отчёт');
         $spreadsheet->getProperties()->setTitle($name);
 
-        for($i = 'A'; $i <= $letters[$width + 2]; $i++)
+        for($i = 'A'; $i <= $letters[$width - 4]; $i++)
             $sheet->getColumnDimension($i)->setAutoSize(true);
+
+        $spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(50);
+        $spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(30);
+        $spreadsheet->getActiveSheet()->getColumnDimension('J')->setWidth(75);
 
 
         Storage::disk('public')->makeDirectory('/xlsx');
