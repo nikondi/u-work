@@ -105,7 +105,7 @@ class Request extends Model
             $letters[] = $l;
 
         $report = [[
-            'Тип', 'Источник', 'ЛС клиента', 'ФИО', 'Номер телефона', 'Контактный номер телефона', 'E-mail', 'Адрес', 'Тема', 'Содержимое',
+            'Номер', 'Тип', 'Источник', 'ЛС клиента', 'ФИО', 'Номер телефона', 'Контактный номер телефона', 'E-mail', 'Адрес', 'Тема', 'Содержимое',
         ]];
         $width = sizeof($report[0]);
         try {
@@ -135,11 +135,12 @@ class Request extends Model
             else
                 $color = 'FFF97316';
 
-            $sheet->getStyle('A'.($k+2))->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($color);
+            $sheet->getStyle('B'.($k+2))->getFill()->setFillType(Fill::FILL_SOLID)->getStartColor()->setARGB($color);
 
             $client = $request->client;
             $entrance = $request->addressDB;
             $report[] = [
+                $request->id,
                 match ($request->type) {
                     'call' => 'Звонок',
                     'done' => 'Завершена',
@@ -195,9 +196,9 @@ class Request extends Model
         for($i = 'A'; $i <= $letters[$width - 4]; $i++)
             $sheet->getColumnDimension($i)->setAutoSize(true);
 
-        $spreadsheet->getActiveSheet()->getColumnDimension('H')->setWidth(50);
-        $spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(30);
-        $spreadsheet->getActiveSheet()->getColumnDimension('J')->setWidth(75);
+        $spreadsheet->getActiveSheet()->getColumnDimension('I')->setWidth(50);
+        $spreadsheet->getActiveSheet()->getColumnDimension('J')->setWidth(30);
+        $spreadsheet->getActiveSheet()->getColumnDimension('K')->setWidth(75);
 
 
         Storage::disk('public')->makeDirectory('/xlsx');
