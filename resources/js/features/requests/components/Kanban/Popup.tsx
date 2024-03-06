@@ -165,13 +165,13 @@ export default function Popup() {
 function Block({name, children}) {
   return <div className="bg-gray-100 rounded-md p-4">
     <div className="text-gray-700 uppercase text-xs pb-2 mb-2 border-b border-gray-300">{name}</div>
-    <div className="flex flex-col gap-y-2">{children}</div>
+    <div className="flex flex-col gap-y-2 dark:text-gray-800">{children}</div>
   </div>
 }
 function SubBlock({name, contentClassName = "", required = false, children}) {
   return <div>
     <div className="text-xs text-gray-500">{name} {required && <span className="text-red-500 text-2xl" style={{lineHeight: '7px'}}>•</span>}</div>
-    <div className={"text-base "+contentClassName}>{children || <span className="text-gray-400">Пусто</span>}</div>
+    <div className={"text-base dark:text-gray-800 "+contentClassName}>{children || <span className="text-gray-400">Пусто</span>}</div>
   </div>
 }
 
