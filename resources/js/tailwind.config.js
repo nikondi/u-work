@@ -5,7 +5,6 @@ export default {
   content: [
     "./resources/**/*.blade.php",
     "./resources/**/*.{js,jsx,ts,tsx}",
-    "./node_modules/react-tailwindcss-datepicker/dist/index.esm.js"
   ],
   theme: {
     container: {
