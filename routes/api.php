@@ -52,6 +52,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
 
     Route::get('/requests', [RequestsController::class, 'index']);
+    Route::get('/requests/export', [RequestsController::class, 'export']);
     Route::put('/requests/{request}', [RequestsController::class, 'update']);
     Route::get('/requests/{request}', [RequestsController::class, 'view']);
     Route::post('/requests/updateOrder', [RequestsController::class, 'updateOrder']);

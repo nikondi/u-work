@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useMemo} from "react";
 import {useAuth} from "@/lib/auth";
 import {protectedRoutes} from "@/routes/protected";
 import {publicRoutes} from "@/routes/public";
@@ -10,12 +10,18 @@ const {NotFound} = lazyImport(() => import('@/features/notFound'), 'NotFound');
 export const AppRoutes = () => {
   const {user} = useAuth();
 
-  const commonRoutes = [];
+  const commonRoutes = [
+    {path: '*', element: <NotFound/>}
+  ];
 
-  const routes = user ? protectedRoutes : publicRoutes;
-  console.log(routes);
+  const routes = useMemo(() => {
+    if(user === false)
+      return [];
+    else
+      return user ? protectedRoutes : publicRoutes;
+  }, [user])
 
-  const element = useRoutes([...routes, ...commonRoutes, {path: '*', element: <NotFound/>}]);
+  const element = useRoutes([...routes, ...commonRoutes]);
 
   return <>{element}</>;
 }

@@ -1,8 +1,8 @@
-import {Address} from "../types";
+import {Address, Entrance} from "../types";
 import {defaultObject} from "@/features/objects";
 
 export const defaultAddress: Address = {
-  id: 0,
+  id: null,
   city: null,
   street: null,
   house: null,
@@ -10,3 +10,14 @@ export const defaultAddress: Address = {
   entrances: [],
   object: defaultObject
 };
+
+export const defaultEntrance: Entrance = {
+  id: null,
+  entrance: 1,
+  object: null,
+  clients: [],
+  per_floor: 6,
+  floors: null,
+  address_id: null,
+  worker: null
+}

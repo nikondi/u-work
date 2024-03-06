@@ -11,6 +11,7 @@ use App\Http\Resources\RequestResource;
 use App\Models\Address;
 use App\Models\Client;
 use App\Models\Request as RequestModel;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 
 class RequestsController extends Controller
@@ -130,5 +131,32 @@ class RequestsController extends Controller
             RequestModel::find($item['id'])->update(['order'=> $item['order']]);
         RequestUpdateOrderEvent::dispatch($request->toArray());
         return true;
+    }
+    public function export(Request $request)
+    {
+        $range = $request->get('range');
+        $to = Carbon::now();
+        if($range == 'week')
+            $from = Carbon::parse('Now -7 days');
+        else if($range == 'month')
+            $from = Carbon::parse('Now -1 month');
+        else if($range == 'year')
+            $from = Carbon::parse('Now -1 year');
+        else
+            $from = Carbon::parse('Now -1 days');
+
+        $report = RequestModel::getExport($from, $to);
+
+        if($report == null)
+            abort(500);
+
+        if(file_exists($report['file'])) {
+            header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment;filename="'.$report['name'].'.xlsx"');
+            header('Cache-Control: max-age=0');
+            echo file_get_contents($report['file']);
+            unlink($report['file']);
+
+        }
     }
 }

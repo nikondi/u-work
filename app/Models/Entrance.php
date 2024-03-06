@@ -16,6 +16,11 @@ class Entrance extends Model
         return $this->belongsTo(User::class, 'worker_id', 'id');
     }
 
+    public function address(): BelongsTo
+    {
+        return $this->belongsTo(Address::class, 'address_id', 'id');
+    }
+
     public function clients(): HasMany
     {
         return $this->hasMany(Client::class, 'address_id');
@@ -24,6 +29,11 @@ class Entrance extends Model
     public function object(): MorphOne
     {
         return $this->morphOne(Objects::class, 'objectable');
+    }
+
+    public function getFull($apartment = null, $floor = null): string
+    {
+        return $this->address->getFull($this->entrance, $apartment, $floor);
     }
 
     protected $fillable = [

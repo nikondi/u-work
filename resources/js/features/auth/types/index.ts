@@ -9,4 +9,4 @@ export type user = {
     roleLabels: string[],
 }
 
-export type LoginedUser = user & { hasRole: (...roles:Role[]) => boolean, };
+export type LoginedUser = user & { hasRole: (...roles:Role[]) => boolean, } | false;

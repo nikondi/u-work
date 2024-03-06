@@ -2,16 +2,13 @@ import React, {Suspense} from "react";
 import LoadingArea from "@/components/LoadingArea";
 import {Outlet} from "react-router-dom";
 import DashboardLayout from "@/components/Layout/DashboardLayout";
-import {lazyImport} from "@/utils/lazyImport";
 import {UsersRoutes} from "@/features/users";
 import {WorkerRoutes} from "@/features/workers";
 import {ClientsRoutes} from "@/features/clients";
 import {RequestRoutes} from "@/features/requests";
 import {AddressesRoutes} from "@/features/addresses";
 import {ObjectsRoutes} from "@/features/objects";
-
-const { Dashboard } = lazyImport(() => import('@/features/dashboard'), 'Dashboard');
-
+import {Dashboard} from "@/features/dashboard";
 
 
 const App = () => {
