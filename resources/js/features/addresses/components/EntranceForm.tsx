@@ -13,11 +13,14 @@ export function EntranceForm() {
   const [currentClient, setCurrentClient] = useState<Client>(null);
 
   useEffect(() => {
+    if(!entrance.id)
+      return;
     setLoading(true);
     EntrancesAPI.getClients(entrance.id)
         .then(({data}) => setEntrance({...entrance, clients: data.data}))
         .catch(err)
         .finally(() => setLoading(false));
+
   }, [entrance.id]);
 
   return <div className="relative">

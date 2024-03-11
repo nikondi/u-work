@@ -46,7 +46,7 @@ export function AddressObject() {
 
   }
   return <div>
-    <button className="btn btn-rose !inline-flex gap-x-2.5" onClick={() => setOpened(!opened)}><Icon icon="objects" size="1.4em"/> Объект</button>
+    <button className="btn btn-rose !inline-flex gap-x-2.5" onClick={() => setOpened(!opened)}><Icon icon="objects" size="1.4em"/> Дом</button>
     {opened && <SidePopup onClose={() => setOpened(false)}>
       <PopupContent>
         <CloseButton onClose={() => setOpened(false)}/>

@@ -1,10 +1,10 @@
-import React, {useEffect, useMemo, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
 import {useParams} from "react-router-dom";
 import LoadingArea from "@/components/LoadingArea";
 import Icon from "@/components/Icon";
 import {err} from "@/helpers";
 import {Address, Entrance} from "../types";
-import {defaultAddress} from "../const";
+import {defaultAddress, defaultEntrance} from "../const";
 import {AddressesAPI} from "../api";
 import {AddressObject} from "./AddressObject";
 import {EntranceForm} from "./EntranceForm";
@@ -20,6 +20,15 @@ export function AddressFormPage() {
     return address.entrances.find((item) => item.entrance == null)
   }, [address.entrances]);
 
+  const addEntrance = useCallback(() => {
+    const lastEntrance = address.entrances[address.entrances.length - 1].entrance;
+    setAddress({...address, entrances: [...address.entrances, {
+      ...defaultEntrance,
+        address_id: address.id,
+        entrance: lastEntrance?(lastEntrance + 1):1,
+    }]})
+  }, [address])
+
 
   useEffect(() => {
     if(id) {
@@ -27,7 +36,7 @@ export function AddressFormPage() {
       AddressesAPI.getSingle(id)
         .then(({data}: {data: Address}) => {
           setAddress(data);
-          setCurrentEntrance(data.entrances.find((e) => e.entrance !== null) || null);
+          setCurrentEntrance(data.entrances.find((e) => e.entrance !== null) || data.entrances.find((e) => e.entrance == null) || null);
         })
         .catch(err)
         .finally(() => setLoading(false));
@@ -46,9 +55,9 @@ export function AddressFormPage() {
           <AddressObject />
           <div className="tab_triggers mt-4">
             {address.entrances.map((entrance) =>
-                entrance.entrance?<div key={entrance.id} className={"tab_trigger "+(currentEntrance?.id == entrance.id?'current':'')} onClick={() => setCurrentEntrance(entrance)}>{entrance.entrance}</div>:null
+                entrance.entrance?<div key={entrance.entrance || entrance.id} className={"tab_trigger "+(currentEntrance?.entrance == entrance.entrance?'current':'')} onClick={() => setCurrentEntrance(entrance)}>{entrance.entrance}</div>:null
             )}
-            <div className="tab_trigger leading-4"><Icon icon="plus"/></div>
+            <div className="tab_trigger leading-4" onClick={addEntrance}><Icon icon="plus"/></div>
             {nullEntrance && <div className={"tab_trigger ml-3 "+(currentEntrance?.id == nullEntrance.id?'current':'')} onClick={() => setCurrentEntrance(nullEntrance)}>Не указан</div>}
           </div>
           {currentEntrance && <EntranceForm />}
