@@ -113,6 +113,7 @@ return [
         'name' => 'Имя',
         'client_phone' => 'Номер телефона клиента',
         'client_phone_contact' => 'Контактный номер телефона клиента',
+        'object.sip' => 'SIP номер'
     ],
 
 ];

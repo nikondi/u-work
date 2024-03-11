@@ -40,7 +40,10 @@ export function ObjectsPage() {
   const updateObjects = () => {
     const toast_id = toast.loading('Обновление');
     ObjectsAPI.updateStatuses()
-      .then(() => setPageRef.current(0))
+      .then(() => {
+        setPageRef.current(0)
+        toast.success('Статусы обновлены');
+      })
       .catch(err)
       .finally(() => toast.dismiss(toast_id));
   }
