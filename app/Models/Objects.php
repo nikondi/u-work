@@ -35,6 +35,8 @@ class Objects extends Model
         'subnet', 'wan', 'pppoe_cred',
         'camera_ip', 'camera_model',
         'sip',
+        'status',
+        'last_online',
         'cubic_ip',
         'minipc_model',
         'intercom_model',

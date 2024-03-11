@@ -21,4 +21,8 @@ export class ObjectsAPI {
   static saveMorphed(id: number, relation: ObjectRelations, data: Partial<ObjectsAPI>) : Promise<AxiosResponse<Objects>> {
     return AxiosClient.put(`/${relation}/${id}/object`, data);
   }
+
+  static updateStatuses() {
+    return AxiosClient.get('/objects/update_statuses');
+  }
 }

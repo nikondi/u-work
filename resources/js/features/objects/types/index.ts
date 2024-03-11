@@ -20,6 +20,8 @@ export type ObjectNet = {
   pppoe_cred: string,
 }
 
+export type ObjectStatus = 'offline' | 'online' | 'unknown';
+
 export type Objects = {
   id: number,
   type: '112-stand' | '112-button' | 'intercom' | 'house',
@@ -28,6 +30,8 @@ export type Objects = {
   nets: ObjectNet[],
   cameras: ObjectCamera[],
   sip: number | string,
+  status: ObjectStatus,
+  last_online: string,
   minipc_model: string,
   intercom_model: string,
   cubic_ip: string,

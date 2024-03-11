@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\API\ARI;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CreateObjectRequest;
 use App\Http\Requests\UpdateObjectRequest;
@@ -113,5 +114,19 @@ class ObjectsController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+
+    public function updateStatuses() {
+        $ARI = new ARI();
+        $peers = $ARI->getPeers();
+        $time = now()->format('Y-m-d H:i:s');
+        foreach($peers as $peer) {
+            $object = ['status' => $peer['state']];
+            if($peer['state'] == 'online')
+                $object['last_online'] = $time;
+            if($obj = Objects::where('sip', $peer['sip'])->first())
+                $obj->update($object);
+        }
     }
 }

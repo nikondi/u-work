@@ -46,6 +46,7 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::post('/entrances/{entrance}/object', [ObjectsController::class, 'storeEntrance']);
 
     Route::resource('/simple_objects', SimpleObjectController::class);
+    Route::get('/objects/update_statuses', [ObjectsController::class, 'updateStatuses']);
     Route::resource('/objects', SimpleObjectController::class);
 
     Route::get('/entrances/{entrance}/clients', [EntranceController::class, 'getClients']);
