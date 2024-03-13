@@ -46,10 +46,10 @@ class Request extends Model
 
     public function getStatusLabel(): string
     {
-        return static::getStatuses($this->status);
+        return static::getStatuses($this->status, static::STATUS_UNKNOWN);
     }
 
-    private static function getStatuses($status = null): array|string
+    private static function getStatuses($status = null, $default = null): array|string
     {
         $statuses = [
             static::STATUS_UNKNOWN => 'unknown',
@@ -58,7 +58,7 @@ class Request extends Model
             static::STATUS_IMPORTANT => 'important',
         ];
 
-        return $statuses[$status] ?? $statuses;
+        return $statuses[$status] ?? $statuses[$default] ?? $statuses;
     }
 
     public static function getStatusOrder(): array
