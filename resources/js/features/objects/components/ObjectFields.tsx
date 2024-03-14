@@ -136,6 +136,21 @@ function ObjectIntercoms({intercom, setIntercom}: {intercom: string, setIntercom
             <Select value={intercom_elem} onChange={(v) => updateIntercom(i, v)}>
               <Option value="foton" index={0}>Фотон</Option>
               <Option value="TDF" index={1}>TDF</Option>
+              <Option value="uniphone" index={2}>UNIPHONE</Option>
+              <Option value="uniphone-ros" index={3}>UNIPHONE (Росдомофон)</Option>
+              <Option value="cyfral" index={4}>Цифрал</Option>
+              <Option value="cyfral-tc" index={5}>Цифрал tc</Option>
+              <Option value="cyfral-new" index={6}>Новый цифрал</Option>
+              <Option value="cyfral-tm" index={7}>Цифрал ТМ</Option>
+              <Option value="impulse" index={8}>Импульс</Option>
+              <Option value="impulse-40d" index={9}>Импульс 40Д</Option>
+              <Option value="metakom" index={12}>Метаком</Option>
+              <Option value="metakom-10tm" index={10}>Метаком 10 тм</Option>
+              <Option value="metakom-ksobj" index={11}>Метаком-КСОБЖ</Option>
+              <Option value="metakom-video" index={13}>Метаком (видео)</Option>
+              <Option value="metakom-uniphone" index={14}>Метаком/Uniphone</Option>
+              <Option value="vizit" index={15}>VIZIT</Option>
+              <Option value="straj-k" index={16}>Страж-к</Option>
             </Select>
           </FormRow>
           <div className="flex-shrink-0">
