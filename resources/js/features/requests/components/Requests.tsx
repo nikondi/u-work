@@ -119,7 +119,7 @@ function RequestRow() {
   const doneRequest = () => {
     setLoading(true);
     RequestsAPI
-        .update(request.id, {status: 'done'})
+        .update(request.id, {type: 'done'})
         .then(({data}) => setRequest(data))
         .catch(() => err())
         .finally(() => setLoading(false));
