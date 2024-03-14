@@ -3,10 +3,13 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\UpdateEntranceRequest;
 use App\Http\Resources\ClientResource;
 use App\Http\Resources\EntranceResource;
 use App\Models\Entrance;
+use App\Models\EntranceIntercom;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class EntranceController extends Controller
 {
@@ -57,9 +60,15 @@ class EntranceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateEntranceRequest $request, Entrance $entrance)
     {
-        //
+        $data = $request->validated();
+        DB::transaction(function() use ($data, $entrance) {
+            $entrance->update($data);
+            if(isset($data['intercoms']))
+                $entrance->hasManySync(EntranceIntercom::class, $data['intercoms'], 'intercoms');
+        });
+        return new EntranceResource($entrance);
     }
 
     /**

@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Traits\HasManySync;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -9,12 +10,9 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Entrance extends Model
 {
-    public $timestamps = false;
+    use HasManySync;
 
-    public function worker(): BelongsTo
-    {
-        return $this->belongsTo(User::class, 'worker_id', 'id');
-    }
+    public $timestamps = false;
 
     public function address(): BelongsTo
     {
@@ -29,6 +27,11 @@ class Entrance extends Model
     public function object(): MorphOne
     {
         return $this->morphOne(Objects::class, 'objectable');
+    }
+
+    public function intercoms(): HasMany
+    {
+        return $this->hasMany(EntranceIntercom::class);
     }
 
     public function getFull($apartment = null, $floor = null): string

@@ -7,6 +7,6 @@ export type ErrorResponse = {
     },
 }
 
-export type Response = {
-    data?: any,
+export type Response<T = any> = {
+    data?: T,
 }

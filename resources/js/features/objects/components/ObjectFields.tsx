@@ -1,4 +1,4 @@
-import React, {useMemo} from "react";
+import React from "react";
 import {Checkbox, FormRow, Input, Option, Select, Textarea} from "@/components/Form";
 import Icon from "@/components/Icon";
 import {ObjectCamera, ObjectNet, Objects} from "../types";
@@ -33,7 +33,6 @@ export function ObjectFields({object = null, setObject, page}: Props) {
 
     <ObjectNets nets={object.nets || []} setNets={(v) => setObject({...object, nets: v})}/>
     {page != 'address' && <ObjectCameras cameras={object.cameras || []} setCameras={(v) => setObject({...object, cameras: v})}/>}
-    {page == 'entrance' && <ObjectIntercoms intercom={object.intercom_model || ''} setIntercom={(v) => setObject({...object, intercom_model: v})}/>}
 
     {page != 'address' && <div className="flex gap-x-3 mb-4 items-center">
       <FormRow label="IP адрес кубика">
@@ -118,52 +117,3 @@ function ObjectCameras({cameras, setCameras}: {cameras: ObjectCamera[], setCamer
   </div>
 }
 
-function ObjectIntercoms({intercom, setIntercom}: {intercom: string, setIntercom: (v: string) => void}) {
-  const intercoms = useMemo(() => {
-    return intercom.split(',');
-  }, [intercom]);
-
-  const updateIntercom = (index: number, value: string) => setIntercom(intercoms.map((item, i) => (index == i)?value:item).join(','));
-  const addIntercom = () => setIntercom([...intercoms, ''].join(','));
-  const removeIntercom = (index: number) => setIntercom(intercoms.filter((_item, i) => i != index).join(','));
-
-  return <div className="mb-6">
-    <div className="text-2xl mb-1">Домофоны</div>
-    <div className="mb-2">
-      {intercoms.length > 0
-        ? intercoms.map((intercom_elem, i) => <div className="flex gap-x-3 mb-1 items-end" key={i}>
-          <FormRow label="Модель домофона" showLabel={i == 0}>
-            <Select value={intercom_elem} onChange={(v) => updateIntercom(i, v)}>
-              <Option value="foton" index={0}>Фотон</Option>
-              <Option value="TDF" index={1}>TDF</Option>
-              <Option value="uniphone" index={2}>UNIPHONE</Option>
-              <Option value="uniphone-ros" index={3}>UNIPHONE (Росдомофон)</Option>
-              <Option value="cyfral" index={4}>Цифрал</Option>
-              <Option value="cyfral-tc" index={5}>Цифрал tc</Option>
-              <Option value="cyfral-new" index={6}>Новый цифрал</Option>
-              <Option value="cyfral-tm" index={7}>Цифрал ТМ</Option>
-              <Option value="impulse" index={8}>Импульс</Option>
-              <Option value="impulse-40d" index={9}>Импульс 40Д</Option>
-              <Option value="metakom" index={12}>Метаком</Option>
-              <Option value="metakom-10tm" index={10}>Метаком 10 тм</Option>
-              <Option value="metakom-ksobj" index={11}>Метаком-КСОБЖ</Option>
-              <Option value="metakom-video" index={13}>Метаком (видео)</Option>
-              <Option value="metakom-uniphone" index={14}>Метаком/Uniphone</Option>
-              <Option value="vizit" index={15}>VIZIT</Option>
-              <Option value="straj-k" index={16}>Страж-к</Option>
-            </Select>
-          </FormRow>
-          <div className="flex-shrink-0">
-            <button type="button" className="px-2 py-3 transition-colors duration-300 hover:text-orange-400 dark:hover:text-orange-400"><Icon icon="times" onClick={() => removeIntercom(i)}/></button>
-          </div>
-        </div>)
-        : <div className="text-gray-400 text-center pt-3 px-2">Пусто</div>
-      }
-    </div>
-    {intercoms.length < 2 &&
-      <div className="text-right">
-        <button type="button" className="btn btn-rose" onClick={addIntercom}>Добавить <Icon icon="plus"/></button>
-      </div>
-    }
-  </div>
-}

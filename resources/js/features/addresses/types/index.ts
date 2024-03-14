@@ -1,4 +1,3 @@
-import {user} from "@/features/auth";
 import {Client} from "@/features/clients";
 import {Objects} from "@/features/objects/types";
 
@@ -12,14 +11,22 @@ export type Address = {
   object: Objects
 }
 
+export type Intercom = {
+  id: number,
+  model: string,
+  version: string,
+  calling_panel: string,
+  door_type: 'builders' | 'uniphone',
+}
+
 export type Entrance = {
   id: number,
   address_id: number,
   entrance: number,
   per_floor: number,
   floors: number,
+  intercoms: Intercom[],
   clients: Client[],
-  worker: user,
   object: Objects
 }
 export type AddressWithEntrance = Address & {

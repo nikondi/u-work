@@ -8,11 +8,12 @@ use Illuminate\Http\Resources\Json\JsonResource;
 /**
  * Class EntranceResource
  *
- * @mixin \App\Models\Entrance
+ * @mixin \App\Models\EntranceIntercom
  * */
-class EntranceResource extends JsonResource
+class EntranceIntercomResource extends JsonResource
 {
     public static $wrap = false;
+
     /**
      * Transform the resource into an array.
      *
@@ -22,11 +23,10 @@ class EntranceResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'entrance' => $this->entrance,
-            'per_floor' => $this->per_floor,
-            'intercoms' => EntranceIntercomResource::collection($this->intercoms),
-            'clients' => [],
-            'object' => new ObjectResource($this->object),
+            'entrance_id' => $this->entrance_id,
+            'model' => $this->model,
+            'version' => $this->version,
+            'calling_panel' => $this->calling_panel,
         ];
     }
 }

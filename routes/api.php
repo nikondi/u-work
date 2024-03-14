@@ -44,12 +44,13 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::put('/entrances/{entrance}/object', [ObjectsController::class, 'updateEntrance']);
     Route::post('/entrances/{entrance}/object', [ObjectsController::class, 'storeEntrance']);
+    Route::get('/entrances/{entrance}/clients', [EntranceController::class, 'getClients']);
+    Route::resource('/entrances', EntranceController::class);
 
     Route::resource('/simple_objects', SimpleObjectController::class);
     Route::get('/objects/update_statuses', [ObjectsController::class, 'updateStatuses']);
     Route::resource('/objects', SimpleObjectController::class);
 
-    Route::get('/entrances/{entrance}/clients', [EntranceController::class, 'getClients']);
 
 
     Route::get('/requests', [RequestsController::class, 'index']);
