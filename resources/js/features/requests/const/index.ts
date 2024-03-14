@@ -21,10 +21,10 @@ export const empty_request: Request = {
 };
 
 export const requestTypes = {
-    'unknown': 'Неизвестно',
-    'new': 'Новая',
-    'done': 'Завершена',
-    'important': 'Срочная',
+    'simple': 'Новые обращения',
+    'call': 'Звонки',
+    'done': 'Завершены',
+    'suggest': 'Новые предложения',
 };
 
 export const default_columns: Column[] = [

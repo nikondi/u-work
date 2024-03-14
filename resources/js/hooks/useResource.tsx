@@ -28,7 +28,6 @@ const default_config = {
   page: 1,
 } as Partial<ResourceConfig>;
 
-
 export function useResource<Row = any>(config: ResourceConfig<Row>) {
   config = {...default_config, ...config};
 
@@ -39,7 +38,7 @@ export function useResource<Row = any>(config: ResourceConfig<Row>) {
   const [content, setContent] = useState<Row[]>([]);
 
   const [pagination, setPagination] = useState<ReactElement>(null)
-  const [list, setList] = useState<ReactElement[] | Row>([]);
+  const [list, setList] = useState<ReactElement[] | Row[]>([]);
   const timeoutRef = useRef<null | ReturnType<typeof setTimeout>>(null);
 
   const setPage = (page: number, silently: boolean = false) => {
@@ -97,7 +96,8 @@ export function useResource<Row = any>(config: ResourceConfig<Row>) {
 
     setList(content.map((row: Row, i) => {
       return config.renderRow
-          ? <RowContextProvider key={i} initial={row}>{config.renderRow(row, i)}</RowContextProvider>
+          // @ts-ignore
+          ? <RowContextProvider key={row.id || i} initial={row}>{config.renderRow(row, i)}</RowContextProvider>
           : null;
     }));
   }, [content]);
