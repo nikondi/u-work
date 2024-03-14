@@ -11,6 +11,7 @@ class UpdateObjectRequest extends FormRequest
             'type' => 'required',
             'router' => '',
             'internet' => '',
+            'worker' => 'array|nullable',
             'nets' => 'array|nullable',
             'nets.*.subnet' => 'required',
             'nets.*.wan' => 'required_unless:net.*.subnet,null',
@@ -40,6 +41,13 @@ class UpdateObjectRequest extends FormRequest
      */
     public function rules(): array
     {
-        return static::getRules($this->get('id'));
+        return static::getRules($this->toArray()['id']);
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $data = $this->toArray();
+        if(isset($data['object']))
+            $this->replace($data['object']);
     }
 }

@@ -8,10 +8,13 @@ export const defaultObject: Objects = {
   nets: [],
   cameras: [],
   cubic_ip: '',
+  worker: null,
   sip: '',
   minipc_model: '',
   intercom_model: '',
   comment: '',
+  status: "offline",
+  last_online: null,
 }
 
 export const defaultSimpleObject: SimpleObject = {

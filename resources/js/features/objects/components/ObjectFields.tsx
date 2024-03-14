@@ -3,6 +3,7 @@ import {Checkbox, FormRow, Input, Option, Select, Textarea} from "@/components/F
 import Icon from "@/components/Icon";
 import {ObjectCamera, ObjectNet, Objects} from "../types";
 import {defaultObject} from "../const";
+import {WorkerSelect} from "@/features/requests/components/RequestForm";
 
 type Props = {
   object: Objects
@@ -16,12 +17,18 @@ export function ObjectFields({object = null, setObject, page}: Props) {
     <div className="flex gap-x-3 mb-4 items-end">
       {page == 'simple_object' &&
         <FormRow label="Тип объекта" required>
-            <Select value={object.type} onChange={(v) => setObject({...object, type: v})}>
-                <Option index={1} value="112-button">Кнопка 112</Option>
-                <Option index={2} value="112-stand">Стойка 112</Option>
-            </Select>
+          <Select value={object.type} onChange={(v) => setObject({...object, type: v})}>
+            <Option index={1} value="112-button">Кнопка 112</Option>
+            <Option index={2} value="112-stand">Стойка 112</Option>
+          </Select>
         </FormRow>
       }
+      {page != 'entrance' &&
+      <FormRow label="Ответственный">
+        <Select onChange={(v) => setObject({...object, worker: v})}>
+          <WorkerSelect worker={object.worker}/>
+        </Select>
+      </FormRow>}
       <FormRow label="Маршрутизатор">
         <Input value={object.router || ''} setValue={(v: string) => setObject({...object, router: v})} />
       </FormRow>

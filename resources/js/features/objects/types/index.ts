@@ -1,3 +1,5 @@
+import {Worker} from "@/features/workers/types";
+
 export type SimpleObject = {
   id: number,
   name: string,
@@ -25,6 +27,7 @@ export type ObjectStatus = 'offline' | 'online' | 'unknown';
 export type Objects = {
   id: number,
   type: '112-stand' | '112-button' | 'intercom' | 'house',
+  worker: Worker
   router: string,
   internet: boolean,
   nets: ObjectNet[],

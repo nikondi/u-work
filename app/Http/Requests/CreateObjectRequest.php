@@ -11,6 +11,7 @@ class CreateObjectRequest extends FormRequest
             'type' => 'required',
             'router' => '',
             'internet' => '',
+            'worker' => 'array|nullable',
             'nets' => 'array|nullable',
             'nets.*.subnet' => 'required',
             'nets.*.wan' => 'required_unless:net.*.subnet,null',

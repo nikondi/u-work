@@ -13,7 +13,6 @@ use App\Models\ObjectCamera;
 use App\Models\ObjectNet;
 use App\Models\Objects;
 use App\Models\SimpleObject;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
 class ObjectsController extends Controller
@@ -43,41 +42,47 @@ class ObjectsController extends Controller
     }
 
     public function storeAddress(CreateObjectRequest $request, Address $address) {
-        return $this->storeMorphed($request, $address);
+        return new ObjectResource(static::storeMorphed($request, $address));
     }
     public function updateAddress(UpdateObjectRequest $request, Address $address) {
-        return $this->updateMorphed($request, $address);
+        return new ObjectResource(static::updateMorphed($request, $address));
     }
     public function storeEntrance(CreateObjectRequest $request, Entrance $entrance) {
-        return $this->storeMorphed($request, $entrance);
+        return new ObjectResource(static::storeMorphed($request, $entrance));
     }
     public function updateEntrance(UpdateObjectRequest $request, Entrance $entrance) {
-        return $this->updateMorphed($request, $entrance);
+        return new ObjectResource(static::updateMorphed($request, $entrance));
     }
 
-    public function storeMorphed(CreateObjectRequest $request, Entrance|Address $item) {
+    public static function storeMorphed(CreateObjectRequest $request, Entrance|Address|SimpleObject $item) {
         $data = $request->validated();
-        $object = DB::transaction(function() use ($request, $item, $data) {
+        if(!empty($data['worker']))
+            $data['worker_id'] = $data['worker']['id'];
+        return DB::transaction(function() use ($request, $item, $data) {
             $object = new Objects($data);
             $object->objectable()->associate($item);
             $object->save();
-            $object->hasManySync(ObjectCamera::class, $data['cameras'], 'cameras');
-            $object->hasManySync(ObjectNet::class, $data['nets'], 'nets');
+            if(isset($data['cameras']))
+                $object->hasManySync(ObjectCamera::class, $data['cameras'], 'cameras');
+            if(isset($data['nets']))
+                $object->hasManySync(ObjectNet::class, $data['nets'], 'nets');
             return $object;
         });
-
-        return new ObjectResource($object);
     }
 
-    public function updateMorphed(UpdateObjectRequest $request, Entrance|Address $item) {
+    public static function updateMorphed(UpdateObjectRequest $request, Entrance|Address|SimpleObject $item) {
         $data = $request->validated();
+        if(!empty($data['worker']))
+            $data['worker_id'] = $data['worker']['id'];
         $object = $item->object;
         DB::transaction(function() use ($request, $item, $data, $object) {
             $object->update($data);
             $object->objectable()->associate($item);
             $object->save();
-            $object->hasManySync(ObjectCamera::class, $data['cameras'], 'cameras');
-            $object->hasManySync(ObjectNet::class, $data['nets'], 'nets');
+            if(isset($data['cameras']))
+                $object->hasManySync(ObjectCamera::class, $data['cameras'], 'cameras');
+            if(isset($data['nets']))
+                $object->hasManySync(ObjectNet::class, $data['nets'], 'nets');
             return $object;
         });
 
@@ -90,7 +95,7 @@ class ObjectsController extends Controller
      */
     public function show(Objects $object)
     {
-        return new ObjectResource($object->with('nets')->with('cameras'));
+        return new ObjectResource($object->with('nets')->with('cameras')->with('worker'));
     }
 
     /**

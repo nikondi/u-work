@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Traits\HasManySync;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 class Objects extends Model
@@ -28,10 +29,16 @@ class Objects extends Model
         return $this->hasMany(ObjectNet::class);
     }
 
+    public function worker(): HasOne
+    {
+        return $this->hasOne(User::class, 'id', 'worker_id');
+    }
+
     protected $fillable = [
         'type',
         'router',
         'internet',
+        'worker_id',
         'subnet', 'wan', 'pppoe_cred',
         'camera_ip', 'camera_model',
         'sip',

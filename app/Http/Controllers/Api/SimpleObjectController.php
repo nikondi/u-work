@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CreateObjectRequest;
 use App\Http\Requests\CreateSimpleObjectRequest;
+use App\Http\Requests\UpdateObjectRequest;
 use App\Http\Requests\UpdateSimpleObjectRequest;
 use App\Http\Resources\SimpleObjectResource;
-use App\Models\ObjectCamera;
-use App\Models\ObjectNet;
-use App\Models\Objects;
 use App\Models\SimpleObject;
 use App\Traits\GetResult;
 use App\Traits\ParseResourceRequest;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Symfony\Component\HttpFoundation\Response as ResponseCodes;
@@ -57,20 +57,16 @@ class SimpleObjectController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * @throws BindingResolutionException
      */
     public function store(CreateSimpleObjectRequest $request)
     {
         $data = $request->validated();
-
-        $simpleObject = DB::transaction(function() use ($data) {
+        $objectRequest = app()->make(CreateObjectRequest::class);
+        $objectRequest->query->replace($data['object']);
+        $simpleObject = DB::transaction(function() use ($objectRequest, $request, $data) {
             $simpleObject = SimpleObject::create($data);
-
-            $object = new Objects($data);
-            $object->objectable()->associate($simpleObject);
-            $object->save();
-            $object->hasManySync(ObjectCamera::class, $data['object']['cameras'], 'cameras');
-            $object->hasManySync(ObjectNet::class, $data['object']['nets'], 'nets');
-            $simpleObject->object = $object;
+            $simpleObject->object = ObjectsController::storeMorphed($objectRequest, $simpleObject);
             return $simpleObject;
         });
 
@@ -99,16 +95,16 @@ class SimpleObjectController extends Controller
 
     /**
      * Update the specified resource in storage.
+     * @throws BindingResolutionException
      */
     public function update(UpdateSimpleObjectRequest $request, string $id)
     {
         $data = $request->validated();
-        $simpleObject = DB::transaction(function() use ($data, $id) {
+        $objectRequest = app()->make(UpdateObjectRequest::class);
+        $simpleObject = DB::transaction(function() use ($objectRequest, $request, $data, $id) {
             $simpleObject = SimpleObject::with('object')->findOrFail($id);
             $simpleObject->update($data);
-            $simpleObject->object->update($data['object']);
-            $simpleObject->object->hasManySync(ObjectCamera::class, $data['object']['cameras'], 'cameras');
-            $simpleObject->object->hasManySync(ObjectNet::class, $data['object']['nets'], 'nets');
+            $simpleObject->object = ObjectsController::updateMorphed($objectRequest, $simpleObject);
             return $simpleObject;
         });
         return new SimpleObjectResource($simpleObject);

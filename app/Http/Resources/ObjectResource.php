@@ -25,6 +25,7 @@ class ObjectResource extends JsonResource
             'id' => $this->id,
             'type' => $this->type,
             'router' => $this->router,
+            'worker' => new WorkerResource($this->worker),
             'internet' => $this->internet,
             'nets' => $this->nets?ObjectNetResource::collection($this->nets):[],
             'cameras' => $this->cameras?ObjectCameraResource::collection($this->cameras):[],
@@ -34,6 +35,8 @@ class ObjectResource extends JsonResource
             'minipc_model' => $this->minipc_model,
             'intercom_model' => $this->intercom_model,
             'comment' => $this->comment,
+            'cubic_ip' => $this->cubic_ip,
+            'check_date' => $this->check_date,
         ];
     }
 }

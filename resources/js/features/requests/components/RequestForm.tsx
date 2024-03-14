@@ -255,10 +255,15 @@ export function ClientSelect({client}: {client: Client}) {
   </>
 }
 
+const workerLabel = (worker: user) => worker
+    ? <><span className="text-orange-500 dark:text-orange-400 text-xs">#{worker.id}</span> {worker.name} <span className="text-xs text-gray-400">{worker.email}</span></>
+    : 'Исполнитель';
+
 export function WorkerSelect({worker}: {worker: user}) {
   const [word, setWord] = useState('');
   const [workers, setWorkers] = useState<user[]>([]);
-  const {opened} = useSelectContext();
+  const {opened, setSelectedOption} = useSelectContext();
+  const [fetched, setFetched] = useState(false);
   const searchInput = useRef<HTMLInputElement>();
 
   useEffect(() => {
@@ -266,22 +271,37 @@ export function WorkerSelect({worker}: {worker: user}) {
   }, [opened]);
 
   useEffect(() => {
+    if(fetched) {
+      setSelectedOption({
+        value: worker,
+        label: workerLabel(worker),
+        dispatch: false
+      });
+      setFetched(false);
+    }
+  }, [fetched]);
+
+  useEffect(() => {
     if(word.trim() !== '') {
       UsersAPI
         .search(5, 1, word, {role: 'worker'}, false)
-        .then(({data}) => setWorkers(data.data))
+        .then(({data}) => {
+          setFetched(true);
+          setWorkers(data.data)
+        })
         .catch(() => err());
     }
     else {
       UsersAPI
         .get(5, 1, {role: 'worker'}, false)
-        .then(({data}) => setWorkers(data.data))
+        .then(({data}) => {
+          setWorkers(data.data)
+          setFetched(true);
+        })
         .catch(() => err());
     }
   }, [word]);
 
-  const workerLabel = (worker: user) =>
-    <><span className="text-orange-500 dark:text-orange-400 text-xs">#{worker.id}</span> {worker.name} <span className="text-xs text-gray-400">{worker.email}</span></>;
 
   const [_word, _setWord] = useDelayedState(setWord, 400, '');
 

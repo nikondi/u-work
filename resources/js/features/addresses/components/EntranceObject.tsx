@@ -25,8 +25,8 @@ export function EntranceObject() {
       ...entrance.object,
       city: address.city,
       type: 'entrance',
-      nets: entrance.object.nets || [],
-      cameras: entrance.object.cameras || []
+      nets: entrance.object?.nets || [],
+      cameras: entrance.object?.cameras || []
     }
 
 
@@ -36,7 +36,7 @@ export function EntranceObject() {
           .catch(err);
     }
 
-    if(entrance.object.id) {
+    if(entrance.object?.id) {
       ObjectsAPI.saveMorphed(entrance.id, 'entrances', d)
         .then(({data}) => toast.success(`Объект ${data.id} сохранён`))
         .catch(err)
