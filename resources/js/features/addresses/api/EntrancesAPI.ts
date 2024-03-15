@@ -8,4 +8,7 @@ export class EntrancesAPI {
   static update(id: number, data: Partial<Entrance>) {
     return AxiosClient.put(`/entrances/${id}`, data);
   }
+  static delete(id: number) {
+    return AxiosClient.delete(`/entrances/${id}`);
+  }
 }

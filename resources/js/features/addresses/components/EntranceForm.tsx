@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {err, getInputInt} from "@/helpers";
+import {err} from "@/helpers";
 import LoadingArea from "@/components/LoadingArea";
 import SidePopup, {CloseButton, PopupContent} from "@/components/SidePopup";
 import {EntrancesAPI} from "../api";
@@ -17,23 +17,23 @@ export function EntranceForm() {
       return;
     setLoading(true);
     EntrancesAPI.getClients(entrance.id)
-        .then(({data}) => setEntrance({...entrance, clients: data.data}))
+        .then(({data}) => setEntrance((prev) => ({...prev, clients: data.data})))
         .catch(err)
         .finally(() => setLoading(false));
 
-  }, [entrance.id]);
+  }, [entrance]);
 
   return <div className="relative">
     <LoadingArea show={loading}/>
     {entrance.entrance && entrance.id && <EntranceObject />}
     {currentClient && <SidePopup onClose={() => setCurrentClient(null)}>
-        <PopupContent>
-            <CloseButton onClose={() => setCurrentClient(null)}/>
-            <ClientForm id={currentClient.id}/>
-        </PopupContent>
+      <PopupContent>
+        <CloseButton onClose={() => setCurrentClient(null)}/>
+        <ClientForm id={currentClient.id}/>
+      </PopupContent>
     </SidePopup>}
     <div className="p-3">
-      <table>
+      {/*<table>
         <tbody>
         <tr>
           <td className="p-1.5">Кол-во этажей:</td>
@@ -44,7 +44,7 @@ export function EntranceForm() {
           <td className="p-1.5"><input type="text" className="bg-transparent border rounded px-2 py-0.5" value={entrance.per_floor || ''} onChange={(e) => setEntrance({...entrance, per_floor: getInputInt(e.target.value)})} /></td>
         </tr>
         </tbody>
-      </table>
+      </table>*/}
       <div className="mt-3">
         <div className="text-2xl mb-4">Жильцы</div>
         <table>

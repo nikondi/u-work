@@ -22,7 +22,7 @@ export class AddressesAPI {
   static getClients(address_id: number) : Promise<AxiosResponse<Response<ClientEntrance[]>>> {
     return AxiosClient.get(`/addresses/${address_id}/getClients`);
   }
-  static saveClients(address_id: number, clients: ({client_id: number, entrance_id: number, entrance: number})[]) {
-    return AxiosClient.post(`/addresses/${address_id}/saveClients`, {clients});
+  static saveClients(address_id: number, entrances: ({entrance_id: number, entrance: number, items: number[]})[]) {
+    return AxiosClient.post(`/addresses/${address_id}/saveClients`, {entrances});
   }
 }

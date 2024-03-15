@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\UpdateEntranceRequest;
 use App\Http\Resources\ClientResource;
 use App\Http\Resources\EntranceResource;
+use App\Models\Client;
 use App\Models\Entrance;
 use App\Models\EntranceIntercom;
 use Illuminate\Http\Request;
@@ -74,8 +75,14 @@ class EntranceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Entrance $entrance)
     {
-        //
+        $client_ids = $entrance->clients()->pluck('id')->toArray();
+        $null_entrance = Entrance::where('address_id', $entrance->address_id)->whereNull('entrance')->first('id');
+        if(!$null_entrance)
+            $null_entrance = Entrance::create(['address_id' => $entrance->address_id, 'entrance' => null]);
+
+        Client::whereIn('id', $client_ids)->update(['entrance_id' => $null_entrance->id]);
+        $entrance->delete();
     }
 }

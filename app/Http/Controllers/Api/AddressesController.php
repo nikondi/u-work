@@ -63,9 +63,22 @@ class AddressesController extends Controller
         return ClientEntranceResource::collection(Client::whereIn('entrance_id', $entrances)->orderByRaw('cast(apartment as unsigned)')->with('entrance')->get());
     }
     public function saveClients(Request $request, int $address_id) {
-        $clients = $request->get('clients');
-        foreach($clients as $client)
-            Client::where('id', $client['client_id'])->update(['entrance_id' => $client['entrance_id']]);
+        $entrances = $request->get('entrances');
+        foreach($entrances as $entrance) {
+            $entrance_id = $entrance['entrance_id'];
+            $entrance_num = $entrance['entrance'];
+            $items = $entrance['items'];
+
+            if(is_null($entrance_id)) {
+                $exist_entrance = Entrance::where('address_id', $address_id)->where('entrance', $entrance_num)->first('id');
+                if($exist_entrance)
+                    $entrance_id = $exist_entrance->id;
+                else
+                    $entrance_id = (Entrance::create(['address_id' => $address_id, 'entrance' => $entrance_num]))->id;
+            }
+
+            Client::whereIn('id', $items)->update(['entrance_id' => $entrance_id]);
+        }
 
         Entrance::where('address_id', $address_id)->whereNull('entrance')->whereDoesntHave('clients')->delete();
         return true;
