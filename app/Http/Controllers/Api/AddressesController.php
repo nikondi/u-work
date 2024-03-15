@@ -4,7 +4,10 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Resources\AddressIndexResource;
 use App\Http\Resources\AddressResource;
+use App\Http\Resources\ClientEntranceResource;
 use App\Models\Address;
+use App\Models\Client;
+use App\Models\Entrance;
 use App\Traits\GetResult;
 use App\Traits\ParseResourceRequest;
 use Illuminate\Http\Request;
@@ -53,5 +56,18 @@ class AddressesController extends Controller
 
     public function show(Address $address) {
         return new AddressResource($address);
+    }
+
+    public function getClients(int $address_id) {
+        $entrances = Entrance::where('address_id', $address_id)->orderBy('entrance')->pluck('id')->toArray();
+        return ClientEntranceResource::collection(Client::whereIn('entrance_id', $entrances)->orderByRaw('cast(apartment as unsigned)')->with('entrance')->get());
+    }
+    public function saveClients(Request $request, int $address_id) {
+        $clients = $request->get('clients');
+        foreach($clients as $client)
+            Client::where('id', $client['client_id'])->update(['entrance_id' => $client['entrance_id']]);
+
+        Entrance::where('address_id', $address_id)->whereNull('entrance')->whereDoesntHave('clients')->delete();
+        return true;
     }
 }

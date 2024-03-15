@@ -16,7 +16,12 @@ class Client extends Authenticatable
 
     public function address(): BelongsTo
     {
-        return $this->belongsTo(Address::class);
+        return $this->entrance->address();
+    }
+
+    public function entrance(): BelongsTo
+    {
+        return $this->belongsTo(Entrance::class);
     }
 
     public function getStatusName(): string
@@ -57,7 +62,7 @@ class Client extends Authenticatable
 
     protected $fillable = [
         'id',
-        'address_id', 'floor', 'apartment',
+        'entrance_id', 'floor', 'apartment',
         'phone', 'email', 'password',
         'name',
         'status',

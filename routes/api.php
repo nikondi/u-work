@@ -38,6 +38,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/addresses/worker', [AddressesController::class, 'indexWorker'])->middleware('role:manager');
     Route::get('/addresses/getCities', [AddressesController::class, 'getCities']);
     Route::get('/addresses/{address}', [AddressesController::class, 'show']);
+    Route::get('/addresses/{address_id}/getClients', [AddressesController::class, 'getClients']);
+    Route::post('/addresses/{address_id}/saveClients', [AddressesController::class, 'saveClients']);
 
     Route::put('/addresses/{address}/object', [ObjectsController::class, 'updateAddress']);
     Route::post('/addresses/{address}/object', [ObjectsController::class, 'storeAddress']);

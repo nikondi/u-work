@@ -6,11 +6,11 @@ use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 /**
- * Class ClientResource
+ * Class ClientEntranceResource
  *
  * @mixin \App\Models\Client
  * */
-class ClientResource extends JsonResource
+class ClientEntranceResource extends JsonResource
 {
     public static $wrap = false;
 
@@ -24,14 +24,10 @@ class ClientResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'email' => $this->email,
-            'phone' => $this->phone,
-            'phones' => $this->getPhones(),
-            'status' => $this->getStatusName(),
             'floor' => $this->floor,
             'apartment' => $this->apartment,
-            'comment' => $this->comment,
-            'entrance_id' => $this->entrance_id,
+            'entrance' => $this->entrance->entrance,
+            'entrance_id' => $this->entrance_id
         ];
     }
 }

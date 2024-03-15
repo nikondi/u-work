@@ -16,12 +16,12 @@ class Entrance extends Model
 
     public function address(): BelongsTo
     {
-        return $this->belongsTo(Address::class, 'address_id', 'id');
+        return $this->belongsTo(Address::class);
     }
 
     public function clients(): HasMany
     {
-        return $this->hasMany(Client::class, 'address_id');
+        return $this->hasMany(Client::class);
     }
 
     public function object(): MorphOne

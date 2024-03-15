@@ -24,8 +24,8 @@ export function EntranceForm() {
   }, [entrance.id]);
 
   return <div className="relative">
-    {loading && <LoadingArea/>}
-    {entrance.entrance && <EntranceObject />}
+    <LoadingArea show={loading}/>
+    {entrance.entrance && entrance.id && <EntranceObject />}
     {currentClient && <SidePopup onClose={() => setCurrentClient(null)}>
         <PopupContent>
             <CloseButton onClose={() => setCurrentClient(null)}/>
