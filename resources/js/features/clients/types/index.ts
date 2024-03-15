@@ -7,6 +7,7 @@ type ClientAddress = {
 
 export type Client = {
   id: number
+  entrance_id: number
   name: string
   email: string
   phone: string
@@ -15,6 +16,8 @@ export type Client = {
   floor: number
   apartment: number
   comment: string
+  address?: string
+  address_id?: number
 }
 
 export type ClientEntrance = {
@@ -28,7 +31,7 @@ export type ClientEntrance = {
 
 export type ClientRaw = {
   id: number,
-  address_id: number,
+  entrance_id: number,
   phone: string,
   email: string,
   name: string,

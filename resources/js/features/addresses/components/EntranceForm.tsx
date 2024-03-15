@@ -56,11 +56,11 @@ export function EntranceForm() {
           </tr>
           </thead>
           <tbody>
-          {entrance.clients && entrance.clients.map(((client) => <tr key={client.id}>
-                <td className="p-1.5">{client.apartment}</td>
-                <td className="p-1.5"><span className="underline text-blue-600 cursor-pointer" onClick={() => setCurrentClient(client)}>{client.name}</span></td>
-                <td className="p-1.5">{client.floor}</td>
-              </tr>
+          {entrance.clients && entrance.clients.map(((client) => <tr key={client.id} className="dark:text-gray-300 cursor-pointer hover:bg-gray-600 hover:bg-opacity-20 transition-colors duration-300" onClick={() => setCurrentClient(client)}>
+              <td className="p-1.5">{client.apartment}</td>
+              <td className="p-1.5">{client.name}</td>
+              <td className="p-1.5">{client.floor}</td>
+            </tr>
           ))}
           </tbody>
         </table>

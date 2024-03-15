@@ -32,6 +32,8 @@ class ClientResource extends JsonResource
             'apartment' => $this->apartment,
             'comment' => $this->comment,
             'entrance_id' => $this->entrance_id,
+            'address_id' => $this->entrance->address_id,
+            'address' => $this->getFullAddress()
         ];
     }
 }

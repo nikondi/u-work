@@ -45,9 +45,7 @@ class Client extends Authenticatable
 
     public function getFullAddress(): string
     {
-        return $this->address->city.', '.$this->address->street.', д. '.$this->address->house
-            .($this->address->entrance?', п. '.$this->address->entrance:'').($this->apartment?', кв. '.$this->apartment:'')
-            .($this->floor?', '.$this->floor.' этаж':'');
+        return $this->entrance->getFull($this->apartment, $this->floor);
     }
 
     public function requests(): HasMany
