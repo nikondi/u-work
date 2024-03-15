@@ -21,7 +21,7 @@ export function EntranceForm() {
         .catch(err)
         .finally(() => setLoading(false));
 
-  }, [entrance]);
+  }, [entrance.entrance]);
 
   return <div className="relative">
     <LoadingArea show={loading}/>
