@@ -17,5 +17,6 @@ class EntranceIntercom extends Model
         'model',
         'version',
         'calling_panel',
+        'door_type'
     ];
 }

@@ -27,6 +27,7 @@ class EntranceIntercomResource extends JsonResource
             'model' => $this->model,
             'version' => $this->version,
             'calling_panel' => $this->calling_panel,
+            'door_type' => $this->door_type,
         ];
     }
 }
