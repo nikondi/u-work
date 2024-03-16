@@ -7,13 +7,20 @@ import {FormRow, Input, Option, Repeater, Select, Textarea} from "@/components/F
 import LoadingArea from "@/components/LoadingArea";
 import {err, getInputInt} from "@/helpers";
 import Save from "@/components/Save";
+import toast from "react-hot-toast";
 
 export function ClientFormPage() {
   const {id} = useParams();
-  return <ClientForm id={id}/>;
+  return <ClientForm id={parseInt(id)} page="single" />;
 }
 
-export function ClientForm({id}) {
+type Props = {
+  id: number,
+  page?: 'popup' | 'single'
+  onSave?: (client: Client) => void
+}
+
+export function ClientForm({id, page = 'popup', onSave = null}: Props) {
   const [client, setClient] = useState<Client>(defaultClient);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -29,29 +36,36 @@ export function ClientForm({id}) {
     }
   }, [id]);
 
-  const onSave: FormEventHandler = (e) => {
+  const save: FormEventHandler = (e) => {
     e.preventDefault();
 
     const client_data: ClientRaw = {...client, password: '', status: statusToNumber[client.status]};
-    console.log(client_data);
     setLoading(true);
 
     if(id) {
       ClientsAPI.update(id, client_data)
-          .then(({data}) => (data.id != id)?navigate(`/clients/${data.id}`):null)
-          .catch(() => err())
+          .then(({data}) => {
+            page == 'single' && data.id != id && navigate(`/clients/${data.id}`);
+            toast.success(`Клиент ${data.id} сохранён`);
+            onSave && onSave(data);
+          })
+          .catch(err)
           .finally(() => setLoading(false));
     }
     else {
       ClientsAPI.create(client_data)
-          .then(({data}) => navigate(`/clients/${data.id}`))
-          .catch(() => err())
+          .then(({data}) => {
+            page == 'single' && navigate(`/clients/${data.id}`);
+            toast.success(`Клиент ${data.id} добавлен`)
+            onSave && onSave(data);
+          })
+          .catch(err)
           .finally(() => setLoading(false));
     }
   }
 
   return (
-      <form onSubmit={onSave}>
+      <form onSubmit={save}>
         <div className="relative">
           {loading && <LoadingArea/>}
           <div className="flex justify-between gap-x-3">

@@ -12,15 +12,18 @@ export function EntranceForm() {
   const [loading, setLoading] = useState(false);
   const [currentClient, setCurrentClient] = useState<Client>(null);
 
-  useEffect(() => {
-    if(!entrance.id)
-      return;
+  const fetchClients = () => {
     setLoading(true);
     EntrancesAPI.getClients(entrance.id)
         .then(({data}) => setEntrance((prev) => ({...prev, clients: data.data})))
         .catch(err)
         .finally(() => setLoading(false));
+  }
 
+  useEffect(() => {
+    if(!entrance.id)
+      return;
+    fetchClients();
   }, [entrance.entrance]);
 
   return <div className="relative">
@@ -29,7 +32,7 @@ export function EntranceForm() {
     {currentClient && <SidePopup onClose={() => setCurrentClient(null)}>
       <PopupContent>
         <CloseButton onClose={() => setCurrentClient(null)}/>
-        <ClientForm id={currentClient.id}/>
+        <ClientForm id={currentClient.id} onSave={fetchClients}/>
       </PopupContent>
     </SidePopup>}
     <div className="p-3">
