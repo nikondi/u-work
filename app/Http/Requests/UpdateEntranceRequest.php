@@ -23,6 +23,10 @@ class UpdateEntranceRequest extends FormRequest
     {
         return [
             'intercoms' => 'array|nullable',
+            'intercoms.*.model' => 'required',
+            'intercoms.*.version' => 'string|nullable',
+            'intercoms.*.calling_panel' => 'string|nullable',
+            'intercoms.*.door_type' => 'string|nullable',
             'entrance' => 'numeric|nullable',
             'per_floor' => 'numeric|nullable',
         ];
