@@ -140,7 +140,7 @@ function EntranceIntercoms({intercoms, setIntercoms}: {intercoms: Intercom[], se
                 <Option value="straj-k" index={16}>Страж-к</Option>
               </Select>
             </FormRow>
-            <FormRow label="Тип двери">
+            <FormRow label="Тип двери" showLabel={i == 0}>
               <Select value={intercom.door_type} onChange={(v) => updateIntercom(i, {...intercom, door_type: v})}>
                 <Option index={1} value="uniphone">Uniphone</Option>
                 <Option index={2} value="builders">Строительная</Option>
