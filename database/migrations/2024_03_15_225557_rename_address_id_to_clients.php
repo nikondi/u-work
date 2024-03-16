@@ -21,7 +21,7 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->nullOnDelete();
-            $table->dropColumn('address_id');
+            $table->dropForeignIdFor('address_id');
         });
     }
 
