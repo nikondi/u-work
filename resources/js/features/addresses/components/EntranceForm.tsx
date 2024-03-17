@@ -7,15 +7,25 @@ import {EntranceObject} from "./EntranceObject";
 import {useAddressContext} from "../contexts/AddressForm";
 import {Client, ClientForm} from "@/features/clients";
 
+const cacheClients = {};
+
 export function EntranceForm() {
   const {currentEntrance: entrance, setCurrentEntrance: setEntrance} = useAddressContext();
   const [loading, setLoading] = useState(false);
   const [currentClient, setCurrentClient] = useState<Client>(null);
 
   const fetchClients = () => {
+    if(cacheClients[entrance.id]) {
+      setEntrance((prev) => ({...prev, clients: cacheClients[entrance.id]}))
+      return;
+    }
     setLoading(true);
+
     EntrancesAPI.getClients(entrance.id)
-        .then(({data}) => setEntrance((prev) => ({...prev, clients: data.data})))
+        .then(({data}) => {
+          cacheClients[entrance.id] = data.data;
+          setEntrance((prev) => ({...prev, clients: data.data}));
+        })
         .catch(err)
         .finally(() => setLoading(false));
   }
