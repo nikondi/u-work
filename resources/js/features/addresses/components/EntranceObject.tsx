@@ -11,10 +11,11 @@ import {FormRow, Option, Select} from "@/components/Form";
 import {EntrancesAPI} from '../api/EntrancesAPI'
 import {Intercom} from "../types";
 
-export function EntranceObject() {
-  const {currentEntrance: entrance, setCurrentEntrance: setEntrance, address} = useAddressContext();
+export function EntranceObject({entrance}) {
+  const {address} = useAddressContext();
   const [opened, setOpened] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [data, setData] = useState(entrance);
 
   const onSave: FormEventHandler = (e) => {
     e.preventDefault();
@@ -22,31 +23,31 @@ export function EntranceObject() {
     setLoading(true);
 
     const d = {
-      ...entrance.object,
+      ...data.object,
       city: address.city,
       type: 'entrance',
-      nets: entrance.object?.nets || [],
-      cameras: entrance.object?.cameras || []
+      nets: data.object?.nets || [],
+      cameras: data.object?.cameras || []
     }
 
 
     if(entrance.id) {
-      EntrancesAPI.update(entrance.id, {intercoms: entrance.intercoms})
+      EntrancesAPI.update(data.id, {intercoms: data.intercoms})
           .then(() => toast.success(`Подъезд ${entrance.id} сохранён`))
           .catch(err);
     }
 
     if(entrance.object?.id) {
-      ObjectsAPI.saveMorphed(entrance.id, 'entrances', d)
+      ObjectsAPI.saveMorphed(data.id, 'entrances', d)
         .then(({data}) => toast.success(`Объект ${data.id} сохранён`))
         .catch(err)
         .finally(() => setLoading(false));
     }
     else {
-      ObjectsAPI.createMorphed(entrance.id, 'entrances', d)
+      ObjectsAPI.createMorphed(data.id, 'entrances', d)
         .then(({data}) => {
           toast.success(`Объект ${data.id} добавлен`)
-          setEntrance({...entrance, object: data});
+          setData({...entrance, object: data});
         })
         .catch(err)
         .finally(() => setLoading(false));
@@ -59,8 +60,8 @@ export function EntranceObject() {
         <CloseButton onClose={() => setOpened(false)}/>
         <form onSubmit={onSave}>
           <LoadingArea show={loading} />
-          <EntranceIntercoms intercoms={entrance.intercoms} setIntercoms={(v) => setEntrance({...entrance, intercoms: v})} />
-          <ObjectFields object={entrance.object} setObject={(v) => setEntrance({...entrance, object: v})} page="entrance"/>
+          <EntranceIntercoms intercoms={entrance.intercoms} setIntercoms={(v) => setData({...data, intercoms: v})} />
+          <ObjectFields object={entrance.object} setObject={(v) => setData({...data, object: v})} page="entrance"/>
           <Save>
             <button type="submit" className="btn btn-primary">{entrance.object?.id?'Сохранить':'Создать'}</button>
           </Save>

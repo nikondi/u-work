@@ -2,8 +2,9 @@ import AxiosClient from "@/lib/axios-client";
 import {AxiosResponse} from "axios";
 import {ClientEntrance} from "@/features/clients";
 import {Response} from "@/types";
+import API from "@/lib/api";
 
-export class AddressesAPI {
+export class AddressesAPI extends API {
   static search(count, page, word, pagination = true, filter = {}) {
     return AxiosClient.get('/addresses/search', {params: {limit: count, word, page, pagination, filter}})
   }
@@ -14,7 +15,7 @@ export class AddressesAPI {
     return AxiosClient.get('/addresses/getCities');
   }
   static getSingle(id) {
-    return AxiosClient.get(`/addresses/${id}`);
+    return this._prepare((controller) => AxiosClient.get(`/addresses/${id}`, {signal: controller.signal}));
   }
   static getEntrances(address_id) {
     return AxiosClient.get(`/addresses/${address_id}/entrances`);

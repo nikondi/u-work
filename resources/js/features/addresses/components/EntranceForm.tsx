@@ -1,44 +1,58 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import {err} from "@/helpers";
 import LoadingArea from "@/components/LoadingArea";
 import SidePopup, {CloseButton, PopupContent} from "@/components/SidePopup";
 import {EntrancesAPI} from "../api";
 import {EntranceObject} from "./EntranceObject";
-import {useAddressContext} from "../contexts/AddressForm";
 import {Client, ClientForm} from "@/features/clients";
+import {Entrance} from "../types";
+import AddClient from "./EntranceForm/AddClient";
+import {AddClientResponse} from "../types/protected";
+import {FaUserPlus} from "react-icons/fa6";
 
-const cacheClients = {};
-
-export function EntranceForm() {
-  const {currentEntrance: entrance, setCurrentEntrance: setEntrance} = useAddressContext();
+export function EntranceForm({entrance}) {
   const [loading, setLoading] = useState(false);
   const [currentClient, setCurrentClient] = useState<Client>(null);
-
-  const fetchClients = () => {
-    if(cacheClients[entrance.id]) {
-      setEntrance((prev) => ({...prev, clients: cacheClients[entrance.id]}))
-      return;
-    }
-    setLoading(true);
-
-    EntrancesAPI.getClients(entrance.id)
-        .then(({data}) => {
-          cacheClients[entrance.id] = data.data;
-          setEntrance((prev) => ({...prev, clients: data.data}));
-        })
-        .catch(err)
-        .finally(() => setLoading(false));
-  }
+  const [data, setData] = useState<Entrance>(entrance);
+  const [addClient, setAddClient] = useState(false);
 
   useEffect(() => {
+    setData(entrance);
+  }, [entrance]);
+
+  const fetchClients = useCallback((entrance_id = null) => {
+    if(!entrance_id && !entrance.id)
+      return;
+    if(!entrance_id)
+      entrance_id = entrance.id;
+
+    setLoading(true);
+
+    const getClients = EntrancesAPI.getClients(entrance_id);
+
+    getClients.getResult
+        .then(({data}) => setData((prev) => ({...prev, clients: data.data})))
+        .catch(err)
+        .finally(() => setLoading(false));
+
+    return () => getClients.abort();
+  }, [entrance.id]);
+
+  useEffect(() => {
+    setData(entrance);
     if(!entrance.id)
       return;
-    fetchClients();
-  }, [entrance.entrance]);
+    return fetchClients();
+  }, [entrance.id]);
+
+  const handleSave = (data: AddClientResponse) => {
+    setData(prev => ({...prev, id: data.entrance_id}));
+    fetchClients(data.entrance_id);
+  }
 
   return <div className="relative">
     <LoadingArea show={loading}/>
-    {entrance.entrance && entrance.id && <EntranceObject />}
+    {data.entrance && data.id && <EntranceObject entrance={data} />}
     {currentClient && <SidePopup onClose={() => setCurrentClient(null)}>
       <PopupContent>
         <CloseButton onClose={() => setCurrentClient(null)}/>
@@ -59,7 +73,10 @@ export function EntranceForm() {
         </tbody>
       </table>*/}
       <div className="mt-3">
-        <div className="text-2xl mb-4">Жильцы</div>
+        <div className="flex gap-x-3.5 items-center mb-4">
+          <div className="text-2xl">Жильцы</div>
+          {data.entrance && <button className="text-xl hover:text-gray-400 transition-colors duration-300" onClick={() => setAddClient(true)}><FaUserPlus /></button>}
+        </div>
         <table>
           <thead>
           <tr>
@@ -69,7 +86,7 @@ export function EntranceForm() {
           </tr>
           </thead>
           <tbody>
-          {entrance.clients && entrance.clients.map(((client) => <tr key={client.id} className="dark:text-gray-300 cursor-pointer hover:bg-gray-600 hover:bg-opacity-20 transition-colors duration-300" onClick={() => setCurrentClient(client)}>
+          {data.clients && data.clients.map(((client) => <tr key={client.id} className="dark:text-gray-300 cursor-pointer hover:bg-gray-600 hover:bg-opacity-20 transition-colors duration-300" onClick={() => setCurrentClient(client)}>
               <td className="p-1.5">{client.apartment}</td>
               <td className="p-1.5">{client.name}</td>
               <td className="p-1.5">{client.floor}</td>
@@ -79,5 +96,7 @@ export function EntranceForm() {
         </table>
       </div>
     </div>
+    {addClient && <AddClient onSave={handleSave} close={() => setAddClient(false)} entrance={data}/>}
   </div>
 }
+

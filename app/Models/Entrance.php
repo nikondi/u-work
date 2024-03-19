@@ -45,4 +45,8 @@ class Entrance extends Model
         'entrance',
         'per_floor'
     ];
+
+    protected $casts = [
+        'address_id' => 'int'
+    ];
 }

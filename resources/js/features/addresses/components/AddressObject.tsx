@@ -1,4 +1,5 @@
 import React, {FormEventHandler, useState} from "react";
+import {Address} from "../types";
 import toast from "react-hot-toast";
 import {err} from "@/helpers";
 import Icon from "@/components/Icon";
@@ -6,14 +7,15 @@ import SidePopup, {CloseButton, PopupContent} from "@/components/SidePopup";
 import LoadingArea from "@/components/LoadingArea";
 import {ObjectFields, Objects, ObjectsAPI} from "@/features/objects";
 import Save from "@/components/Save";
-import {useAddressContext} from "@/features/addresses/contexts/AddressForm";
 
-export function AddressObject() {
-  const {address, setAddress} = useAddressContext();
+type Props = {
+  address: Address
+}
+
+export function AddressObject({address}: Props) {
   const [opened, setOpened] = useState(false);
   const [loading, setLoading] = useState(false);
-
-  const setObject = (v: Objects) => setAddress({...address, object: v});
+  const [object, setObject] = useState<Objects>(address.object);
 
   const onSave: FormEventHandler = (e) => {
     e.preventDefault();
@@ -21,11 +23,11 @@ export function AddressObject() {
     setLoading(true);
 
     const d = {
-      ...address.object,
+      ...object,
       city: address.city,
       type: 'house',
-      nets: address.object.nets || [],
-      cameras: []
+      nets: object.nets || [],
+      cameras: object.cameras || []
     }
 
     if(address.object.id) {
@@ -45,6 +47,7 @@ export function AddressObject() {
     }
 
   }
+
   return <div>
     <button className="btn btn-rose !inline-flex gap-x-2.5" onClick={() => setOpened(!opened)}><Icon icon="objects" size="1.4em"/> Дом</button>
     {opened && <SidePopup onClose={() => setOpened(false)}>

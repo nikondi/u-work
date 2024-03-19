@@ -30,36 +30,54 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::post('/logout', [AuthController::class, 'logout']);
 
-    Route::get('/clients/searchAny', [ClientsController::class, 'searchAny'])->middleware('role:manager');
-    Route::resource('/clients', ClientsController::class)->middleware('role:manager');
+    Route::middleware('role:manager')->prefix('clients')->group(function() {
+        Route::get('/searchAny', [ClientsController::class, 'searchAny']);
+        Route::get('/searchNotInAddress/{address_id}', [ClientsController::class, 'searchNotInAddress']);
+        Route::get('/getNotInAddress/{address_id}', [ClientsController::class, 'indexNotInAddress']);
+    });
+    Route::resource('/clients', ClientsController::class);
 
-    Route::get('/addresses/search', [AddressesController::class, 'search'])->middleware('role:manager');
-    Route::get('/addresses', [AddressesController::class, 'index'])->middleware('role:manager');
-    Route::get('/addresses/worker', [AddressesController::class, 'indexWorker'])->middleware('role:manager');
-    Route::get('/addresses/getCities', [AddressesController::class, 'getCities']);
-    Route::get('/addresses/{address}', [AddressesController::class, 'show']);
-    Route::get('/addresses/{address_id}/getClients', [AddressesController::class, 'getClients']);
-    Route::post('/addresses/{address_id}/saveClients', [AddressesController::class, 'saveClients']);
 
-    Route::put('/addresses/{address}/object', [ObjectsController::class, 'updateAddress']);
-    Route::post('/addresses/{address}/object', [ObjectsController::class, 'storeAddress']);
+    Route::prefix('addresses')->group(function() {
+        Route::middleware('role:manager')->group(function() {
+            Route::get('/search', [AddressesController::class, 'search']);
+            Route::get('', [AddressesController::class, 'index']);
+            Route::get('/worker', [AddressesController::class, 'indexWorker']);
+        });
+        Route::get('/getCities', [AddressesController::class, 'getCities']);
+        Route::get('/{address}', [AddressesController::class, 'show']);
+        Route::get('/{address_id}/getClients', [AddressesController::class, 'getClients']);
+        Route::post('/{address_id}/saveClients', [AddressesController::class, 'saveClients']);
 
-    Route::put('/entrances/{entrance}/object', [ObjectsController::class, 'updateEntrance']);
-    Route::post('/entrances/{entrance}/object', [ObjectsController::class, 'storeEntrance']);
-    Route::get('/entrances/{entrance}/clients', [EntranceController::class, 'getClients']);
+        Route::put('/{address}/object', [ObjectsController::class, 'updateAddress']);
+        Route::post('/{address}/object', [ObjectsController::class, 'storeAddress']);
+    });
+
+
+    Route::prefix('entrances')->group(function() {
+        Route::post('/addClients', [EntranceController::class, 'addClients']);
+
+        Route::put('/{entrance}/object', [ObjectsController::class, 'updateEntrance']);
+        Route::post('/{entrance}/object', [ObjectsController::class, 'storeEntrance']);
+
+        Route::get('/{entrance}/clients', [EntranceController::class, 'getClients']);
+    });
     Route::resource('/entrances', EntranceController::class);
+
+
 
     Route::resource('/simple_objects', SimpleObjectController::class);
     Route::get('/objects/update_statuses', [ObjectsController::class, 'updateStatuses']);
     Route::resource('/objects', SimpleObjectController::class);
 
 
-
-    Route::get('/requests', [RequestsController::class, 'index']);
-    Route::get('/requests/export', [RequestsController::class, 'export']);
-    Route::put('/requests/{request}', [RequestsController::class, 'update']);
-    Route::get('/requests/{request}', [RequestsController::class, 'view']);
-    Route::post('/requests/updateOrder', [RequestsController::class, 'updateOrder']);
+    Route::prefix('requests')->group(function() {
+        Route::get('', [RequestsController::class, 'index']);
+        Route::get('/export', [RequestsController::class, 'export']);
+        Route::put('/{request}', [RequestsController::class, 'update']);
+        Route::get('/{request}', [RequestsController::class, 'view']);
+        Route::post('/updateOrder', [RequestsController::class, 'updateOrder']);
+    });
 });
 
 Route::middleware(['request.addJson', 'auth:sanctum', 'role:tomoru,manager'])->group(function() {

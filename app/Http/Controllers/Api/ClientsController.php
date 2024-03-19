@@ -6,9 +6,11 @@ use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
 use App\Http\Resources\ClientResource;
 use App\Models\Client;
+use App\Models\Entrance;
 use App\Models\Request as RequestModel;
 use App\Traits\GetResult;
 use App\Traits\ParseResourceRequest;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class ClientsController extends Controller
@@ -41,14 +43,33 @@ class ClientsController extends Controller
         return response(new ClientResource($client), 200);
     }
 
-    public function searchAny(Request $request) {
+    private function searchBase(Builder $query, Request $request) {
         [$page, $limit, $pagination] = $this->parseResourceRequest($request);
+        $word = $request->get('word');
 
-        $query = Client::query();
         $columns = ['id', 'phone', 'name', 'comment'];
-        foreach($columns as $column)
-            $query->orWhere($column, 'LIKE', '%'.$request->get('word').'%');
+        $query->where(function($query) use ($columns, $word) {
+            foreach($columns as $column)
+                $query->orWhere($column, 'LIKE', '%'.$word.'%');
+        });
 
+        return ClientResource::collection($this->getResult($query, $limit, $page, $pagination));
+    }
+
+    public function searchAny(Request $request) {
+        return $this->searchBase(Client::query(), $request);
+    }
+
+    public function searchNotInAddress(Request $request, int $address_id) {
+        $entrances = Entrance::query()->where('address_id', $address_id)->pluck('id');
+        $query = Client::query()->whereNotIn('entrance_id', $entrances);
+        return $this->searchBase($query, $request);
+    }
+
+    public function indexNotInAddress(Request $request, int $address_id) {
+        [$page, $limit, $pagination] = $this->parseResourceRequest($request);
+        $entrances = Entrance::query()->where('address_id', $address_id)->pluck('id');
+        $query = Client::query()->whereNotIn('entrance_id', $entrances);
         return ClientResource::collection($this->getResult($query, $limit, $page, $pagination));
     }
 

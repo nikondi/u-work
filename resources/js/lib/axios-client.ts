@@ -26,7 +26,7 @@ AxiosClient.interceptors.response.use((response) => {
 }, (error) => {
   const {response} = error;
 
-  if (response.status == 401)
+  if (response && response.status == 401)
     storage.clearToken();
 
   throw error;

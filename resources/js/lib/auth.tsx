@@ -47,7 +47,7 @@ export const AuthProvider = ({children}) => {
       });
   };
 
-  return <AuthContext.Provider value={{user, setUser, logout}}>
+  return user !== false && <AuthContext.Provider value={{user, setUser, logout}}>
     {children}
   </AuthContext.Provider>
 }

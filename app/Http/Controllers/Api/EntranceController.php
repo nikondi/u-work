@@ -9,6 +9,7 @@ use App\Http\Resources\EntranceResource;
 use App\Models\Client;
 use App\Models\Entrance;
 use App\Models\EntranceIntercom;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -48,6 +49,33 @@ class EntranceController extends Controller
 
     public function getClients(Entrance $entrance) {
         return ClientResource::collection($entrance->clients()->orderByRaw('cast(apartment as unsigned)')->get());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function addClients(Request $request) {
+        $entrance_id = $request->get('entrance_id');
+        $entrance = $request->get('entrance');
+        $address_id = $request->get('address_id');
+        $client_ids = $request->get('client_ids');
+
+        if(empty($entrance_id)) {
+            if(empty($entrance) || empty($address_id))
+                throw new Exception('Пустые id и номер подъезда');
+
+            for($i = $entrance; $i > 0 ; $i--) {
+                $_entrance = Entrance::firstOrCreate([
+                    'address_id' => $address_id,
+                    'entrance' => $i,
+                ]);
+                if($i == $entrance)
+                    $entrance_id = $_entrance->id;
+            }
+        }
+
+        Client::whereIn('id', $client_ids)->update(['entrance_id' => $entrance_id]);
+        return compact('entrance_id');
     }
 
     /**

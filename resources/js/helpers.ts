@@ -58,12 +58,20 @@ export function formatDate(date: Date) {
 }
 
 export function err(text: any = 'Произошла ошибка', duration = 1000) {
-  if(text.response?.data?.message)
+  let show = true;
+  if(text.code == 'ERR_CANCELED') {
+    if(text.config?.signal?.reason != '_abort')
+      text = `Запрос ${text.config.url} отменён причина: ${text.config.signal.reason}`;
+    else
+      show = false;
+  }
+  else if(text.response?.data?.message)
     text = text.response.data.message;
   else if(text.message)
     text = text.message;
 
-  toast.error(text, {duration});
+  if(show)
+    toast.error(text, {duration});
 }
 
 export function uniqName(len = 8) {

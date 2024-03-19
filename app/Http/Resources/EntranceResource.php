@@ -27,6 +27,7 @@ class EntranceResource extends JsonResource
             'intercoms' => EntranceIntercomResource::collection($this->intercoms),
             'clients' => [],
             'object' => new ObjectResource($this->object),
+            'address_id' => $this->address_id
         ];
     }
 }

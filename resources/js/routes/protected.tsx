@@ -12,28 +12,28 @@ import {Dashboard} from "@/features/dashboard";
 
 
 const App = () => {
-    return (
-        <DashboardLayout>
-            <Suspense fallback={<div className="relative"><LoadingArea/></div>}>
-                <Outlet />
-            </Suspense>
-        </DashboardLayout>
-    );
+  return (
+    <DashboardLayout>
+      <Suspense fallback={<div className="fixed inset-0"><LoadingArea/></div>}>
+        <Outlet/>
+      </Suspense>
+    </DashboardLayout>
+  );
 };
 
 export const protectedRoutes = [
-    {
-        path: '/',
-        element: <App />,
-        children: [
-            {path: '/', element: <Dashboard/>},
+  {
+    path: '/',
+    element: <App/>,
+    children: [
+      {path: '/', element: <Dashboard/>},
 
-            {path: '/users/*', element: <UsersRoutes/>},
-            {path: '/workers/*', element: <WorkerRoutes/>},
-            {path: '/clients/*', element: <ClientsRoutes/>},
-            {path: '/requests/*', element: <RequestRoutes/>},
-            {path: '/addresses/*', element: <AddressesRoutes/>},
-            {path: '/objects/*', element: <ObjectsRoutes/>},
-        ],
-    },
+      {path: '/users/*', element: <UsersRoutes/>},
+      {path: '/workers/*', element: <WorkerRoutes/>},
+      {path: '/clients/*', element: <ClientsRoutes/>},
+      {path: '/requests/*', element: <RequestRoutes/>},
+      {path: '/addresses/*', element: <AddressesRoutes/>},
+      {path: '/objects/*', element: <ObjectsRoutes/>},
+    ],
+  },
 ];
