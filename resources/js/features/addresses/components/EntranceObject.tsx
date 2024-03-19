@@ -12,7 +12,10 @@ import {EntrancesAPI} from '../api/EntrancesAPI'
 import {Intercom} from "../types";
 
 export function EntranceObject({entrance}) {
-  const {address} = useAddressContext();
+  const addressContext = useAddressContext();
+  if(!addressContext)
+    return <>Загрузка...</>;
+  const {address} = addressContext;
   const [opened, setOpened] = useState(false);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(entrance);

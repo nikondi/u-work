@@ -1,4 +1,4 @@
-import React, {createContext, useContext, useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Client, ClientEntrance} from "@/features/clients";
 import {useAddressContext} from "../contexts/AddressForm";
 import {AddressesAPI} from "../api";
@@ -21,7 +21,6 @@ import Save from "@/components/Save";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import {rectSortingStrategy, SortableContext, useSortable} from "@dnd-kit/sortable";
 import {CSS} from "@dnd-kit/utilities";
-import {FaUserPlus} from "react-icons/fa6";
 
 type sortedClientsItem = {
   id: string
@@ -35,51 +34,19 @@ type sortedClients = {
   items: sortedClientsItem[]
 }[]
 
-type AddingEntrance = {
-  id: number,
-  entrance: number
-}
-
-type AddClients = {
-  entrance: AddingEntrance,
-  clients: Client[]
-}
-
-type ClientsEntrancesContext = {
-  addingEntrance: AddingEntrance,
-  setAddingEntrance: (v: AddingEntrance) => void
-  addClients: AddClients
-  setAddClients: (v: AddClients) => void
-  close: () => void
-}
-const ClientsEntrancesContext = createContext<ClientsEntrancesContext>(null);
-const useClientsEntrancesContext = () => useContext(ClientsEntrancesContext);
-
 const makeClientSortable = (client: ClientEntrance | Client) : sortedClientsItem => {
   return {id: `id-${client.id}`, content: (client as ClientEntrance)};
 }
 
 export function ClientsEntrances({close}) {
-  const [addingEntrance, setAddingEntrance] = useState(null);
-  const [addClients, setAddClients] = useState<AddClients>(null);
+  const addressContext = useAddressContext();
+  if(!addressContext)
+    return <>Загрузка...</>;
+  const {address, fetchAddress} = addressContext;
 
-  return <ClientsEntrancesContext.Provider value={{
-    addingEntrance, setAddingEntrance,
-    addClients, setAddClients,
-    close
-  }}>
-    <div className="fixed inset-0 z-10 flex justify-center items-start p-5">
-      <div className="bg-black bg-opacity-40 backdrop-blur-sm absolute inset-0" onClick={close}></div>
-      <ClientsList/>
-    </div>
-  </ClientsEntrancesContext.Provider>
-}
-
-function ClientsList() {
-  const {address, fetchAddress} = useAddressContext();
   const [clients, setClients] = useState<ClientEntrance[]>([]);
   const [loading, setLoading] = useState(false);
-  const {close, addClients} = useClientsEntrancesContext();
+
 
   const sortedClients: sortedClients = [];
   address.entrances.map((entrance) => {
@@ -117,18 +84,6 @@ function ClientsList() {
         .catch(err)
         .finally(() => setLoading(false));
   }
-
-
-  useEffect(() => {
-    if(!addClients)
-      return;
-
-    const column = sortedClients.find((column) => column.entrance_id?(column.entrance_id == addClients.entrance.id):(column.entrance == addClients.entrance.entrance));
-    if(column) {
-      column.items = [...addClients.clients.map(makeClientSortable), ...column.items];
-    }
-  }, [addClients]);
-
 
   const [draggingItem, setDraggingItem] = useState(null);
 
@@ -214,8 +169,8 @@ function ClientsList() {
       }),
   );
 
-
-  return <>
+  return <div className="fixed inset-0 z-10 flex justify-center items-start p-5">
+    <div className="bg-black bg-opacity-40 backdrop-blur-sm absolute inset-0" onClick={close}></div>
     <LoadingArea show={loading}/>
     <Save>
       <button type="button" className="btn btn-red" onClick={close}>Закрыть</button>
@@ -233,23 +188,22 @@ function ClientsList() {
           >
             {sortedClients.map((entrance) => <EntranceColumn entrance={entrance} key={entrance.id}/>)}
             {draggingItem && <DragOverlay zIndex={1000}>
-              <ClientCard id={draggingItem.id} client={draggingItem.data}/>
+                <ClientCard id={draggingItem.id} client={draggingItem.data}/>
             </DragOverlay>}
           </DndContext>
         </ErrorBoundary>
       </div>
     </div>
-  </>;
+  </div>
+
 }
+
 
 function EntranceColumn({entrance}) {
   const { setNodeRef } = useDroppable({ id: entrance.id });
-  const {setAddingEntrance} = useClientsEntrancesContext();
-
   return <div className="rounded-md flex flex-col">
     <div className="text-lg mb-3 flex gap-x-3 items-center">
       {entrance.entrance || 'Не определён'}
-      <button type="button" className="transition-colors duration-300 hover:text-orange-500" onClick={() => setAddingEntrance({id: entrance.entrance_id, entrance: entrance.entrance})}><FaUserPlus /></button>
     </div>
     <div className="overflow-auto tiny-scrollbar flex-1 flex gap-y-2 flex-col p-3 bg-gray-600 dark:bg-white bg-opacity-15 dark:bg-opacity-15 rounded-sm" style={{maxHeight: 'calc(100vh - 180px)', width: '300px'}} ref={setNodeRef}>
       <SortableContext id={entrance.id} items={entrance.items} strategy={rectSortingStrategy}>

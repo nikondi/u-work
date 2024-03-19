@@ -7,7 +7,11 @@ import {ClientsEntrances} from "../MoveClients";
 import AddressTabs from "./Tabs";
 
 export default function AddressInner() {
-  const {address, loading} = useAddressContext();
+  const addressContext = useAddressContext();
+  if(!addressContext)
+    return <>Загрузка...</>;
+  const {address, loading} = addressContext;
+
   const [moveClients, setMoveClients] = useState(false);
 
   return <div>

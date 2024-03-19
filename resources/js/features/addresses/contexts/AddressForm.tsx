@@ -13,13 +13,7 @@ type AddressContext = {
   fetchAddress: () => void
 }
 const AddressContext = createContext<AddressContext>(null);
-export const useAddressContext = () => {
-  const value = useContext(AddressContext);
-  if(!value)
-    throw new Error('Address context is empty');
-
-  return value;
-};
+export const useAddressContext = () => useContext(AddressContext);
 
 export function AddressContextProvider({children}) {
   const {id} = useParams();
