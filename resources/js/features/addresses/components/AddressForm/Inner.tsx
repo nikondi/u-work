@@ -24,7 +24,7 @@ export default function AddressInner() {
             <button className="btn btn-primary" type="button" onClick={() => setMoveClients(true)}><FaUsers/></button>
           </div>
         </div>
-        {address.object && <AddressObject address={address} />}
+        <AddressObject address={address} />
         {address.entrances.length > 0 && <AddressTabs entrances={address.entrances} address_id={address.id}/>}
       </div>
     </div>

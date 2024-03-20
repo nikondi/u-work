@@ -1,11 +1,11 @@
-import React, {FormEventHandler, useState} from "react";
+import React, {FormEventHandler, useEffect, useState} from "react";
 import {Address} from "../types";
 import toast from "react-hot-toast";
 import {err} from "@/helpers";
 import Icon from "@/components/Icon";
 import SidePopup, {CloseButton, PopupContent} from "@/components/SidePopup";
 import LoadingArea from "@/components/LoadingArea";
-import {ObjectFields, Objects, ObjectsAPI} from "@/features/objects";
+import {defaultObject, ObjectFields, Objects, ObjectsAPI} from "@/features/objects";
 import Save from "@/components/Save";
 
 type Props = {
@@ -15,7 +15,11 @@ type Props = {
 export function AddressObject({address}: Props) {
   const [opened, setOpened] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [object, setObject] = useState<Objects>(address.object);
+  const [object, setObject] = useState<Objects>(address.object || defaultObject);
+
+  useEffect(() => {
+    setObject(address.object);
+  }, [address]);
 
   const onSave: FormEventHandler = (e) => {
     e.preventDefault();
@@ -30,7 +34,7 @@ export function AddressObject({address}: Props) {
       cameras: object.cameras || []
     }
 
-    if(address.object.id) {
+    if(object.id) {
       ObjectsAPI.saveMorphed(address.id, 'addresses', d)
         .then(({data}) => toast.success(`Объект ${data.id} сохранён`))
         .catch(err)
@@ -55,9 +59,9 @@ export function AddressObject({address}: Props) {
         <CloseButton onClose={() => setOpened(false)}/>
         <form onSubmit={onSave}>
           <LoadingArea show={loading} />
-          <ObjectFields object={address.object} setObject={setObject} page="address"/>
+          <ObjectFields object={object} setObject={setObject} page="address"/>
           <Save>
-            <button type="submit" className="btn btn-primary">{address.object?.id?'Сохранить':'Создать'}</button>
+            <button type="submit" className="btn btn-primary">{object?.id?'Сохранить':'Создать'}</button>
           </Save>
         </form>
       </PopupContent>

@@ -1,4 +1,4 @@
-import React, {FormEventHandler, useState} from "react";
+import React, {FormEventHandler, useEffect, useState} from "react";
 import toast from "react-hot-toast";
 import {err} from "@/helpers";
 import Icon from "@/components/Icon";
@@ -19,6 +19,10 @@ export function EntranceObject({entrance}) {
   const [opened, setOpened] = useState(false);
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(entrance);
+
+  useEffect(() => {
+    setData(entrance);
+  }, [entrance]);
 
   const onSave: FormEventHandler = (e) => {
     e.preventDefault();
@@ -56,6 +60,7 @@ export function EntranceObject({entrance}) {
         .finally(() => setLoading(false));
     }
   }
+
   return <div className="pt-6">
     <button className="btn btn-rose !inline-flex gap-x-2.5" onClick={() => setOpened(!opened)}><Icon icon="objects" size="1.4em"/> Подъезд</button>
     {opened && <SidePopup onClose={() => setOpened(false)}>
@@ -63,10 +68,10 @@ export function EntranceObject({entrance}) {
         <CloseButton onClose={() => setOpened(false)}/>
         <form onSubmit={onSave}>
           <LoadingArea show={loading} />
-          <EntranceIntercoms intercoms={entrance.intercoms} setIntercoms={(v) => setData({...data, intercoms: v})} />
-          <ObjectFields object={entrance.object} setObject={(v) => setData({...data, object: v})} page="entrance"/>
+          <EntranceIntercoms intercoms={data.intercoms} setIntercoms={(v) => setData({...data, intercoms: v})} />
+          <ObjectFields object={data.object} setObject={(v) => setData({...data, object: v})} page="entrance"/>
           <Save>
-            <button type="submit" className="btn btn-primary">{entrance.object?.id?'Сохранить':'Создать'}</button>
+            <button type="submit" className="btn btn-primary">{data.object?.id?'Сохранить':'Создать'}</button>
           </Save>
         </form>
       </PopupContent>
