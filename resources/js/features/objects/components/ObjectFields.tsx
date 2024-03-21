@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Checkbox, FormRow, Input, Option, Select, Textarea} from "@/components/Form";
 import Icon from "@/components/Icon";
 import {ObjectCamera, ObjectFile, ObjectNet, Objects} from "../types";
@@ -6,6 +6,8 @@ import {defaultObject} from "../const";
 import {WorkerSelect} from "@/features/requests/components/RequestForm";
 import toast from "react-hot-toast";
 import {FaPlus} from "react-icons/fa";
+import Fancybox from "@/components/Fancybox";
+import {Base64} from "@/helpers";
 
 type Props = {
   object: Objects
@@ -61,6 +63,7 @@ export function ObjectFields({object = null, setObject, page}: Props) {
       <Textarea value={object.comment || ''} setValue={(v) => setObject({...object, comment: v})}/>
     </FormRow>
     <ObjectSchemas schemas={object.schemas || []} setSchemas={(v) => setObject({...object, schemas: v})}/>
+    <ObjectPhotos photos={object.photos || []} setPhotos={(v) => setObject({...object, photos: v})} />
   </div>
 }
 
@@ -157,4 +160,56 @@ function ObjectSchemas({schemas, setSchemas}: {schemas: ObjectFile[], setSchemas
       )}
     </div>
   </div>;
+}
+function ObjectPhotos({photos, setPhotos}: {photos: ObjectFile[], setPhotos: (v: ObjectFile[]) => void}) {
+  const addFile: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    const file = e.target.files[0];
+    if(photos.find((schema) => schema.basename == file.name)) {
+      e.target.value = null;
+      toast.error('Файл с таким именем уже загружен!');
+      return;
+    }
+    setPhotos([...photos, {id: null, path: null, file, url: null, type: 'photo', basename: file.name }]);
+    e.target.value = null;
+  }
+  const removeFile = (index: number) => setPhotos(photos.filter((_item, i) => i != index));
+
+  return <div className="mb-6">
+    <div className="text-2xl mb-2">Фотографии</div>
+    <div className="mb-3 flex items-center gap-x-3">
+      <label className="relative">
+        <div className="btn btn-primary !flex items-center gap-x-3 cursor-pointer"><FaPlus size="1.2em" /> <div>Выбрать файл</div></div>
+        <input type="file" onChange={addFile} accept="image/png,image/jpg,image/webp,image/gif" className="absolute opacity-0 -z-10 top-0"/>
+      </label>
+    </div>
+    <Fancybox>
+      <div className="flex flex-wrap gap-x-2">
+        {photos.map((photo, i) =>
+          <div key={photo.basename+i} className="relative hover:bg-gray-400 hover:bg-opacity-10 transition-colors duration-150 p-2 border border-gray-300 dark:border-gray-600">
+            <button type="button" className="transition-colors absolute right-0 top-0 px-1.5 py-1 bg-opacity-20 bg-black duration-300 hover:text-orange-400 dark:hover:text-orange-400"><Icon icon="times" onClick={() => removeFile(i)}/></button>
+            {photo.url
+                ? <ObjectPhoto src={photo.url} basename={photo.basename}/>
+                : <ObjectBase64Photo file={photo.file} basename={photo.basename} />
+            }
+          </div>
+        )}
+      </div>
+    </Fancybox>
+  </div>;
+}
+
+function ObjectPhoto({src, basename}) {
+  return <a href={src} data-fancybox="photos"><img src={src} className="block w-[150px] h-[150px] object-center object-contain" alt={basename}/></a>;
+}
+
+function ObjectBase64Photo({file, basename}: {file: File, basename: string}) {
+  const [base64, setBase64] = useState(null);
+
+  useEffect(() => {
+    Base64(file)
+        .then(val => setBase64(val))
+        .catch(() => toast.error('Не удалось распознать изображение'));
+  }, []);
+
+  return <ObjectPhoto src={base64} basename={basename}/>
 }

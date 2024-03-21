@@ -86,3 +86,14 @@ export function uniqName(len = 8) {
 export function getInputInt(input: string) {
   return parseInt(input.replace(/\D/, '')) || null;
 }
+
+
+export function Base64(file: File) : Promise<string> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    // @ts-ignore
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = reject;
+  });
+}
