@@ -5,6 +5,7 @@ import {ObjectCamera, ObjectFile, ObjectNet, Objects} from "../types";
 import {defaultObject} from "../const";
 import {WorkerSelect} from "@/features/requests/components/RequestForm";
 import toast from "react-hot-toast";
+import {FaPlus} from "react-icons/fa";
 
 type Props = {
   object: Objects
@@ -142,11 +143,10 @@ function ObjectSchemas({schemas, setSchemas}: {schemas: ObjectFile[], setSchemas
   return <div className="mb-6">
     <div className="text-2xl mb-2">Схемы</div>
     <div className="mb-3 flex items-center gap-x-3">
-      {/*<label className="relative">
-        <button type="button" className="btn btn-primary !flex items-center gap-x-3"><FaPlus size="1.2em" /> <div>Выбрать файл</div></button>
+      <label className="relative">
+        <div className="btn btn-primary !flex items-center gap-x-3 cursor-pointer"><FaPlus size="1.2em" /> <div>Выбрать файл</div></div>
         <input type="file" onChange={addFile} accept=".vsdx,.vsd" className="absolute opacity-0 -z-10 top-0"/>
-      </label>*/}
-      <input type="file" onChange={addFile} accept=".vsdx,.vsd"/>
+      </label>
     </div>
     <div className="flex flex-col gap-y-2">
       {schemas.map((schema, i) =>
