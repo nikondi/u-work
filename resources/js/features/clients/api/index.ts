@@ -11,10 +11,10 @@ export class ClientsAPI extends API {
     return AxiosClient.get('/clients/searchAny', {params: {limit: count, word, page, pagination}})
   }
   static searchNotInAddress(count: number, word: string, address_id: number) {
-    return this._prepare<Response<Client[]>>((controller) => AxiosClient.get(`/clients/searchNotInAddress/${address_id}`, {params: {limit: count, word}, signal: controller.signal}));
+    return this._prepare<Response<Client[]>>(({signal}) => AxiosClient.get(`/clients/searchNotInAddress/${address_id}`, {params: {limit: count, word}, signal}));
   }
   static getNotInAddress(count: number, address_id: number) {
-    return this._prepare<Response<Client[]>>((controller) => AxiosClient.get(`/clients/getNotInAddress/${address_id}`, {params: {limit: count}, signal: controller.signal}));
+    return this._prepare<Response<Client[]>>(({signal}) => AxiosClient.get(`/clients/getNotInAddress/${address_id}`, {params: {limit: count}, signal}));
   }
   static getSingle(id: number) {
     return AxiosClient.get(`/clients/${id}`);

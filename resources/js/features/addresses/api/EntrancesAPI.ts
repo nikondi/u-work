@@ -4,7 +4,7 @@ import API from "@/lib/api";
 
 export class EntrancesAPI extends API {
   static getClients(id: number) {
-    return this._prepare((controller) => AxiosClient.get(`/entrances/${id}/clients`, {signal: controller.signal}));
+    return this._prepare(({signal}) => AxiosClient.get(`/entrances/${id}/clients`, {signal}));
   }
   static update(id: number, data: Partial<Entrance>) {
     return AxiosClient.put(`/entrances/${id}`, data);

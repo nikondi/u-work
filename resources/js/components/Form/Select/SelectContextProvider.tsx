@@ -1,9 +1,9 @@
-import React, {createContext, useContext, useState} from "react";
+import React, {createContext, ReactNode, useContext, useState} from "react";
 
 export type OptionValue = string | number | null | any;
 
-type selectedOption = {value: OptionValue, dispatch: boolean, label: (React.JSX.Element | string)}
-type setSelectedOption = (value: selectedOption, dispatch?: boolean) => void;
+type selectedOption = {value: OptionValue, dispatch: boolean, label: (ReactNode)}
+type setSelectedOption = (value: Partial<selectedOption>, dispatch?: boolean) => void;
 
 type SelectContext = {
     selectedOption: selectedOption, setSelectedOption: setSelectedOption,

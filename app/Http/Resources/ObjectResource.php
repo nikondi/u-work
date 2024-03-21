@@ -21,6 +21,10 @@ class ObjectResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+//        dd($this->files);
+        $schemas = $this->files->where('type', 'schema');
+        $photos = $this->files->where('type', 'photo');
+
         return [
             'id' => $this->id,
             'type' => $this->type,
@@ -37,6 +41,8 @@ class ObjectResource extends JsonResource
             'comment' => $this->comment,
             'cubic_ip' => $this->cubic_ip,
             'check_date' => $this->check_date,
+            'schemas' => $schemas?ObjectFileResource::collection($schemas):[],
+            'photos' => $photos?ObjectFileResource::collection($photos):[],
         ];
     }
 }

@@ -1,7 +1,6 @@
 import React, {FormEventHandler, useEffect, useState} from "react";
 import {Address} from "../types";
 import toast from "react-hot-toast";
-import {err} from "@/helpers";
 import Icon from "@/components/Icon";
 import SidePopup, {CloseButton, PopupContent} from "@/components/SidePopup";
 import LoadingArea from "@/components/LoadingArea";
@@ -26,29 +25,14 @@ export function AddressObject({address}: Props) {
 
     setLoading(true);
 
-    const d = {
-      ...object,
-      city: address.city,
-      type: 'house',
-      nets: object.nets || [],
-      cameras: object.cameras || []
-    }
-
-    if(object.id) {
-      ObjectsAPI.saveMorphed(address.id, 'addresses', d)
-        .then(({data}) => toast.success(`Объект ${data.id} сохранён`))
-        .catch(err)
-        .finally(() => setLoading(false));
-    }
-    else {
-      ObjectsAPI.createMorphed(address.id, 'addresses', d)
-        .then(({data}) => {
-          toast.success(`Объект ${data.id} добавлен`)
-          setObject(data);
-        })
-        .catch(err)
-        .finally(() => setLoading(false));
-    }
+    ObjectsAPI.manageMorphed(address.id, 'addresses', object, {
+      object_type: 'house',
+      callback: (server_data, type) => {
+        toast.success(`Объект ${server_data.id} `+((type == 'save')?'сохранён':'добавлен'));
+        setObject(server_data);
+      },
+      onFinally: () => setLoading(false),
+    });
 
   }
 

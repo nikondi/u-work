@@ -10,10 +10,13 @@ use App\Http\Resources\ObjectResource;
 use App\Models\Address;
 use App\Models\Entrance;
 use App\Models\ObjectCamera;
+use App\Models\ObjectFile;
 use App\Models\ObjectNet;
 use App\Models\Objects;
 use App\Models\SimpleObject;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class ObjectsController extends Controller
 {
@@ -54,11 +57,44 @@ class ObjectsController extends Controller
         return new ObjectResource(static::updateMorphed($request, $entrance));
     }
 
+    private static function uploadFiles($object_id, $files) {
+        $result = [];
+        $disk_dir = basename(Storage::disk('public')->path(''));
+
+        foreach($files as $file_data) {
+            if(empty($file_data['id'])) {
+                /* @var $file UploadedFile */
+                $path = "objects/{$object_id}/{$file_data['basename']}";
+                $file = $file_data['file'];
+                if($file->storeAs($disk_dir.'/'.$path)) {
+                    $result[] = [
+                        'id' => null,
+                        'path' => $path,
+                        'type' => $file_data['type'],
+                        'objects_id' => $object_id,
+                    ];
+                }
+            }
+            else {
+                $result[] = [
+                    'id' => $file_data['id'],
+                    'path' => $file_data['path'],
+                    'type' => $file_data['type'],
+                    'objects_id' => $object_id,
+                ];
+            }
+        }
+
+        return $result;
+    }
+
     public static function storeMorphed(CreateObjectRequest $request, Entrance|Address|SimpleObject $item) {
         $data = $request->validated();
+
         if(!empty($data['worker']))
             $data['worker_id'] = $data['worker']['id'];
-        return DB::transaction(function() use ($request, $item, $data) {
+
+        $object = DB::transaction(function() use ($request, $item, $data) {
             $object = new Objects($data);
             $object->objectable()->associate($item);
             $object->save();
@@ -66,16 +102,27 @@ class ObjectsController extends Controller
                 $object->hasManySync(ObjectCamera::class, $data['cameras'], 'cameras');
             if(isset($data['nets']))
                 $object->hasManySync(ObjectNet::class, $data['nets'], 'nets');
+            if(isset($data['files'])) {
+                $object->hasManySync(ObjectFile::class, static::uploadFiles($object->id, $data['files']), 'files', deleted_callback: function(ObjectFile $file) {
+                    Storage::disk('public')->delete($file->path);
+                });
+            }
             return $object;
         });
+
+        return new ObjectResource($object);
     }
 
     public static function updateMorphed(UpdateObjectRequest $request, Entrance|Address|SimpleObject $item) {
         $data = $request->validated();
+
         if(!empty($data['worker']))
             $data['worker_id'] = $data['worker']['id'];
+
         $object = $item->object;
-        DB::transaction(function() use ($request, $item, $data, $object) {
+        if(!$object)
+            abort(500, 'Не найден объект');
+        $object = DB::transaction(function() use ($request, $item, $data, $object) {
             $object->update($data);
             $object->objectable()->associate($item);
             $object->save();
@@ -83,9 +130,15 @@ class ObjectsController extends Controller
                 $object->hasManySync(ObjectCamera::class, $data['cameras'], 'cameras');
             if(isset($data['nets']))
                 $object->hasManySync(ObjectNet::class, $data['nets'], 'nets');
+            if(isset($data['files'])) {
+                $data['files'] = array_filter($data['files'], fn($item) => !empty($item['type']));
+                $object->hasManySync(ObjectFile::class, static::uploadFiles($object->id, $data['files']), 'files', deleted_callback: function(ObjectFile $file) {
+                    Storage::disk('public')->delete($file->path);
+                });
+            }
+
             return $object;
         });
-
         return new ObjectResource($object);
     }
 
@@ -95,7 +148,8 @@ class ObjectsController extends Controller
      */
     public function show(Objects $object)
     {
-        return new ObjectResource($object->with('nets')->with('cameras')->with('worker'));
+        $object->load('nets', 'cameras', 'files');
+        return new ObjectResource($object);
     }
 
     /**

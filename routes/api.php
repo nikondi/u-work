@@ -68,7 +68,7 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::resource('/simple_objects', SimpleObjectController::class);
     Route::get('/objects/update_statuses', [ObjectsController::class, 'updateStatuses']);
-    Route::resource('/objects', SimpleObjectController::class);
+    Route::resource('/objects', ObjectsController::class);
 
 
     Route::prefix('requests')->group(function() {

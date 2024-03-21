@@ -6,59 +6,52 @@ import SidePopup, {CloseButton, PopupContent} from "@/components/SidePopup";
 import Save from "@/components/Save";
 import LoadingArea from "@/components/LoadingArea";
 import {ObjectFields, ObjectsAPI} from "@/features/objects";
-import {useAddressContext} from "../contexts/AddressForm";
 import {FormRow, Option, Select} from "@/components/Form";
 import {EntrancesAPI} from '../api/EntrancesAPI'
-import {Intercom} from "../types";
+import {Entrance, Intercom} from "../types";
 
 export function EntranceObject({entrance}) {
-  const addressContext = useAddressContext();
-  if(!addressContext)
-    return <>Загрузка...</>;
-  const {address} = addressContext;
   const [opened, setOpened] = useState(false);
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState(entrance);
+  const [data, setData] = useState<Entrance>(entrance);
 
   useEffect(() => {
     setData(entrance);
-  }, [entrance]);
+    const cleans = [];
+    if(entrance.object) {
+      setLoading(true);
+      const getObject = ObjectsAPI.getSingle(entrance.object.id);
+      getObject.getResult
+        .then(({data: d}) => setData({...entrance, object: d}))
+        .catch(err)
+        .finally(() => setLoading(false));
+      cleans.push(getObject.abort);
+    }
+
+    return () => {
+      cleans.map(func => func());
+    }
+  }, [entrance.entrance]);
 
   const onSave: FormEventHandler = (e) => {
     e.preventDefault();
 
     setLoading(true);
 
-    const d = {
-      ...data.object,
-      city: address.city,
-      type: 'entrance',
-      nets: data.object?.nets || [],
-      cameras: data.object?.cameras || []
-    }
-
-
-    if(entrance.id) {
+    if(data.id) {
       EntrancesAPI.update(data.id, {intercoms: data.intercoms})
           .then(() => toast.success(`Подъезд ${entrance.id} сохранён`))
           .catch(err);
     }
 
-    if(entrance.object?.id) {
-      ObjectsAPI.saveMorphed(data.id, 'entrances', d)
-        .then(({data}) => toast.success(`Объект ${data.id} сохранён`))
-        .catch(err)
-        .finally(() => setLoading(false));
-    }
-    else {
-      ObjectsAPI.createMorphed(data.id, 'entrances', d)
-        .then(({data}) => {
-          toast.success(`Объект ${data.id} добавлен`)
-          setData({...entrance, object: data});
-        })
-        .catch(err)
-        .finally(() => setLoading(false));
-    }
+    ObjectsAPI.manageMorphed(data.id, 'entrances', data.object, {
+      object_type: 'intercom',
+      callback: (server_data, type) => {
+        toast.success(`Объект ${server_data.id} `+((type == 'save')?'сохранён':'добавлен'));
+        setData((prev) => ({...prev, object: server_data}));
+      },
+      onFinally: () => setLoading(false),
+    });
   }
 
   return <div className="pt-6">
@@ -68,7 +61,7 @@ export function EntranceObject({entrance}) {
         <CloseButton onClose={() => setOpened(false)}/>
         <form onSubmit={onSave}>
           <LoadingArea show={loading} />
-          <EntranceIntercoms intercoms={data.intercoms} setIntercoms={(v) => setData({...data, intercoms: v})} />
+          <EntranceIntercoms intercoms={data.intercoms || []} setIntercoms={(v) => setData({...data, intercoms: v})} />
           <ObjectFields object={data.object} setObject={(v) => setData({...data, object: v})} page="entrance"/>
           <Save>
             <button type="submit" className="btn btn-primary">{data.object?.id?'Сохранить':'Создать'}</button>

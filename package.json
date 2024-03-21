@@ -23,6 +23,7 @@
         "@dnd-kit/utilities": "^3.2.2",
         "@vitejs/plugin-react": "^4.2.1",
         "laravel-echo": "^1.15.3",
+        "object-to-formdata": "^4.5.1",
         "prop-types": "^15.8.1",
         "pusher-js": "^8.4.0-rc2",
         "react": "^18.2.0",

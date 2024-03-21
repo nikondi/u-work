@@ -24,6 +24,13 @@ class CreateObjectRequest extends FormRequest
             'minipc_model' => '',
             'intercom_model' => '',
             'comment' => '',
+            'files' => 'array|nullable',
+            'files.*.id' => 'nullable',
+            'files.*.url' => 'nullable',
+            'files.*.type' => 'string|nullable',
+            'files.*.basename' => 'string|nullable',
+            'files.*.file' => 'file|nullable',
+            'files.*.path' => 'string|nullable',
         ];
     }
     /**
@@ -42,5 +49,14 @@ class CreateObjectRequest extends FormRequest
     public function rules(): array
     {
         return static::getRules();
+    }
+
+    protected function prepareForValidation(): void
+    {
+        $data = $this->toArray();
+        if(isset($data['object']))
+            $this->replace($data['object']);
+        if(in_array($data['internet'], ['true', 'false']))
+            $this->merge(['internet' => $data['internet'] == 'true']);
     }
 }

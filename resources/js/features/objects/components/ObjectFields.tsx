@@ -1,9 +1,10 @@
 import React from "react";
 import {Checkbox, FormRow, Input, Option, Select, Textarea} from "@/components/Form";
 import Icon from "@/components/Icon";
-import {ObjectCamera, ObjectNet, Objects} from "../types";
+import {ObjectCamera, ObjectFile, ObjectNet, Objects} from "../types";
 import {defaultObject} from "../const";
 import {WorkerSelect} from "@/features/requests/components/RequestForm";
+import toast from "react-hot-toast";
 
 type Props = {
   object: Objects
@@ -55,9 +56,10 @@ export function ObjectFields({object = null, setObject, page}: Props) {
         </Select>
       </FormRow>
     </div>}
-    <FormRow label="Примечание">
+    <FormRow label="Примечание" className="mb-4">
       <Textarea value={object.comment || ''} setValue={(v) => setObject({...object, comment: v})}/>
     </FormRow>
+    <ObjectSchemas schemas={object.schemas || []} setSchemas={(v) => setObject({...object, schemas: v})}/>
   </div>
 }
 
@@ -124,3 +126,35 @@ function ObjectCameras({cameras, setCameras}: {cameras: ObjectCamera[], setCamer
   </div>
 }
 
+function ObjectSchemas({schemas, setSchemas}: {schemas: ObjectFile[], setSchemas: (v: ObjectFile[]) => void}) {
+  const addFile: React.ChangeEventHandler<HTMLInputElement> = (e) => {
+    const file = e.target.files[0];
+    if(schemas.find((schema) => schema.basename == file.name)) {
+      e.target.value = null;
+      toast.error('Файл с таким именем уже загружен!');
+      return;
+    }
+    setSchemas([...schemas, {id: null, path: null, file, url: null, type: 'schema', basename: file.name }]);
+    e.target.value = null;
+  }
+  const removeFile = (index: number) => setSchemas(schemas.filter((_item, i) => i != index));
+
+  return <div className="mb-6">
+    <div className="text-2xl mb-2">Схемы</div>
+    <div className="mb-3 flex items-center gap-x-3">
+      {/*<label className="relative">
+        <button type="button" className="btn btn-primary !flex items-center gap-x-3"><FaPlus size="1.2em" /> <div>Выбрать файл</div></button>
+        <input type="file" onChange={addFile} accept=".vsdx,.vsd" className="absolute opacity-0 -z-10 top-0"/>
+      </label>*/}
+      <input type="file" onChange={addFile} accept=".vsdx,.vsd"/>
+    </div>
+    <div className="flex flex-col gap-y-2">
+      {schemas.map((schema, i) =>
+        <div key={schema.basename+i} className="flex gap-x-3 items-center hover:bg-gray-400 hover:bg-opacity-10 px-3 transition-colors duration-150 rounded">
+          <button type="button" className="transition-colors duration-300 hover:text-orange-400 dark:hover:text-orange-400"><Icon icon="times" onClick={() => removeFile(i)}/></button>
+          {schema.url ? <a href={schema.url} className="block flex-1 text-blue-600 dark:text-blue-400 p-1.5" target="_blank">{schema.basename}</a> : <div className="flex-1 p-1.5">{schema.file.name}</div>}
+        </div>
+      )}
+    </div>
+  </div>;
+}

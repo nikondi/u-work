@@ -24,6 +24,15 @@ export type ObjectNet = {
 
 export type ObjectStatus = 'offline' | 'online' | 'unknown';
 
+export type ObjectFile = {
+  id: number,
+  file?: File,
+  path: string,
+  url: string,
+  type: 'schema' | 'photo',
+  basename: string
+}
+
 export type Objects = {
   id: number,
   type: '112-stand' | '112-button' | 'intercom' | 'house',
@@ -39,4 +48,6 @@ export type Objects = {
   intercom_model: string,
   cubic_ip: string,
   comment: string,
+  schemas: ObjectFile[]
+  photos: ObjectFile[]
 }

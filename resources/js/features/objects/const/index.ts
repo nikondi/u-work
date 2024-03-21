@@ -15,6 +15,8 @@ export const defaultObject: Objects = {
   comment: '',
   status: "offline",
   last_online: null,
+  schemas: [],
+  photos: []
 }
 
 export const defaultSimpleObject: SimpleObject = {

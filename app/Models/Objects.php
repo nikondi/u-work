@@ -29,6 +29,11 @@ class Objects extends Model
         return $this->hasMany(ObjectNet::class);
     }
 
+    public function files(): HasMany
+    {
+        return $this->hasMany(ObjectFile::class);
+    }
+
     public function worker(): HasOne
     {
         return $this->hasOne(User::class, 'id', 'worker_id');
