@@ -150,7 +150,7 @@ function ObjectSchemas({schemas, setSchemas}: {schemas: ObjectFile[], setSchemas
     <div className="mb-3 flex items-center gap-x-3">
       <label className="relative">
         <div className="btn btn-primary !flex items-center gap-x-3 cursor-pointer"><FaPlus size="1.2em" /> <div>Выбрать файл</div></div>
-        <input type="file" onChange={addFile} accept=".vsdx,.vsd" className="absolute opacity-0 -z-10 top-0"/>
+        <input type="file" onChange={addFile} accept=".vsdx,.vsd,.pdf" className="absolute opacity-0 -z-10 top-0"/>
       </label>
     </div>
     <div className="flex flex-col gap-y-2">
@@ -160,7 +160,7 @@ function ObjectSchemas({schemas, setSchemas}: {schemas: ObjectFile[], setSchemas
           {schema.url
               ? <a href={schema.url} className="block text-blue-600 dark:text-blue-400 p-1.5 max-w-[200px] break-words" target="_blank">{schema.basename}</a>
               : <div className="flex-1 p-1.5">{schema.file.name}</div>}
-          <input value={schema.title || ''} onChange={(e) => updateFile(i, {title: e.target.value})} className="rounded bg-transparent border border-gray-200 px-1 py-0.5 flex-1" />
+          <input value={schema.title || ''} onChange={(e) => updateFile(i, {title: e.target.value})} placeholder="Название" className="rounded bg-transparent border border-gray-200 px-1 py-0.5 flex-1" />
         </div>
       )}
     </div>
@@ -199,7 +199,7 @@ function ObjectPhotos({photos, setPhotos}: {photos: ObjectFile[], setPhotos: (v:
                 : <ObjectBase64Photo file={photo.file} basename={photo.basename} title={photo.title} />
             }
             <div className="mt-2">
-              <input value={photo.title || ''} onChange={(e) => updateFile(i, {title: e.target.value})} className="rounded bg-transparent border border-gray-200 px-1 py-0.5 flex-1" />
+              <input value={photo.title || ''} onChange={(e) => updateFile(i, {title: e.target.value})} placeholder="Название" className="rounded bg-transparent border border-gray-200 px-1 py-0.5 flex-1" />
             </div>
           </div>
         )}
