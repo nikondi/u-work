@@ -13,5 +13,5 @@ export default function HasRole({roles = [], showAdmin = true, children}: PropsW
     if(typeof roles === 'string')
         roles = [roles];
 
-    return <>{(user.hasRole(...roles) || (showAdmin && user.hasRole('admin'))) && children}</>;
+    return <>{user && ((user.hasRole(...roles) || (showAdmin && user.hasRole('admin')))) && children}</>;
 }
