@@ -16,21 +16,14 @@ export function EntranceObject({entrance}) {
   const [data, setData] = useState<Entrance>(entrance);
 
   useEffect(() => {
-    setData(entrance);
-    const cleans = [];
-    if(entrance.object) {
-      setLoading(true);
-      const getObject = ObjectsAPI.getSingle(entrance.object.id);
-      getObject.getResult
-        .then(({data: d}) => setData({...entrance, object: d}))
+    setLoading(true);
+    const getEntrance = EntrancesAPI.getSingle(entrance.id);
+    getEntrance.getResult
+        .then(({data: server_data}) => setData(server_data))
         .catch(err)
         .finally(() => setLoading(false));
-      cleans.push(getObject.abort);
-    }
 
-    return () => {
-      cleans.map(func => func());
-    }
+    return () => getEntrance.abort();
   }, [entrance.entrance]);
 
   const onSave: FormEventHandler = (e) => {
@@ -73,10 +66,9 @@ export function EntranceObject({entrance}) {
 }
 
 function EntranceIntercoms({intercoms, setIntercoms}: {intercoms: Intercom[], setIntercoms: (v: Intercom[]) => void}) {
-  const updateIntercom = (index: number, value: Intercom) => setIntercoms(intercoms.map((item, i) => (index == i)?value:item));
+  const updateIntercom = (index: number, value: Partial<Intercom>) => setIntercoms(intercoms.map((item, i) => (index == i)?{...item, ...value}:item));
   const addIntercom = () => setIntercoms([...intercoms, {id: null, calling_panel: '', model: '', version: '', door_type: 'uniphone'}]);
   const removeIntercom = (index: number) => setIntercoms(intercoms.filter((_item, i) => i != index));
-
 
   return <div className="mb-6">
     <div className="text-2xl mb-1">Домофоны</div>
@@ -84,7 +76,7 @@ function EntranceIntercoms({intercoms, setIntercoms}: {intercoms: Intercom[], se
       {intercoms.length > 0
           ? intercoms.map((intercom, i) => <div className="flex gap-x-3 mb-1 items-end" key={i}>
             <FormRow label="Модель" showLabel={i == 0} required>
-              <Select value={intercom.model} onChange={(v) => updateIntercom(i, {...intercom, model: v})}>
+              <Select value={intercom.model} onChange={(v) => updateIntercom(i, {model: v})}>
                 <Option index={1} value="metakom">Метаком</Option>
                 <Option index={2} value="metakom-video">Метаком (видео)</Option>
                 <Option index={3} value="tdf">TDF</Option>
@@ -99,7 +91,7 @@ function EntranceIntercoms({intercoms, setIntercoms}: {intercoms: Intercom[], se
               </Select>
             </FormRow>
             <FormRow label="Версия" showLabel={i == 0} required>
-              <Select value={intercom.version} onChange={(v) => updateIntercom(i, {...intercom, version: v})}>
+              <Select value={intercom.version} onChange={(v) => updateIntercom(i, {version: v})}>
                 <Option index={1} value="Ver.1.2">Ver.1.2</Option>
                 <Option index={2} value="Ver.1.35">Ver.1.35</Option>
                 <Option index={3} value="Ver.1.6">Ver.1.6</Option>
@@ -124,7 +116,7 @@ function EntranceIntercoms({intercoms, setIntercoms}: {intercoms: Intercom[], se
               </Select>
             </FormRow>
             <FormRow label="Вызывная панель" showLabel={i == 0} required>
-              <Select value={intercom.calling_panel} onChange={(v) => updateIntercom(i, {...intercom, calling_panel: v})}>
+              <Select value={intercom.calling_panel} onChange={(v) => updateIntercom(i, {calling_panel: v})}>
                 <Option value="uniphone" index={2}>UNIPHONE</Option>
                 <Option value="uniphone-ros" index={3}>UNIPHONE (Росдомофон)</Option>
                 <Option value="cyfral" index={4}>Цифрал</Option>
@@ -143,7 +135,7 @@ function EntranceIntercoms({intercoms, setIntercoms}: {intercoms: Intercom[], se
               </Select>
             </FormRow>
             <FormRow label="Тип двери" showLabel={i == 0}>
-              <Select value={intercom.door_type} onChange={(v) => updateIntercom(i, {...intercom, door_type: v})}>
+              <Select value={intercom.door_type} onChange={(v) => updateIntercom(i, {door_type: v})}>
                 <Option index={1} value="uniphone">Uniphone</Option>
                 <Option index={2} value="builders">Строительная</Option>
               </Select>

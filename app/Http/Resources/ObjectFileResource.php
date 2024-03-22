@@ -23,6 +23,7 @@ class ObjectFileResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'title' => $this->title,
             'type' => $this->type,
             'path' => $this->path,
             'url' => Storage::url($this->path),

@@ -130,6 +130,7 @@ function ObjectCameras({cameras, setCameras}: {cameras: ObjectCamera[], setCamer
   </div>
 }
 
+
 function ObjectSchemas({schemas, setSchemas}: {schemas: ObjectFile[], setSchemas: (v: ObjectFile[]) => void}) {
   const addFile: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const file = e.target.files[0];
@@ -138,10 +139,11 @@ function ObjectSchemas({schemas, setSchemas}: {schemas: ObjectFile[], setSchemas
       toast.error('Файл с таким именем уже загружен!');
       return;
     }
-    setSchemas([...schemas, {id: null, path: null, file, url: null, type: 'schema', basename: file.name }]);
+    setSchemas([...schemas, {id: null, title: '', path: null, file, url: null, type: 'schema', basename: file.name }]);
     e.target.value = null;
   }
   const removeFile = (index: number) => setSchemas(schemas.filter((_item, i) => i != index));
+  const updateFile = (index: number, data: Partial<ObjectFile>) => setSchemas(schemas.map((item, i) => i == index ? {...item, ...data} : item));
 
   return <div className="mb-6">
     <div className="text-2xl mb-2">Схемы</div>
@@ -155,7 +157,10 @@ function ObjectSchemas({schemas, setSchemas}: {schemas: ObjectFile[], setSchemas
       {schemas.map((schema, i) =>
         <div key={schema.basename+i} className="flex gap-x-3 items-center hover:bg-gray-400 hover:bg-opacity-10 px-3 transition-colors duration-150 rounded">
           <button type="button" className="transition-colors duration-300 hover:text-orange-400 dark:hover:text-orange-400"><Icon icon="times" onClick={() => removeFile(i)}/></button>
-          {schema.url ? <a href={schema.url} className="block flex-1 text-blue-600 dark:text-blue-400 p-1.5" target="_blank">{schema.basename}</a> : <div className="flex-1 p-1.5">{schema.file.name}</div>}
+          {schema.url
+              ? <a href={schema.url} className="block text-blue-600 dark:text-blue-400 p-1.5 max-w-[200px] break-words" target="_blank">{schema.basename}</a>
+              : <div className="flex-1 p-1.5">{schema.file.name}</div>}
+          <input value={schema.title || ''} onChange={(e) => updateFile(i, {title: e.target.value})} className="rounded bg-transparent border border-gray-200 px-1 py-0.5 flex-1" />
         </div>
       )}
     </div>
@@ -169,10 +174,12 @@ function ObjectPhotos({photos, setPhotos}: {photos: ObjectFile[], setPhotos: (v:
       toast.error('Файл с таким именем уже загружен!');
       return;
     }
-    setPhotos([...photos, {id: null, path: null, file, url: null, type: 'photo', basename: file.name }]);
+    setPhotos([...photos, {id: null, title: '', path: null, file, url: null, type: 'photo', basename: file.name }]);
     e.target.value = null;
   }
   const removeFile = (index: number) => setPhotos(photos.filter((_item, i) => i != index));
+  const updateFile = (index: number, data: Partial<ObjectFile>) => setPhotos(photos.map((item, i) => i == index ? {...item, ...data} : item));
+
 
   return <div className="mb-6">
     <div className="text-2xl mb-2">Фотографии</div>
@@ -188,9 +195,12 @@ function ObjectPhotos({photos, setPhotos}: {photos: ObjectFile[], setPhotos: (v:
           <div key={photo.basename+i} className="relative hover:bg-gray-400 hover:bg-opacity-10 transition-colors duration-150 p-2 border border-gray-300 dark:border-gray-600">
             <button type="button" className="transition-colors absolute right-0 top-0 px-1.5 py-1 bg-opacity-20 bg-black duration-300 hover:text-orange-400 dark:hover:text-orange-400"><Icon icon="times" onClick={() => removeFile(i)}/></button>
             {photo.url
-                ? <ObjectPhoto src={photo.url} basename={photo.basename}/>
-                : <ObjectBase64Photo file={photo.file} basename={photo.basename} />
+                ? <ObjectPhoto src={photo.url} basename={photo.basename} title={photo.title} />
+                : <ObjectBase64Photo file={photo.file} basename={photo.basename} title={photo.title} />
             }
+            <div className="mt-2">
+              <input value={photo.title || ''} onChange={(e) => updateFile(i, {title: e.target.value})} className="rounded bg-transparent border border-gray-200 px-1 py-0.5 flex-1" />
+            </div>
           </div>
         )}
       </div>
@@ -198,11 +208,13 @@ function ObjectPhotos({photos, setPhotos}: {photos: ObjectFile[], setPhotos: (v:
   </div>;
 }
 
-function ObjectPhoto({src, basename}) {
-  return <a href={src} data-fancybox="photos"><img src={src} className="block w-[150px] h-[150px] object-center object-contain" alt={basename}/></a>;
+type ObjectPhoto = {src: string, basename: string, title: string};
+function ObjectPhoto({src, basename, title}: ObjectPhoto) {
+  return <a href={src} data-fancybox="photos" data-caption={title}><img src={src} className="block w-[150px] h-[150px] object-center object-contain mx-auto" alt={basename}/></a>;
 }
 
-function ObjectBase64Photo({file, basename}: {file: File, basename: string}) {
+type ObjectBase64Photo = {file: File, basename: string, title: string};
+function ObjectBase64Photo({file, basename, title}: ObjectBase64Photo) {
   const [base64, setBase64] = useState(null);
 
   useEffect(() => {
@@ -211,5 +223,5 @@ function ObjectBase64Photo({file, basename}: {file: File, basename: string}) {
         .catch(() => toast.error('Не удалось распознать изображение'));
   }, []);
 
-  return <ObjectPhoto src={base64} basename={basename}/>
+  return <ObjectPhoto src={base64} basename={basename} title={title}/>
 }

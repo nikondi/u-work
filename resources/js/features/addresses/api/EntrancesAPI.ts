@@ -15,4 +15,8 @@ export class EntrancesAPI extends API {
   static addClients(entrance_id: number, entrance: number, address_id: number, client_ids: number[]) {
     return AxiosClient.post(`/entrances/addClients`, {entrance_id, entrance, client_ids, address_id});
   }
+
+  static getSingle(id: number) {
+    return this._prepare(({signal}) => AxiosClient.get(`/entrances/${id}`, {signal}));
+  }
 }

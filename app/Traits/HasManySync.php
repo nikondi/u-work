@@ -25,16 +25,20 @@ trait HasManySync {
             return $id;
         });
 
-        // Добавляем новые
-        $attachments = $items->filter(function($item) {
+        // Обновляем существующие и добавляем новые
+        $attachments = $items->filter(function($item) use ($model) {
             // Old entry (you can add your custom code here)
-            return empty($item['id']);
+            if(!empty($item['id'])) {
+                $model::find($item['id'])->update($item);
+                return false;
+            }
+
+            return true;
         })->map(function ($item) use ($foreign_key, $model, $deleted_ids) {
             // New entry (you can add your custom code here)
             $item['id'] = $deleted_ids->pop();
             return new $model([...$item, $foreign_key => $this->id]);
         });
-
 
         $this->$relation()->saveMany($attachments);
         $this->load($relation);

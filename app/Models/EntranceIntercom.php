@@ -13,6 +13,7 @@ class EntranceIntercom extends Model
     }
 
     protected $fillable = [
+        'id',
         'entrance_id',
         'model',
         'version',

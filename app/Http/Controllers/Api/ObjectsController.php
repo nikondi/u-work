@@ -64,13 +64,14 @@ class ObjectsController extends Controller
         foreach($files as $file_data) {
             if(empty($file_data['id'])) {
                 /* @var $file UploadedFile */
-                $path = "objects/{$object_id}/{$file_data['basename']}";
+                $path = "objects/{$object_id}/{$file_data['type']}/{$file_data['basename']}";
                 $file = $file_data['file'];
                 if($file->storeAs($disk_dir.'/'.$path)) {
                     $result[] = [
                         'id' => null,
                         'path' => $path,
                         'type' => $file_data['type'],
+                        'title' => $file_data['title'],
                         'objects_id' => $object_id,
                     ];
                 }
@@ -80,6 +81,7 @@ class ObjectsController extends Controller
                     'id' => $file_data['id'],
                     'path' => $file_data['path'],
                     'type' => $file_data['type'],
+                    'title' => $file_data['title'],
                     'objects_id' => $object_id,
                 ];
             }

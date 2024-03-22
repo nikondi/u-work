@@ -42,9 +42,10 @@ class EntranceController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Entrance $entrance)
     {
-        //
+        $entrance->load('intercoms', 'object');
+        return new EntranceResource($entrance);
     }
 
     public function getClients(Entrance $entrance) {

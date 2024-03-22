@@ -61,7 +61,7 @@ export class ObjectsAPI extends API {
     delete d['photos'];
 
     if(d.files.length == 0)
-      d.files.push({id: null, basename: null, type: null, file: null, path: null, url: null});
+      d.files.push({id: null, basename: null, title: null, type: null, file: null, path: null, url: null});
 
     config.beforeSend && config.beforeSend();
 

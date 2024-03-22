@@ -26,6 +26,7 @@ export type ObjectStatus = 'offline' | 'online' | 'unknown';
 
 export type ObjectFile = {
   id: number,
+  title: string,
   file?: File,
   path: string,
   url: string,

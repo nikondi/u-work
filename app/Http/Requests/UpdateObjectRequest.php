@@ -26,6 +26,7 @@ class UpdateObjectRequest extends FormRequest
             'comment' => '',
             'files' => 'array|nullable',
             'files.*.id' => 'nullable',
+            'files.*.title' => 'nullable',
             'files.*.url' => 'nullable',
             'files.*.type' => 'string|nullable',
             'files.*.basename' => 'string|nullable',

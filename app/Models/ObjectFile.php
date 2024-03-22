@@ -8,6 +8,7 @@ class ObjectFile extends Model
 {
     protected $fillable = [
         'id',
+        'title',
         'path',
         'type',
         'objects_id',
