@@ -1,4 +1,5 @@
 import AxiosClient from "@/lib/axios-client";
+import {Request} from "../types";
 
 export class RequestsAPI {
     static get(count, page = 1, order = null, filter = {}) {
@@ -17,7 +18,7 @@ export class RequestsAPI {
     static create(data) {
         return AxiosClient.post(`/requests`, data);
     }
-    static async update(id, data) {
+    static async update(id: number, data: Partial<Request>) {
         return AxiosClient.put(`/requests/${id}`, data);
     }
     static async updateOrder(items) {

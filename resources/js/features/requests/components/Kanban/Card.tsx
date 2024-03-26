@@ -1,11 +1,15 @@
 import {useKanbanContext} from "./KanbanContext";
-import React, {HTMLAttributes, PointerEventHandler, useMemo} from "react";
+import React, {HTMLAttributes, PointerEventHandler, useMemo, useState} from "react";
 import {Link} from "react-router-dom";
 import {useSortable} from "@dnd-kit/sortable";
 import {CSS} from "@dnd-kit/utilities";
 import {twMerge} from "tailwind-merge";
 import {Request} from "../../types";
 import Icon from "@/components/Icon";
+import {RequestsAPI} from "@/features/requests";
+import {err} from "@/helpers";
+import toast from "react-hot-toast";
+import {FaTrashAlt} from "react-icons/fa";
 
 type KanbanItemProps = {
   id: string,
@@ -35,11 +39,12 @@ const getDate = (date_string: string) => {
   return `${date.getDay()} ${monthes[date.getMonth()]} ${date.getFullYear()} ${('0'+date.getHours()).slice(-2)}:${('0'+date.getMinutes()).slice(-2)}`
 }
 
-export default function Card({id, item, colors, className, ...props}: KanbanItemProps) {
+export default function Card({id, item, colors, className = '', ...props}: KanbanItemProps) {
   const {setCurrentRequest} = useKanbanContext();
+  const [archived, setArchived] = useState(false);
 
   const {address, phone, contact_phone, email} = useMemo(() => {
-    const address = (item.client && item.client.address?.full) || item.addressDB?.full || item.address || null;
+    const address = (item.client && item.client.address) || item.addressDB?.full || item.address || null;
     const phone = (item.client && item.client.phones && item.client.phones[0]) || item.client_phone || null;
     const contact_phone = (item.client && item.client.phones && item.client.phones[1]) || item.client_phone_contact || null;
     const email = (item.email && item.email) || (item.client && item.client.email && item.client.email) || null;
@@ -49,6 +54,19 @@ export default function Card({id, item, colors, className, ...props}: KanbanItem
 
   const preventClick: PointerEventHandler = (e) => e.stopPropagation();
 
+  const archive = () => {
+    const toastId = toast.loading('Архивирование...');
+    RequestsAPI.update(item.id, {archived: true})
+      .then(() => {
+        setArchived(true);
+        toast.success('Карточка архивирована')
+      })
+      .catch(err)
+      .finally(() => toast.dismiss(toastId))
+  }
+
+  if(archived)
+    return;
 
   return <KanbanItem id={id} data={item}>
     <div className={twMerge("rounded-md shadow bg-white text-gray-800 overflow-hidden flex cursor-grab ", className)} {...props}>
@@ -70,6 +88,7 @@ export default function Card({id, item, colors, className, ...props}: KanbanItem
               ? <a href={'mailto:'+email} onPointerDown={preventClick}><Icon icon="envelope"/></a>
               : <span><Icon icon="envelope"/></span>
             }
+            <button type="button" onClick={archive} onPointerDown={preventClick}><FaTrashAlt /></button>
           </div>
         </div>
         <div className="text-gray-400 text-xs">Ответственный</div>
