@@ -28,7 +28,7 @@ class RequestsController extends Controller
         }
 
         if(empty($data['client_id']) && !empty($data['client_phone'])) {
-            $client = Client::where('phone', $data['client_phone'])->first();
+            $client = Client::whereRaw('FIND_IN_SET("'.$data['client_phone'].'", phone)')->first();
             if($client)
                 $data['client_id'] = $client->id;
         }
