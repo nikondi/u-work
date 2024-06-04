@@ -32,11 +32,11 @@ function KanbanItem({id, data, children}) {
   </div>
 }
 
-const monthes = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
+const months = ['Янв', 'Фев', 'Мар', 'Апр', 'Май', 'Июн', 'Июл', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек'];
 
 const getDate = (date_string: string) => {
   const date = new Date(date_string);
-  return `${date.getDay()} ${monthes[date.getMonth()]} ${date.getFullYear()} ${('0'+date.getHours()).slice(-2)}:${('0'+date.getMinutes()).slice(-2)}`
+  return `${date.getDay()} ${months[date.getMonth()]} ${date.getFullYear()} ${('0'+date.getHours()).slice(-2)}:${('0'+date.getMinutes()).slice(-2)}`
 }
 
 export default function Card({id, item, colors, className = '', ...props}: KanbanItemProps) {
@@ -55,6 +55,9 @@ export default function Card({id, item, colors, className = '', ...props}: Kanba
   const preventClick: PointerEventHandler = (e) => e.stopPropagation();
 
   const archive = () => {
+    if(!confirm('Точно архивировать?'))
+      return;
+
     const toastId = toast.loading('Архивирование...');
     RequestsAPI.update(item.id, {archived: true})
       .then(() => {
