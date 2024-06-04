@@ -27,7 +27,7 @@ class RequestsController extends Controller
                 $data['worker_id'] = $address->worker->id;
         }
 
-        if(empty($data['client_id'] && !empty($data['phone']))) {
+        if(empty($data['client_id']) && !empty($data['phone'])) {
             $client = Client::where('phone', $data['phone'])->first();
             if($client)
                 $data['client_id'] = $client->id;
