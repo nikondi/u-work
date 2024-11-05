@@ -25,8 +25,8 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::get('/user', [AuthController::class, 'getUserResource']);
 
     Route::get('/users/search', [UserController::class, 'search']);
-    Route::resource('/users', UserController::class);
-    Route::post('/users/add', [UserController::class, 'store']);
+//    Route::resource('/users', UserController::class);
+//    Route::post('/users/add', [UserController::class, 'store']);
 
     Route::post('/logout', [AuthController::class, 'logout']);
 

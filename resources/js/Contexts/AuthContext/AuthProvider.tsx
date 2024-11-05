@@ -6,7 +6,6 @@ import {TAuthContext} from "@/Contexts/AuthContext/types";
 
 export default function AuthProvider({children}: PropsWithChildren) {
   const {user} = usePage<PageProps>().props.auth;
-  console.log(user)
 
   const logout = () => {
     return router.get(route('logout'));

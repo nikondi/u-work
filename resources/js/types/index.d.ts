@@ -16,6 +16,7 @@ export type PageProps<T extends Record<string, unknown> = Record<string, unknown
   }
   breadcrumbs: Breadcrumb[],
   title: string
+  h1: string
 };
 
 

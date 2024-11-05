@@ -11,6 +11,7 @@ use Inertia\Response;
 /**
  * @property Breadcrumbs $breadcrumbs
  * @property string $title
+ * @property string $h1
  *
  * @method PageService title(string $title)
  *
@@ -19,7 +20,8 @@ class PageService implements Arrayable
 {
     private array $data = [
         'breadcrumbs' => null,
-        'title' => null
+        'title' => null,
+        'h1' => null
     ];
 
     public function __construct() {}
@@ -50,6 +52,12 @@ class PageService implements Arrayable
             return $this;
         }
         throw new BadMethodCallException();
+    }
+
+    public function h1($h1 = null): static
+    {
+        $this->set('h1', $h1 ?? $this->title);
+        return $this;
     }
 
     public function breadcrumbs(Breadcrumbs|array|null $breadcrumbs = null): PageService
