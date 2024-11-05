@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+/* @mixin  \App\Models\User */
 class UserResource extends JsonResource
 {
     public static $wrap = false;
@@ -15,7 +16,6 @@ class UserResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        /* @var \App\Models\User $this */
         $roles = [];
         foreach($this->roles as $role)
             $roles[] = $role->slug;

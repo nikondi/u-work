@@ -1,15 +1,6 @@
 import React from "react";
-import {useMemo} from "react";
+import {twMerge} from "tailwind-merge";
 
 export default function LoadingArea({show = false}) {
-    const classes = useMemo(() => {
-        const classes = "loading-area";
-        if(show)
-            return classes+' loading-area--loading';
-        return classes;
-    }, [show]);
-
-    return (
-        <div className={classes}></div>
-    )
+    return <div className={twMerge('loading-area', show && 'loading-area--loading')}></div>
 }

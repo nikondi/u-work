@@ -22,9 +22,6 @@ return new class extends Migration
 
             $table->date('check_date')->nullable()->after('cubic_ip');
         });
-        Schema::table('entrances', function (Blueprint $table) {
-            $table->dropConstrainedForeignId('worker_id');
-        });
     }
 
     /**

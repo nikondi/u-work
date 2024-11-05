@@ -1,0 +1,15 @@
+{
+    "$schema": "https://laravel-ide.com/schema/laravel-ide-v2.json",
+    "completions": [
+        {
+            "complete": "inertiaPage",
+            "condition": [
+                {
+                    "methodNames": ["render"],
+                    "parameters": [1],
+                    "classFqn": ["\\App\\Services\\PageService"]
+                }
+            ]
+        }
+    ]
+}

@@ -21,7 +21,7 @@ return new class extends Migration
                 ->constrained()
                 ->cascadeOnUpdate()
                 ->nullOnDelete();
-            $table->dropForeignIdFor(Address::class);
+//            $table->dropForeignIdFor(Address::class);
         });
     }
 

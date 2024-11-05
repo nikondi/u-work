@@ -52,7 +52,7 @@ return new class extends Migration
 //            $table->dropUnique('addresses_city_street_house_entrance_unique');
             $table->unique(['city', 'street', 'house'], 'UNIQUE_ADDRESS');
             $table->dropForeign('FK_worker_address');
-            $table->dropColumn(['worker_id', 'entrance']);
+            $table->dropColumn(['worker_id']);
         });
     }
 

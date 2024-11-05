@@ -1,18 +1,22 @@
 {
-  "compilerOptions": {
-    "module": "commonjs",
-    "target": "es5",
-    "sourceMap": true,
-    "jsx": "react",
-    "allowSyntheticDefaultImports": true,
-    "lib": ["dom", "es2017", "es2018.promise", "ES2021.String"],
-    "allowJs": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./resources/js/*"]
-    }
-  },
-  "exclude": [
-    "node_modules"
-  ],
+    "compilerOptions": {
+        "allowJs": true,
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "jsx": "react-jsx",
+        "strict": true,
+        "isolatedModules": true,
+        "target": "ESNext",
+        "strictNullChecks": false,
+        "esModuleInterop": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipLibCheck": true,
+        "noEmit": true,
+        "paths": {
+            "@/*": ["./resources/js/*"],
+            "ziggy-js": ["./vendor/tightenco/ziggy"]
+        },
+        "types": ["vite/client"]
+    },
+    "include": ["resources/js/**/*.ts", "resources/js/**/*.tsx", "resources/js/**/*.d.ts"]
 }

@@ -1,4 +1,3 @@
-version: '3.8'
 services:
 
   # Backend контейнер
@@ -42,10 +41,10 @@ services:
     command: ['--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci','--default-authentication-plugin=mysql_native_password']
     environment:
       # Желаемые настройки для СУБД MySQL
-      MYSQL_DATABASE: uniphonedev
+      MYSQL_DATABASE: 'uniphonework'
       MYSQL_ROOT_PASSWORD: 'root'
-      MYSQL_USER: 'uniphonedev'
-      MYSQL_PASSWORD: 'uniphonedev'
+      MYSQL_USER: 'uniphonework'
+      MYSQL_PASSWORD: 'uniphonework'
     volumes:
       - dbdata:/var/lib/mysql # Используем именованный том из блока volumes
       - ./docker/mariadb/my.cnf:/etc/mysql/my.cnf # Передаем в контейнер конфигурационный файл

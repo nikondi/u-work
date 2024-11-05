@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,6 +14,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::any('/{any?}', function() {
-    return view('welcome');
-})->where('any', '^((?!api|assets|storage).)*$');
+Route::middleware('auth')->group(function () {
+    Route::get('/', WelcomeController::class)->name('welcome');
+});
+
+require __DIR__ . '/auth.php';
+
