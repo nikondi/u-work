@@ -30,7 +30,7 @@ export default function Sidebar() {
         </SidebarNavLink>
       </HasRole>
       <HasRole roles={['manager']}>
-        <SidebarNavLink href={route('kanban.index')}>
+        <SidebarNavLink href={route('kanban.index')} active={route().current().startsWith('kanban.')}>
           <svg height="20" className="h-5" viewBox="0 0 24 24"><g><path d="M8.269 1.25H4.23c-2.006 0-2.981.932-2.981 2.85v15.8c0 1.918.975 2.85 2.981 2.85H8.27c2.006 0 2.981-.932 2.981-2.85V4.1c0-1.918-.975-2.85-2.981-2.85zM9.75 19.9c0 1.013-.214 1.35-1.481 1.35H4.23c-1.267 0-1.481-.337-1.481-1.35V4.1c0-1.013.214-1.35 1.481-1.35H8.27c1.267 0 1.481.337 1.481 1.35zM19.769 1.25H15.73c-2.006 0-2.981.932-2.981 2.85v8.8c0 1.918.975 2.85 2.981 2.85h4.038c2.006 0 2.981-.932 2.981-2.85V4.1c0-1.918-.975-2.85-2.981-2.85zM21.25 12.9c0 1.013-.214 1.35-1.481 1.35H15.73c-1.267 0-1.481-.337-1.481-1.35V4.1c0-1.013.214-1.35 1.481-1.35h4.038c1.267 0 1.481.337 1.481 1.35z" fill="currentColor"></path></g></svg>
           <span>Канбан</span>
         </SidebarNavLink>
