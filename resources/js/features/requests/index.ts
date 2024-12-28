@@ -1,4 +1,4 @@
 export * from "./routes"
 export * from "./types"
-export * from "./api"
+export * from "../../API"
 // export * from "./const"

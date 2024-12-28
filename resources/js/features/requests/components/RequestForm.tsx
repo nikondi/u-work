@@ -2,7 +2,7 @@ import React, {FormEvent, useCallback, useEffect, useRef, useState} from "react"
 import {useNavigate, useParams} from "react-router-dom";
 import toast from "react-hot-toast";
 import LoadingArea from "@/components/LoadingArea";
-import {RequestsAPI} from "../api";
+import {RequestsAPI} from "../../../API";
 import {empty_request, requestTypes} from "../const";
 import {Request, RequestStatus} from "../types"
 import useFetching from "@/hooks/useFetching";

@@ -25,7 +25,7 @@ export interface Breadcrumb {
   text: string
 }
 
-export type StateFunction<T> = React.Dispatch<React.SetStateAction<T>>
+export type StateFunction<T = any> = React.Dispatch<React.SetStateAction<T>>
 
 export interface ResourceCollection<T> {
   data: T[],

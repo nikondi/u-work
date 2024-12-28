@@ -537,7 +537,8 @@
   .kanban-column {
     @apply w-[250px] min-w-[250px] px-2 pt-2 -mt-2 flex flex-col h-full rounded transition-colors;
     &__inner {
-      @apply flex-1 overflow-y-auto;
+      //@apply flex-1 overflow-y-auto;
+      height: 100%;
     }
   }
 

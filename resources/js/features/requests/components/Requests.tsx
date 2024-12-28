@@ -7,7 +7,7 @@ import toast from "react-hot-toast";
 import {Option, Select} from "@/components/Form";
 import {err} from "@/helpers";
 import {useEcho} from "@/hooks";
-import {RequestsAPI} from "../api";
+import {RequestsAPI} from "../../../API";
 import {useAuth} from "@/lib/auth";
 import {Request} from "@/features/requests";
 import {requestTypes} from "../const";

@@ -1,5 +1,5 @@
 import React, {createContext, PropsWithChildren, useContext, useEffect, useMemo, useState} from "react";
-import {KanbanContextProvider, useKanbanContext} from "./KanbanContext";
+import {KanbanContextProvider, useKanbanContext} from "../contexts/KanbanContext/KanbanContext";
 import Popup from "./Popup";
 import {KanbanColumn} from "./Column";
 import {
@@ -18,8 +18,7 @@ import Card from "./Card";
 import toast from "react-hot-toast";
 import {useEcho} from "@/hooks";
 import {default_columns} from "../../const";
-import {Request} from "../../types";
-import {RequestsAPI} from "../../../../API";
+import {RequestsAPI} from "../../api";
 import SidePopup, {CloseButton, PopupContent} from "@/components/SidePopup";
 import {FaFileExcel} from "react-icons/fa6";
 import storage from "@/utils/storage";
