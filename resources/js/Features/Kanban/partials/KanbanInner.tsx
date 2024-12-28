@@ -16,7 +16,7 @@ import {TRequest} from "@/Features/Requests/types";
 import RequestsAPI from "@/API/RequestsAPI";
 
 export default function KanbanInner() {
-  const {columns, moveCard} = useKanban();
+  const {columns, moveCard, setOverColumn} = useKanban();
   const [draggingItem, setDraggingItem] = useState<TRequest>();
 
   const sensors = useSensors(
@@ -47,12 +47,14 @@ export default function KanbanInner() {
       if(delta.y > 0)
         overIndex = columns.find((col) => col.id == overColumn).items.length;
     }
+    setOverColumn(overColumn);
 
     moveCard(active, overColumn, overIndex);
   };
 
   const handleDragEnd = ({active}: DragEndEvent) => {
     setDraggingItem(null);
+    setOverColumn(null);
 
     const newColumn = active.data.current.sortable.containerId;
     const item = active.data.current.item;

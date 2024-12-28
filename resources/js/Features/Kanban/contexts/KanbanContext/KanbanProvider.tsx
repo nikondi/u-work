@@ -15,6 +15,7 @@ const initial_columns: TKanbanColumn[] = [
 
 export default function KanbanProvider({children}: PropsWithChildren) {
   const [columns, setColumns] = useState(initial_columns);
+  const [overColumn, setOverColumn] = useState<string>(null);
 
   const addItemsToColumn = (column: string, items: TRequest|TRequest[]) => {
     if(!Array.isArray(items))
@@ -34,8 +35,6 @@ export default function KanbanProvider({children}: PropsWithChildren) {
   const moveCard = (from_card: Active, toColumn: string, toIndex: number ) => {
     const fromColumn = from_card.data.current.sortable.containerId;
     let fromIndex = from_card.data.current.sortable.index;
-
-    console.log(toColumn, toIndex)
 
     if(fromColumn !== toColumn) {
       setColumns((prev) => {
@@ -61,7 +60,8 @@ export default function KanbanProvider({children}: PropsWithChildren) {
 
   return (
     <KanbanContext.Provider value={{
-      columns, addItemsToColumn, moveCard, setColumns
+      columns, addItemsToColumn, moveCard, setColumns,
+      overColumn, setOverColumn
     }}>
       {children}
     </KanbanContext.Provider>

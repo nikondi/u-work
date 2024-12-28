@@ -7,6 +7,8 @@ export type TKanbanContext = {
   setColumns: StateFunction<TKanbanColumn[]>
   addItemsToColumn: (column: string, items: TRequest|TRequest[]) => void
   moveCard: (from_card: Active, toColumn: string, toIndex: number) => void
+  overColumn: string
+  setOverColumn: StateFunction<string>
 }
 
 export type TKanbanColumn = {
