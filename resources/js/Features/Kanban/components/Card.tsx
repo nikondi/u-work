@@ -8,6 +8,7 @@ import Icon from "../../../Components/Icon";
 import {FaTrashAlt} from "react-icons/fa";
 import {Link} from "react-router-dom";
 import RequestsAPI from "@/API/RequestsAPI";
+import {getColumnColor} from "@/Features/Kanban/helpers";
 
 type KanbanItemProps = {
   id: number,
@@ -55,11 +56,11 @@ export default function Card({id, data, className = '', ...props}: KanbanItemPro
 
   return <Item id={id} data={data}>
     <div className={twMerge("rounded-md shadow bg-white text-gray-800 overflow-hidden flex cursor-grab ", className)} {...props}>
-      <div className="kanban-card__color"></div>
+      <div className={twMerge("kanban-card__color", getColumnColor(data.type))}></div>
       <div className="p-2 flex-1">
         <div className="flex items-start">
           <div className="kanban-card__subject" /* onClick={() => setCurrentRequest(item)}*/ onPointerDown={preventClick}>
-            {data.subject || 'Заявка #'+data.id}
+            {data.type} {data.subject || 'Заявка #'+data.id}
           </div>
           <div className="kanban-card__icons">
             <span className={address && 'active'} title={address}>

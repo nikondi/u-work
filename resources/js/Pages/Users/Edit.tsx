@@ -8,7 +8,7 @@ import {UserForm} from "@/Features/Users/partials";
 
 const Edit = () => {
   const {user} = usePage<FormPageProps>().props;
-  const onSubmit: FormHandler = (_e, form) => {
+  const onSubmit: FormHandler = (form) => {
     form.put(route('users.update', [user.id]), {
       onSuccess: () => toast.success('Пользователь сохранён')
     })

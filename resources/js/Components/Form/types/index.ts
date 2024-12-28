@@ -35,4 +35,4 @@ export interface InertiaFormProps<TForm extends FormDataType> {
 
 
 export type FormContextType<T extends object = any> = InertiaFormProps<T> | IAxiosForm<T>
-export type FormHandler<TForm extends object = any> = (e: FormEvent<HTMLFormElement>, form: FormContextType<TForm>) => void;
+export type FormHandler<TForm extends object = any> = (form: FormContextType<TForm>, e: FormEvent<HTMLFormElement>) => void;

@@ -6,7 +6,7 @@ import DefaultLayout from "@/Layouts/DefaultLayout";
 
 
 const LoginForm = () => {
-  const onSubmit: FormHandler = (_e, form) => form.post(route('login_handler'))
+  const onSubmit: FormHandler = (form) => form.post(route('login_handler'))
 
   return (
     <section className="overflow-auto h-screen">

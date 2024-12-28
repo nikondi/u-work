@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import {UserForm} from "@/Features/Users/partials";
 
 const Create = () => {
-  const onSubmit: FormHandler = (_e, form) => {
+  const onSubmit: FormHandler = (form) => {
     form.post(route('users.store'), {
       onSuccess: () => toast.success('Пользователь добавлен')
     })

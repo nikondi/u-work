@@ -13,7 +13,7 @@ const Form = ({onSubmit, initialData, children, ...props}: PropsWithChildren<Pro
   const submit = (e: FormEvent<HTMLFormElement>) => {
     if(onSubmit) {
       e.preventDefault()
-      onSubmit(e, form);
+      onSubmit(form, e);
     }
   }
   return (

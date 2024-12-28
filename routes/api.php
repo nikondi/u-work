@@ -73,7 +73,8 @@ Route::middleware('auth:sanctum')->group(function() {
 
     Route::prefix('requests')->group(function() {
         Route::get('', [RequestsController::class, 'index']);
-        Route::get('/export', [RequestsController::class, 'export']);
+        Route::get('/export', [RequestsController::class, 'export'])
+            ->name('api.requests.export');
         Route::put('/{request}', [RequestsController::class, 'update']);
         Route::get('/{request}', [RequestsController::class, 'view']);
         Route::post('/updateOrder', [RequestsController::class, 'updateOrder']);

@@ -1,9 +1,10 @@
-import {ReactNode} from "react";
+import React, {ReactNode} from "react";
 import DashboardLayout from "@/Layouts/DashboardLayout";
-import {Kanban} from "@/Features/Kanban/partials"
+import {ExcelExport, Kanban} from "@/Features/Kanban/partials"
 
 const KanbanPage = () => {
   return <div className="kanban-wrap">
+    <ExcelExport/>
     <Kanban/>
   </div>;
 }

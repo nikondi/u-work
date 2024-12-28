@@ -135,7 +135,7 @@ class RequestsController extends Controller
 
     public function updateOrder(Request $request) {
         foreach($request->toArray() as $item)
-            RequestModel::find($item['id'])->update(['order'=> $item['order']]);
+            RequestModel::where('id', $item['id'])->update(['order' => $item['order']]);
         RequestUpdateOrderEvent::dispatch($request->toArray());
         return true;
     }

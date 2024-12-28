@@ -1,22 +1,22 @@
 import React, {PropsWithChildren, useState} from "react";
 import {KanbanContext} from "./KanbanContext";
 import {TKanbanColumn} from "@/Features/Kanban/types";
-import {TRequestCard} from "@/Features/Requests/types";
+import {TRequest} from "@/Features/Requests/types";
 import {Active} from "@dnd-kit/core";
 import {arrayMove} from "@dnd-kit/sortable";
 
 const initial_columns: TKanbanColumn[] = [
-  {id: 'simple', colors: "bg-orange-500", title: "Новые обращения", items: []},
-  {id: 'order', colors: "bg-orange-500", title: "Заказы", items: []},
-  {id: 'call', colors: "bg-rose-400", title: "Звонки", items: []},
-  {id: 'done', colors: "bg-green-600", title: "Завершены", items: []},
-  {id: 'suggest', colors: "bg-gray-500", title: "Новые предложения", items: []},
+  {id: 'simple', title: "Новые обращения", items: []},
+  {id: 'order', title: "Заказы", items: []},
+  {id: 'call', title: "Звонки", items: []},
+  {id: 'done', title: "Завершены", items: []},
+  {id: 'suggest', title: "Новые предложения", items: []},
 ];
 
 export default function KanbanProvider({children}: PropsWithChildren) {
   const [columns, setColumns] = useState(initial_columns);
 
-  const addItemsToColumn = (column: string, items: TRequestCard|TRequestCard[]) => {
+  const addItemsToColumn = (column: string, items: TRequest|TRequest[]) => {
     if(!Array.isArray(items))
       items = [items];
 

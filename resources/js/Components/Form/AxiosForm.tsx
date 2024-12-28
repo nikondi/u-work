@@ -13,7 +13,7 @@ const AxiosForm = ({onSubmit, initialData, children, ...props}: PropsWithChildre
   const submit = (e: FormEvent<HTMLFormElement>) => {
     if(onSubmit) {
       e.preventDefault()
-      onSubmit(e, form);
+      onSubmit(form, e);
     }
   }
   return (

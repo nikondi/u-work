@@ -21,7 +21,7 @@ export default class RequestsAPI {
     static async update(id: number, data: Partial<TRequest>) {
         return AxiosClient.put(`/requests/${id}`, data);
     }
-    static async updateOrder(items: TRequest[]) {
+    static async updateOrder(items: { id: number, order: number }[]) {
         return AxiosClient.post(`/requests/updateOrder`, items);
     }
 }

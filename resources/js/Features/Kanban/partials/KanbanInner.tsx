@@ -2,7 +2,7 @@ import {useKanban} from "../contexts/KanbanContext";
 import React, {useState} from "react";
 import {
   closestCenter,
-  DndContext,
+  DndContext, DragEndEvent,
   DragOverEvent,
   DragOverlay,
   PointerSensor,
@@ -13,6 +13,7 @@ import {
 import {Column} from "../components";
 import Card from "@/Features/Kanban/components/Card";
 import {TRequest} from "@/Features/Requests/types";
+import RequestsAPI from "@/API/RequestsAPI";
 
 export default function KanbanInner() {
   const {columns, moveCard} = useKanban();
@@ -50,8 +51,30 @@ export default function KanbanInner() {
     moveCard(active, overColumn, overIndex);
   };
 
-  const handleDragEnd = () => {
+  const handleDragEnd = ({active}: DragEndEvent) => {
     setDraggingItem(null);
+
+    const newColumn = active.data.current.sortable.containerId;
+    const item = active.data.current.item;
+    const changedColumn = item.type != newColumn;
+
+    item.type = newColumn;
+    const activeColumn = columns.find(({id}) => newColumn == id);
+
+    const reOrder = () => {
+      return RequestsAPI.updateOrder(activeColumn.items.map((item, i) => ({
+        id: item.id,
+        order: i * 10
+      })));
+    }
+    const changeColumn = () => {
+      return RequestsAPI.update(item.id, { type: newColumn });
+    }
+
+    let prom = new Promise((resolve) => resolve(1));
+    if(changedColumn)
+      prom = prom.then(changeColumn);
+    prom.then(reOrder);
   };
 
   return <DndContext
