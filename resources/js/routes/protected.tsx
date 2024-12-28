@@ -1,7 +1,7 @@
 import React, {Suspense} from "react";
 import LoadingArea from "@/components/LoadingArea";
 import {Outlet} from "react-router-dom";
-import DashboardLayout from "@/components/Layout/DashboardLayout";
+import DashboardLayout from "@/Layout/DashboardLayout/DashboardLayout";
 import {UsersRoutes} from "@/features/users";
 import {WorkerRoutes} from "@/features/workers";
 import {ClientsRoutes} from "@/features/clients";

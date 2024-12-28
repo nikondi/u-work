@@ -27,6 +27,9 @@ class UserSeeder extends Seeder
         ];
 
         foreach($users as $user) {
+            if(User::where('email', $user['email'])->exists())
+                continue;
+
             $_user = User::create($user);
             if(isset($user['role']))
                 $_user->roles()->attach($user['role']);

@@ -1,7 +1,7 @@
 import React, {ReactNode} from "react";
 import DashboardLayout from "@/Layouts/DashboardLayout";
-import {IndexPageProps} from "./types";
 import {Link} from "@inertiajs/react";
+import {IndexPageProps} from "@/Features/Users/types";
 
 const Index = ({users}: IndexPageProps) => {
   return <>

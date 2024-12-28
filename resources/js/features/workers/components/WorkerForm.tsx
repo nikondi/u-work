@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import LoadingDiv from "@/components/LoadingDiv.jsx";
 import {FormRow, Input} from "@/components/Form";
 import ErrorList from "@/components/ErrorList.jsx";
-import Icon from "@/components/Icon";
+import Icon from "@/Components/Icon";
 import Popup from "@/components/Popup";
 import LoadingArea from "@/components/LoadingArea";
 import {err} from "@/helpers";

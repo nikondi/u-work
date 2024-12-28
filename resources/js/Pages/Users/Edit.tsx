@@ -1,10 +1,10 @@
 import {ReactNode} from "react";
 import DashboardLayout from "@/Layouts/DashboardLayout";
-import {UserForm} from "@/Pages/Users/partials";
 import {FormHandler} from "@/Components/Form";
 import {usePage} from "@inertiajs/react";
-import {FormPageProps} from "./types";
 import toast from "react-hot-toast";
+import {FormPageProps} from "@/Features/Users/types";
+import {UserForm} from "@/Features/Users/partials";
 
 const Edit = () => {
   const {user} = usePage<FormPageProps>().props;

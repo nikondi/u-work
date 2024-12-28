@@ -1,7 +1,7 @@
 import {Row, useFormContext} from "@/Components/Form";
 import React from "react";
 import {Role, RoleLabel} from "@/types/auth";
-import {IUserForm} from "@/Pages/Users/types";
+import {IUserForm} from "@/Features/Users/types";
 
 const userRoles: Record<Role, RoleLabel> = {
   admin: 'Администратор',

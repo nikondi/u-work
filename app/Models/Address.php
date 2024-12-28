@@ -10,6 +10,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Address extends Model
 {
+    public $timestamps = false;
     public function entrances(): HasMany
     {
         return $this->hasMany(Entrance::class, 'address_id')->orderBy('entrance');

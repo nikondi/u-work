@@ -2,7 +2,7 @@ import {ReactNode} from "react";
 import DashboardLayout from "@/Layouts/DashboardLayout";
 import {FormHandler} from "@/Components/Form";
 import toast from "react-hot-toast";
-import {UserForm} from "@/Pages/Users/partials";
+import {UserForm} from "@/Features/Users/partials";
 
 const Create = () => {
   const onSubmit: FormHandler = (_e, form) => {

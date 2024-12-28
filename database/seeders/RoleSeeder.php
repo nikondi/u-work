@@ -23,7 +23,10 @@ class RoleSeeder extends Seeder
             ['slug' => 'manager', 'name' => 'Менеджер']
         ];
 
-        foreach($roles as $role)
+        foreach($roles as $role) {
+            if(Role::where('slug', $role['slug'])->exists())
+                continue;
             Role::create($role);
+        }
     }
 }

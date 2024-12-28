@@ -5,7 +5,7 @@ import {Entrance} from "../../types";
 import toast from "react-hot-toast";
 import {err} from "@/helpers";
 import {FaTimes} from "react-icons/fa";
-import Icon from "@/components/Icon";
+import Icon from "@/Components/Icon";
 import {EntranceForm} from "../EntranceForm";
 
 type Props = {

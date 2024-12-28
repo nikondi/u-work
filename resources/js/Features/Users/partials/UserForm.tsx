@@ -39,7 +39,6 @@ export default function UserForm({onSubmit}: Props) {
         <Input name="password_confirmation" label="Подтверждение пароля" className="mb-6" required={!user} type="password"/>
         <Roles/>
         <SaveButton>{user ? 'Сохранить' : 'Добавить'}</SaveButton>
-        <LoadingDiv/>
         <ErrorList/>
       </Form>
     </div>

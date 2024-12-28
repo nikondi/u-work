@@ -3,7 +3,7 @@ import {rectSortingStrategy, SortableContext} from "@dnd-kit/sortable";
 import Card from "./Card";
 import {useDroppable} from "@dnd-kit/core";
 import {useKanbanContext} from "./KanbanContext";
-import Icon from "@/components/Icon";
+import Icon from "@/Components/Icon";
 import {Column} from "@/features/requests";
 import {empty_request} from "../../const";
 

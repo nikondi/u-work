@@ -1,34 +1,19 @@
 import toast from "react-hot-toast";
 
-export function mergeClasses(...args: string[]) {
-  const classes = [];
-  for (let i = 0; i < args.length; i++) {
-    if (typeof args[i] == 'undefined')
-      continue;
-    let classNames = [];
-    if (typeof args[i] == 'string')
-      classNames = args[i].split(' ');
-    else
-      classNames = args[i].split(' ');
-
-    classes.push(...classNames);
-  }
-
-
-  classes.forEach(function (_class, i) {
-    if (!_class) {
-      classes.slice(i, 1);
+export function mergeClass(...args: (string | string[] | {[k: string]: boolean|null})[]) {
+  const className: string[] = [];
+  args.forEach((cl) => {
+    if(!cl)
       return true;
-    }
-    for (let j = i; j < classes.length; j++) {
-      if (classes[j] === _class) {
-        classes.slice(i, 1);
-        break;
-      }
-    }
+    if(Array.isArray(cl))
+      className.push(...cl);
+    else if(typeof cl == 'object')
+      Object.entries(cl).forEach(([key, expression]) => expression && className.push(key))
+    else if(typeof cl == 'string')
+      className.push(cl);
   });
 
-  return classes.join(' ');
+  return className.join(' ');
 }
 
 export function untranslit(str: string) {

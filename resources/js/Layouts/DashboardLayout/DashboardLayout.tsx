@@ -1,4 +1,3 @@
-import ErrorBoundary from "@/components/ErrorBoundary";
 import React, {PropsWithChildren} from "react";
 import {Sidebar, TopBar} from "./partials";
 import {PageProvider} from "@/Contexts/PageContext";
@@ -6,6 +5,7 @@ import {AuthProvider} from "@/Contexts/AuthContext";
 import {Head, usePage} from "@inertiajs/react";
 import {PageProps} from "@/types";
 import {Toaster} from "react-hot-toast";
+import ErrorBoundary from "@/Components/ErrorBoundary";
 
 
 export default function DashboardLayout({children}: PropsWithChildren) {

@@ -5,7 +5,7 @@ import {useSortable} from "@dnd-kit/sortable";
 import {CSS} from "@dnd-kit/utilities";
 import {twMerge} from "tailwind-merge";
 import {Request} from "../../types";
-import Icon from "@/components/Icon";
+import Icon from "@/Components/Icon";
 import {RequestsAPI} from "@/features/requests";
 import {err} from "@/helpers";
 import toast from "react-hot-toast";

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Checkbox, FormRow, Input, Option, Select, Textarea} from "@/components/Form";
-import Icon from "@/components/Icon";
+import Icon from "@/Components/Icon";
 import {ObjectCamera, ObjectFile, ObjectNet, Objects} from "../types";
 import {defaultObject} from "../const";
 import {WorkerSelect} from "@/features/requests/components/RequestForm";

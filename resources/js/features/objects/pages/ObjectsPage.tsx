@@ -1,11 +1,10 @@
 import React, {useCallback, useRef, useState} from "react";
 import {TableServer} from "@/components/Table/Table.jsx";
-import LoadingArea from "@/components/LoadingArea";
 import {ResourceFetchFunction} from "@/hooks/useResource";
 import SearchInput from "@/components/SearchInput";
 import {useDelayedState} from "@/hooks";
 import SidePopup, {CloseButton, PopupContent} from "@/components/SidePopup";
-import Icon from "@/components/Icon";
+import Icon from "@/Components/Icon";
 import {err} from "@/helpers";
 import {ObjectsAPI, SimpleObjectsAPI} from "../api";
 import {Objects as ObjectType} from "../types";
@@ -14,6 +13,7 @@ import {ObjectForm} from "../components/ObjectForm";
 import {ObjectStatusDot} from "@/components/ObjectStatus";
 import {BiRefresh} from "react-icons/bi";
 import toast from "react-hot-toast";
+import {LoadingArea} from "@/Components";
 
 export function ObjectsPage() {
   const [loading, setLoading] = useState(false);

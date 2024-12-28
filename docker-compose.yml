@@ -24,7 +24,7 @@ services:
     restart: unless-stopped
     tty: true
     ports:
-      - "80:80" # Внутренний порт контейнера пробрасываем на host машину
+      - "8001:80" # Внутренний порт контейнера пробрасываем на host машину
     volumes:
       - .:/var/www # Монтируем локальную папку в контейнер как /var/www
       - ./docker/nginx/conf.d/:/etc/nginx/conf.d/ # Передаем в контейнер конфигурационные файлы nginx
@@ -58,6 +58,7 @@ services:
         dockerfile: ./docker/nodejs/Dockerfile
     tty: true
     #restart: always
+    restart: unless-stopped
     ports:
         - "5173:5173"
     working_dir: /var/www
@@ -66,7 +67,7 @@ services:
 
   redis:
       image: redis:7.2.3
-      restart: always
+      restart: unless-stopped
       ports:
           - "6379:6379"
       volumes:

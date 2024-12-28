@@ -3,5 +3,5 @@ import React, {PropsWithChildren} from "react";
 
 export default function SaveButton({children}: PropsWithChildren) {
   const {processing} = useFormContext();
-  return !processing && <button type="submit" className="btn btn-primary py-3 px-7">{children}</button>
+  return <button type="submit" className="btn btn-primary py-3 px-7" disabled={processing}>{processing?'Загрузка...':children}</button>
 }

@@ -1,6 +1,6 @@
 import React from "react";
 import {HasRole} from "@/Components";
-import Icon from "@/components/Icon";
+import Icon from "@/Components/Icon";
 import {SidebarNavLink} from "../components";
 import {usePageContext} from "@/Contexts/PageContext";
 import {twMerge} from "tailwind-merge";
@@ -13,12 +13,12 @@ export default function Sidebar() {
       <BurgerButton/>
     </div>*/}
     <div className="flex mx-auto flex-grow mt-4 flex-col text-gray-400 space-y-2 p-3 w-full">
-      <SidebarNavLink href={route('welcome')}>
+      <SidebarNavLink href={route('welcome')} active={route().current() == 'welcome'}>
         <svg className="h-5" height="20" viewBox="0 0 512 512"><path d="M197.332 170.668h-160C16.746 170.668 0 153.922 0 133.332v-96C0 16.746 16.746 0 37.332 0h160c20.59 0 37.336 16.746 37.336 37.332v96c0 20.59-16.746 37.336-37.336 37.336zM37.332 32A5.336 5.336 0 0 0 32 37.332v96a5.337 5.337 0 0 0 5.332 5.336h160a5.338 5.338 0 0 0 5.336-5.336v-96A5.337 5.337 0 0 0 197.332 32zM197.332 512h-160C16.746 512 0 495.254 0 474.668v-224c0-20.59 16.746-37.336 37.332-37.336h160c20.59 0 37.336 16.746 37.336 37.336v224c0 20.586-16.746 37.332-37.336 37.332zm-160-266.668A5.337 5.337 0 0 0 32 250.668v224A5.336 5.336 0 0 0 37.332 480h160a5.337 5.337 0 0 0 5.336-5.332v-224a5.338 5.338 0 0 0-5.336-5.336zM474.668 512h-160c-20.59 0-37.336-16.746-37.336-37.332v-96c0-20.59 16.746-37.336 37.336-37.336h160c20.586 0 37.332 16.746 37.332 37.336v96C512 495.254 495.254 512 474.668 512zm-160-138.668a5.338 5.338 0 0 0-5.336 5.336v96a5.337 5.337 0 0 0 5.336 5.332h160a5.336 5.336 0 0 0 5.332-5.332v-96a5.337 5.337 0 0 0-5.332-5.336zM474.668 298.668h-160c-20.59 0-37.336-16.746-37.336-37.336v-224C277.332 16.746 294.078 0 314.668 0h160C495.254 0 512 16.746 512 37.332v224c0 20.59-16.746 37.336-37.332 37.336zM314.668 32a5.337 5.337 0 0 0-5.336 5.332v224a5.338 5.338 0 0 0 5.336 5.336h160a5.337 5.337 0 0 0 5.332-5.336v-224A5.336 5.336 0 0 0 474.668 32zm0 0" fill="currentColor"></path></svg>
         <span>Dashboard</span>
       </SidebarNavLink>
       <HasRole roles={['admin']}>
-        <SidebarNavLink href={route('users.index')}>
+        <SidebarNavLink href={route('users.index')} active={route().current().startsWith('users.')}>
           <svg className="h-5" viewBox="0 0 512 512"><path d="M437.02 330.98c-27.883-27.882-61.071-48.523-97.281-61.018C378.521 243.251 404 198.548 404 148 404 66.393 337.607 0 256 0S108 66.393 108 148c0 50.548 25.479 95.251 64.262 121.962-36.21 12.495-69.398 33.136-97.281 61.018C26.629 379.333 0 443.62 0 512h40c0-119.103 96.897-216 216-216s216 96.897 216 216h40c0-68.38-26.629-132.667-74.98-181.02zM256 256c-59.551 0-108-48.448-108-108S196.449 40 256 40s108 48.448 108 108-48.449 108-108 108z" fill="currentColor"></path></svg>
           <span>Пользователи</span>
         </SidebarNavLink>

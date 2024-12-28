@@ -1,5 +1,5 @@
 import React, {ChangeEventHandler, Fragment, useMemo} from "react";
-import Icon from "@/components/Icon";
+import Icon from "@/Components/Icon";
 
 type RepeaterConfig = {
   renderRow?: (row: string | number | null, onChange: ChangeEventHandler<HTMLInputElement>, addRow: (value: string) => void, removeRow: () => void) => React.ReactElement

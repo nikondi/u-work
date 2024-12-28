@@ -7,7 +7,7 @@ import {err} from "@/helpers";
 import {RequestsAPI} from "../../api";
 import {default_columns} from "../../const";
 import LoadingArea from "@/components/LoadingArea";
-import Icon from "@/components/Icon";
+import Icon from "@/Components/Icon";
 import {Select, Option} from "@/components/Form";
 import {AddressSelect} from "@/features/search_selects";
 import Save from "@/components/Save";

@@ -1,7 +1,7 @@
 import React, {FormEventHandler, useEffect, useState} from "react";
 import toast from "react-hot-toast";
 import {err} from "@/helpers";
-import Icon from "@/components/Icon";
+import Icon from "@/Components/Icon";
 import SidePopup, {CloseButton, PopupContent} from "@/components/SidePopup";
 import Save from "@/components/Save";
 import LoadingArea from "@/components/LoadingArea";

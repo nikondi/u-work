@@ -1,5 +1,5 @@
 import React, {ChangeEventHandler, InputHTMLAttributes, PropsWithChildren} from "react";
-import Icon from "@/components/Icon";
+import Icon from "@/Components/Icon";
 import './checkbox.scss';
 
 type Props = InputHTMLAttributes<HTMLInputElement> & {

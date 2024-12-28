@@ -12,7 +12,7 @@ import {useAuth} from "@/lib/auth";
 import {Request} from "@/features/requests";
 import {requestTypes} from "../const";
 import {stateFunction} from "@/types";
-import Icon from "@/components/Icon";
+import Icon from "@/Components/Icon";
 
 export function Requests() {
   const [filter, _setFilter] = useState<any>(null);

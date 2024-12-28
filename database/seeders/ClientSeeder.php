@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Address;
 use App\Models\Client;
+use App\Models\Entrance;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +19,7 @@ class ClientSeeder extends Seeder
     {
         Model::reguard();
 
-        $filePath = Storage::disk('public')->path('Клиенты.csv');
+        $filePath = Storage::disk('imports')->path('Клиенты.csv');
 
         $this->command->info('Импорт клиентов');
 
@@ -81,9 +82,13 @@ class ClientSeeder extends Seeder
                 'city' => $line_arr['city'],
                 'street' => $line_arr['street'],
                 'house' => $line_arr['house'],
-                'entrance' => $line_arr['entrance'],
             ], $line_arr);
-            $client->address()->associate($address)->save();
+            $entrance = Entrance::firstOrCreate([
+                'address_id' => $address->id,
+                'entrance' => $line_arr['entrance']
+            ]);
+
+            $client->entrance()->associate($entrance)->save();
 
             $this->command->getOutput()->progressAdvance();
         }
