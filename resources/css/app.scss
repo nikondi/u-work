@@ -537,7 +537,7 @@
   .kanban-column {
     @apply w-[250px] min-w-[250px] px-2 pt-2 -mt-2 flex flex-col h-full rounded transition-colors;
     &__inner {
-      //@apply flex-1 overflow-y-auto;
+      @apply flex-1 overflow-y-auto;
       height: 100%;
     }
   }
@@ -572,11 +572,11 @@
     }
 
     &__input {
-      @apply transition-colors duration-300 border border-gray-400 rounded w-full px-3 py-1 bg-transparent hover:bg-white focus:bg-white outline-none;
+      @apply transition-colors duration-300 border border-gray-400 rounded w-full px-3 py-1 bg-transparent hover:bg-white focus:bg-white dark:hover:bg-gray-700 dark:focus:bg-gray-700 outline-none;
     }
 
     &__textarea {
-      @apply transition-colors duration-300 border border-gray-400 rounded w-full px-3 py-1 bg-transparent hover:bg-white focus:bg-white outline-none resize-none;
+      @apply transition-colors duration-300 border border-gray-400 rounded w-full px-3 py-1 bg-transparent hover:bg-white focus:bg-white dark:hover:bg-gray-700 dark:focus:bg-gray-700 outline-none resize-none;
       height: 150px;
     }
   }

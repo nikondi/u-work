@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useState} from "react";
 import {err} from "@/helpers";
 import LoadingArea from "@/components/LoadingArea";
-import SidePopup, {CloseButton, PopupContent} from "@/components/SidePopup";
+import SidePopup, {CloseButton, PopupContent} from "@/Components/Sidepopup/SidePopup";
 import {EntrancesAPI} from "../api";
 import {EntranceObject} from "./EntranceObject";
 import {Client, ClientForm} from "@/features/clients";

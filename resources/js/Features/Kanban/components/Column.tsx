@@ -6,11 +6,11 @@ import {twMerge} from "tailwind-merge";
 import Card from "../components/Card";
 import {useKanban} from "../contexts/KanbanContext";
 import RequestsAPI from "@/API/RequestsAPI";
-import {getColumnColor} from "../helpers";
+import {getColumnColor, getColumnLabel} from "../helpers";
 
 type Props = TKanbanColumn;
 
-export default function KanbanColumn({id, items, title}: Props) {
+export default function KanbanColumn({id, items}: Props) {
   const {setNodeRef} = useDroppable({id: id});
   const {addItemsToColumn, overColumn} = useKanban();
 
@@ -24,7 +24,7 @@ export default function KanbanColumn({id, items, title}: Props) {
 
   return <div className={twMerge("kanban-column", overColumn == id && 'bg-gray-500 bg-opacity-20')} ref={setNodeRef}>
     <div className={twMerge("px-3 py-2 rounded flex items-center text-white mb-5", getColumnColor(id))} style={{height: '40px'}}>
-      <div className="flex-1">{title}</div>
+      <div className="flex-1">{getColumnLabel(id)}</div>
       {/*<button onClick={addItem} className="mr-2 p-0.5"><Icon icon="plus" width=".85em" height=".85em"/></button>*/}
       {/*<span className="text-gray-300">({items.length})</span>*/}
     </div>

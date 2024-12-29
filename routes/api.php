@@ -71,13 +71,17 @@ Route::middleware('auth:sanctum')->group(function() {
     Route::resource('/objects', ObjectsController::class);
 
 
-    Route::prefix('requests')->group(function() {
-        Route::get('', [RequestsController::class, 'index']);
+    Route::prefix('requests')->name('api.requests.')->group(function() {
+        Route::get('', [RequestsController::class, 'index'])
+            ->name('index');
         Route::get('/export', [RequestsController::class, 'export'])
-            ->name('api.requests.export');
-        Route::put('/{request}', [RequestsController::class, 'update']);
-        Route::get('/{request}', [RequestsController::class, 'view']);
-        Route::post('/updateOrder', [RequestsController::class, 'updateOrder']);
+            ->name('export');
+        Route::put('/{request}', [RequestsController::class, 'update'])
+            ->name('update');
+        Route::get('/{request}', [RequestsController::class, 'show'])
+            ->name('show');
+        Route::post('/updateOrder', [RequestsController::class, 'updateOrder'])
+            ->name('updateOrder');
     });
 });
 

@@ -4,7 +4,7 @@ import {EntrancesAPI} from "../../api";
 import {Client, ClientsAPI} from "@/features/clients";
 import {useDelayedState} from "@/hooks";
 import {err} from "@/helpers";
-import Save from "@/components/Save";
+import Save from "@/Components/Save";
 import SearchInput from "@/components/SearchInput";
 import toast from "react-hot-toast";
 import {AddClientResponse} from "../../types/protected";

@@ -6,7 +6,7 @@ import {ClientsAPI} from "../api";
 import {FormRow, Input, Option, Repeater, Select, Textarea} from "@/components/Form";
 import LoadingArea from "@/components/LoadingArea";
 import {err, getInputInt} from "@/helpers";
-import Save from "@/components/Save";
+import Save from "@/Components/Save";
 import toast from "react-hot-toast";
 
 export function ClientFormPage() {

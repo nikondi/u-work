@@ -6,6 +6,9 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
+/**
+ * @property Address $address
+ * */
 class Client extends Authenticatable
 {
     public const STATUS_INVALID = 0; // Нет договора

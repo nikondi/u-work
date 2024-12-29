@@ -2,7 +2,7 @@ import {Client} from "@/features/clients";
 import {user} from "@/features/auth";
 import {Address} from "@/features/addresses";
 
-export type RequestStatus = 'new' | 'done' | 'important' | 'unknown';
+export type RequestStatus = 'new' | 'done' | 'important' | 'unknown' | string;
 type RequestSource = "unisite" | "uniwork" | "tomoru" | string;
 
 export type TRequest = {
@@ -14,8 +14,8 @@ export type TRequest = {
   client?: Client,
   worker: | user | null,
   client_name?: string,
-  client_phone: number | string,
-  client_phone_contact?: number | string,
+  client_phone: string,
+  client_phone_contact?: string,
   email: string,
   addressDB?: Address,
   address?: string,
@@ -32,11 +32,27 @@ export type TRequestCard = {
   source: RequestSource,
   subject: string,
   client_name?: string,
-  client_phone: number | string,
-  client_phone_contact?: number | string,
+  client_phone: string,
+  client_phone_contact?: string,
   email: string,
   address?: string,
   status: RequestStatus,
   created: string,
   archived: boolean
+}
+
+export interface IRequestForm {
+  client_id: number
+  type: string
+  source: RequestSource
+  subject: string
+  worker_id: number
+  address_id: number
+  email: string
+  client_name: string
+  client_phone: string
+  client_phone_contact: string
+  address: string
+  content: string
+  status: RequestStatus
 }

@@ -10,7 +10,7 @@ import LoadingArea from "@/components/LoadingArea";
 import Icon from "@/Components/Icon";
 import {Select, Option} from "@/components/Form";
 import {AddressSelect} from "@/features/search_selects";
-import Save from "@/components/Save";
+import Save from "@/Components/Save";
 
 export default function Popup() {
   const {currentRequest, setCurrentRequest} = useKanbanContext();

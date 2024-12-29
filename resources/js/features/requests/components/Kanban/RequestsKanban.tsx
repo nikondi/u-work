@@ -20,7 +20,7 @@ import {useEcho} from "@/hooks";
 import {default_columns} from "../../const";
 import {Request} from "../../types";
 import {RequestsAPI} from "../../../../API";
-import SidePopup, {CloseButton, PopupContent} from "@/components/SidePopup";
+import SidePopup, {CloseButton, PopupContent} from "@/Components/Sidepopup/SidePopup";
 import {FaFileExcel} from "react-icons/fa6";
 import storage from "@/utils/storage";
 

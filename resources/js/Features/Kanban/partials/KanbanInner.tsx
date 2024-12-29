@@ -10,8 +10,7 @@ import {
   useSensor,
   useSensors
 } from "@dnd-kit/core";
-import {Column} from "../components";
-import Card from "@/Features/Kanban/components/Card";
+import {Column, Card} from "../components";
 import {TRequest} from "@/Features/Requests/types";
 import RequestsAPI from "@/API/RequestsAPI";
 

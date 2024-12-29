@@ -21,11 +21,11 @@ class RequestsController extends Controller
         if(isset($data['status']))
             $data['status'] = RequestModel::convertStatusLabel($data['status']);
 
-        if(!empty($data['address_id'])) {
-            $address = Address::find($data['address_id']);
-            if($address && $address->worker)
-                $data['worker_id'] = $address->worker->id;
-        }
+//        if(!empty($data['address_id'])) {
+//            $address = Address::find($data['address_id']);
+//            if($address && $address->worker)
+//                $data['worker_id'] = $address->worker->id;
+//        }
 
         if(empty($data['client_id']) && !empty($data['client_phone'])) {
             $client = Client::whereRaw('FIND_IN_SET("'.$data['client_phone'].'", phone)')->first();
@@ -33,14 +33,14 @@ class RequestsController extends Controller
                 $data['client_id'] = $client->id;
         }
 
-        if(!empty($data['client_id'])) {
-            $client = Client::find($data['client_id']);
-            if($client) {
-                $data['address_id'] = $client->address->id;
-                if($client->address->worker)
-                    $data['worker_id'] = $client->address->worker->id;
-            }
-        }
+//        if(!empty($data['client_id'])) {
+//            $client = Client::find($data['client_id']);
+//            if($client) {
+//                $data['address_id'] = $client->address->id;
+//                if($client->address->worker)
+//                    $data['worker_id'] = $client->address->worker->id;
+//            }
+//        }
 
         $item = null;
         if($request->user()->hasRole('tomoru')) {
@@ -77,6 +77,7 @@ class RequestsController extends Controller
         else
             return response(new RequestResource($item), 200);
     }
+
     public function index(Request $request) {
         $page = $request->exists('page')?intval($request->get('page')):1;
         $limit = $request->exists('limit')?intval($request->get('limit')):-1;
@@ -129,7 +130,7 @@ class RequestsController extends Controller
         return new RequestResource($request);
     }
 
-    public function view(RequestModel $request) {
+    public function show(RequestModel $request) {
         return new RequestResource($request);
     }
 

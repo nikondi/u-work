@@ -3,7 +3,7 @@ import {TableServer} from "@/components/Table/Table.jsx";
 import {ResourceFetchFunction} from "@/hooks/useResource";
 import SearchInput from "@/components/SearchInput";
 import {useDelayedState} from "@/hooks";
-import SidePopup, {CloseButton, PopupContent} from "@/components/SidePopup";
+import SidePopup, {CloseButton, PopupContent} from "@/Components/Sidepopup/SidePopup";
 import Icon from "@/Components/Icon";
 import {err} from "@/helpers";
 import {ObjectsAPI, SimpleObjectsAPI} from "../api";

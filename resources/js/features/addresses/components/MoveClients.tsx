@@ -17,7 +17,7 @@ import {
   useSensors
 } from "@dnd-kit/core";
 import LoadingArea from "@/components/LoadingArea";
-import Save from "@/components/Save";
+import Save from "@/Components/Save";
 import ErrorBoundary from "@/components/ErrorBoundary";
 import {rectSortingStrategy, SortableContext, useSortable} from "@dnd-kit/sortable";
 import {CSS} from "@dnd-kit/utilities";

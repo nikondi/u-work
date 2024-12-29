@@ -4,7 +4,7 @@ import {ObjectFields} from "./ObjectFields";
 import {SimpleObjectsAPI} from "../api";
 import LoadingArea from "@/components/LoadingArea";
 import {defaultObject, defaultSimpleObject} from "../const";
-import Save from "@/components/Save";
+import Save from "@/Components/Save";
 import {FormRow, Input, Option, Select} from "@/components/Form";
 import toast from "react-hot-toast";
 import {err} from "@/helpers";

@@ -6,9 +6,9 @@ import {err} from "@/helpers";
 import {twMerge} from "tailwind-merge";
 import Icon from "../../../Components/Icon";
 import {FaTrashAlt} from "react-icons/fa";
-import {Link} from "react-router-dom";
 import RequestsAPI from "@/API/RequestsAPI";
 import {getColumnColor} from "@/Features/Kanban/helpers";
+import {Link} from "@inertiajs/react";
 
 type KanbanItemProps = {
   id: number,
@@ -59,9 +59,9 @@ export default function Card({id, data, className = '', ...props}: KanbanItemPro
       <div className={twMerge("kanban-card__color", getColumnColor(data.type))}></div>
       <div className="p-2 flex-1">
         <div className="flex items-start">
-          <div className="kanban-card__subject" /* onClick={() => setCurrentRequest(item)}*/ onPointerDown={preventClick}>
-            {data.type} {data.subject || 'Заявка #'+data.id}
-          </div>
+          <Link preserveState href={route('kanban.show', [data.id])} className="kanban-card__subject" onPointerDown={preventClick}>
+            {data.subject || 'Заявка #'+data.id}
+          </Link>
           <div className="kanban-card__icons">
             <span className={address && 'active'} title={address}>
               <Icon icon="locate" />
@@ -79,8 +79,8 @@ export default function Card({id, data, className = '', ...props}: KanbanItemPro
         </div>
         <div className="text-gray-400 text-xs">Ответственный</div>
         {data.worker
-          ? <Link target="_blank" to={`/workers/${data.worker.id}`} className="text-blue-600" onPointerDown={preventClick}>{data.worker.name}</Link>
-          : <span className="dotted-btn" onPointerDown={preventClick}/* onClick={() => setCurrentRequest(item)}*/>Назначить</span>
+          ? <Link target="_blank" href={`/workers/${data.worker.id}`} className="text-blue-600" onPointerDown={preventClick}>{data.worker.name}</Link>
+          : <Link preserveState href={route('kanban.show', [data.id])} className="dotted-btn" onPointerDown={preventClick}>Назначить</Link>
         }
         <div className="border-t border-gray-300 flex justify-between mt-1.5 pt-0.5">
           <div className="text-orange-500">#{data.id}</div>

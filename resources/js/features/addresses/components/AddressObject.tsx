@@ -2,10 +2,10 @@ import React, {FormEventHandler, useEffect, useState} from "react";
 import {Address} from "../types";
 import toast from "react-hot-toast";
 import Icon from "@/Components/Icon";
-import SidePopup, {CloseButton, PopupContent} from "@/components/SidePopup";
+import SidePopup, {CloseButton, PopupContent} from "@/Components/Sidepopup/SidePopup";
 import LoadingArea from "@/components/LoadingArea";
 import {defaultObject, ObjectFields, Objects, ObjectsAPI} from "@/features/objects";
-import Save from "@/components/Save";
+import Save from "@/Components/Save";
 
 type Props = {
   address: Address

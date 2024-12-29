@@ -6,11 +6,11 @@ import {Active} from "@dnd-kit/core";
 import {arrayMove} from "@dnd-kit/sortable";
 
 const initial_columns: TKanbanColumn[] = [
-  {id: 'simple', title: "Новые обращения", items: []},
-  {id: 'order', title: "Заказы", items: []},
-  {id: 'call', title: "Звонки", items: []},
-  {id: 'done', title: "Завершены", items: []},
-  {id: 'suggest', title: "Новые предложения", items: []},
+  {id: 'simple',items: []},
+  {id: 'order',items: []},
+  {id: 'call',items: []},
+  {id: 'done',items: []},
+  {id: 'suggest',items: []},
 ];
 
 export default function KanbanProvider({children}: PropsWithChildren) {

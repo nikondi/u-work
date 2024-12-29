@@ -6,7 +6,7 @@ import SearchInput from "@/components/SearchInput";
 import toast from "react-hot-toast";
 import {useDelayedState} from "@/hooks";
 import {Address} from "@/features/addresses";
-import SidePopup, {CloseButton, PopupContent} from "@/components/SidePopup";
+import SidePopup, {CloseButton, PopupContent} from "@/Components/Sidepopup/SidePopup";
 import {ClientForm} from "./ClientForm";
 import {Client} from "../types";
 import {ClientsAPI} from "../api";

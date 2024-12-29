@@ -1,6 +1,6 @@
 import {TRequest} from "@/Features/Requests/types";
 import {Active} from "@dnd-kit/core";
-import {StateFunction} from "@/types";
+import {PageProps, StateFunction} from "@/types";
 
 export type TKanbanContext = {
   columns: TKanbanColumn[]
@@ -13,6 +13,9 @@ export type TKanbanContext = {
 
 export type TKanbanColumn = {
   id: string,
-  title: string,
   items: TRequest[]
 }
+
+export type TKanbanPageProps = PageProps<{
+  request: TRequest
+}>
