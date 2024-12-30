@@ -3,11 +3,12 @@ import {TKanbanPageProps} from "../../types";
 import {Form, FormHandler, Input, Textarea} from "@/Components/Form";
 import {IRequestForm} from "@/Features/Requests/types";
 import {Edit, EditToggle, Show, useEditable} from "@/Contexts/EditableContext";
-import {Icon, Save} from "@/Components";
+import {Empty, Icon, Save} from "@/Components";
 import {Block, SubBlock} from "@/Components/SidePopup";
 import {getColumnColor, getColumnLabel, getRequestSourceLabel} from "@/Features/Kanban/helpers";
 import toast from "react-hot-toast";
 import {Client} from "./RequestFormPartials";
+import React from "react";
 
 const baseData: IRequestForm = {
   client_id: null,
@@ -113,6 +114,12 @@ export default function RequestForm() {
             : currentRequest.address
           }</SubBlock>
         }*/}
+        {request.addressDB
+          ? <a target="_blank" href={`/clients/${request.addressDB.id}`} className="rounded-md bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-500 p-2 mt-2 text-blue-600 dark:text-blue-400 flex gap-x-1">
+            {request.addressDB.full}
+          </a>
+          : <Empty>{request.address}</Empty>
+        }
       </Block>
     </div>
     <Edit>

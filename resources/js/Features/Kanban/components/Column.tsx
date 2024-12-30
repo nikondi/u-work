@@ -15,7 +15,7 @@ export default function KanbanColumn({id, items}: Props) {
   const {addItemsToColumn, overColumn} = useKanban();
 
   const loadItems = () => {
-    RequestsAPI.get(-1, 1, {order: 'asc'}, {type: id, archived: false}).then(({data}) => addItemsToColumn(id, data.data))
+    RequestsAPI.get(-1, 1, {order: 'asc'}, {type: id, archived: false, temp: false}).then(({data}) => addItemsToColumn(id, data.data))
   }
 
   useEffect(() => {

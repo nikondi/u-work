@@ -2,7 +2,7 @@ import AxiosClient from "@/lib/axios-client";
 import {TRequest} from "@/Features/Requests/types";
 
 export default class RequestsAPI {
-    static get(count: number, page = 1, order: Partial<Record<keyof TRequest, 'asc' | 'desc'>> = null, filter: Partial<TRequest> = {}) {
+    static get(count: number, page = 1, order: Partial<Record<keyof TRequest, 'asc' | 'desc'>> = null, filter: Partial<TRequest & {temp: boolean}> = {}) {
         if(order == null)
             order = {id: 'asc'};
 
