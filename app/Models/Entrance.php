@@ -36,7 +36,7 @@ class Entrance extends Model
 
     public function getFull($apartment = null, $floor = null): string
     {
-        return $this->address->getFull($this->entrance, $apartment, $floor);
+        return $this->address?->getFull($this->entrance, $apartment, $floor) ?? '';
     }
 
     protected $fillable = [
