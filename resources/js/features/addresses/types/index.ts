@@ -1,5 +1,5 @@
-import {Client} from "@/features/clients";
 import {Objects} from "@/features/objects/types";
+import {Client} from "@/features/clients/types";
 
 export type Address = {
   id: number,

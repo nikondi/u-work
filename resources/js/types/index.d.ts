@@ -7,6 +7,7 @@ export type stateFunction<T = any> = React.Dispatch<React.SetStateAction<T>>
 export * from "./LaravelResponse"
 export * from "./ReactChildrens"
 
+export type Role = 'admin' | 'manager' | 'tomoru' | 'worker';
 
 export type PageProps<T extends Record<string, unknown> = Record<string, unknown>> = T & {
   flash: any;

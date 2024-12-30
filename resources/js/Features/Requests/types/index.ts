@@ -1,6 +1,6 @@
-import {Client} from "@/features/clients";
-import {user} from "@/features/auth";
-import {Address} from "@/features/addresses";
+import {Client} from "@/features/clients/types";
+import {Address} from "@/features/addresses/types";
+import {IUser} from "@/types/auth";
 
 export type RequestStatus = 'new' | 'done' | 'important' | 'unknown' | string;
 type RequestSource = "unisite" | "uniwork" | "tomoru" | string;
@@ -12,7 +12,7 @@ export type TRequest = {
   source: RequestSource,
   subject: string,
   client?: Client,
-  worker: | user | null,
+  worker: | IUser | null,
   client_name?: string,
   client_phone: string,
   client_phone_contact?: string,

@@ -1,4 +1,4 @@
-import {Address} from "@/features/addresses";
+import {Address} from "@/features/addresses/types";
 
 type ClientAddress = {
   floor: number | string,

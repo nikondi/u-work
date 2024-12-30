@@ -1,4 +1,4 @@
-import React, {createContext, ReactElement, useContext, useEffect, useRef, useState} from "react";
+import React, {createContext, PropsWithChildren, ReactElement, useContext, useEffect, useRef, useState} from "react";
 import {stateFunction} from "@/types";
 
 type renderRowFunction<T> = (elem: T, index: number) => ReactElement;
@@ -110,7 +110,11 @@ export function useResource<Row = any>(config: ResourceConfig<Row>) {
 
 const RowContext = createContext(null);
 
-function RowContextProvider({children, initial = null}) {
+type RowContextProviderProps = PropsWithChildren<{
+  initial: any
+}>
+
+function RowContextProvider({children, initial = null}: RowContextProviderProps) {
   const [row, setRow] = useState<typeof initial>(initial);
 
   return <RowContext.Provider value={{

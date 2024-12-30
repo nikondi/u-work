@@ -1,6 +1,0 @@
-export * from "./routes"
-export * from "./api"
-export * from "./types"
-export * from "./const"
-export * from "./pages/ObjectsPage"
-export * from "./components/ObjectFields"

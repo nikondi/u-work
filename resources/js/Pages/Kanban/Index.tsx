@@ -13,7 +13,7 @@ const KanbanPage = ({request}: TKanbanPageProps) => {
         <ExcelExport/>
       </div>
       <KanbanInner/>
-      {request && <RequestPopup request={request}/>}
+      {request && <RequestPopup/>}
     </KanbanProvider>
   </div>;
 }

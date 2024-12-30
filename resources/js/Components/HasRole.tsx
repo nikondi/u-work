@@ -1,6 +1,6 @@
 import {PropsWithChildren} from "react";
-import {Role} from "@/features/auth";
 import {useAuth} from "@/Contexts/AuthContext";
+import {Role} from "@/types";
 
 type Props = {
   roles: Role[] | Role,

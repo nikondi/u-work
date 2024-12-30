@@ -1,4 +1,4 @@
-import {user} from "@/features/auth";
-import {Address} from "@/features/addresses";
+import {Address} from "@/features/addresses/types";
+import {IUser} from "@/types/auth";
 
-export type Worker = user & { addresses: Address[] }
+export type Worker = IUser & { addresses: Address[] }
