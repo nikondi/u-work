@@ -1,6 +1,5 @@
 import React from "react";
 import {HasRole} from "@/Components";
-import Icon from "@/Components/Icon";
 import {SidebarNavLink} from "../components";
 import {usePageContext} from "@/Contexts/PageContext";
 import {twMerge} from "tailwind-merge";
@@ -24,17 +23,17 @@ export default function Sidebar() {
         </SidebarNavLink>
       </HasRole>
       <HasRole roles={['tomoru', 'worker']}>
-        <SidebarNavLink href="/requests">
+        {/*<SidebarNavLink href="/requests">
           <svg width="20" viewBox="0 0 512 512" className="h-5"><g><path d="M352.459 220c0-11.046-8.954-20-20-20h-206c-11.046 0-20 8.954-20 20s8.954 20 20 20h206c11.046 0 20-8.954 20-20zM126.459 280c-11.046 0-20 8.954-20 20s8.954 20 20 20H251.57c11.046 0 20-8.954 20-20s-8.954-20-20-20H126.459z" fill="currentColor"></path><path d="M173.459 472H106.57c-22.056 0-40-17.944-40-40V80c0-22.056 17.944-40 40-40h245.889c22.056 0 40 17.944 40 40v123c0 11.046 8.954 20 20 20s20-8.954 20-20V80c0-44.112-35.888-80-80-80H106.57c-44.112 0-80 35.888-80 80v352c0 44.112 35.888 80 80 80h66.889c11.046 0 20-8.954 20-20s-8.954-20-20-20z" fill="currentColor"></path><path d="M467.884 289.572c-23.394-23.394-61.458-23.395-84.837-.016l-109.803 109.56a20.005 20.005 0 0 0-5.01 8.345l-23.913 78.725a20 20 0 0 0 24.476 25.087l80.725-22.361a19.993 19.993 0 0 0 8.79-5.119l109.573-109.367c23.394-23.394 23.394-61.458-.001-84.854zM333.776 451.768l-40.612 11.25 11.885-39.129 74.089-73.925 28.29 28.29-73.652 73.514zM439.615 346.13l-3.875 3.867-28.285-28.285 3.862-3.854c7.798-7.798 20.486-7.798 28.284 0 7.798 7.798 7.798 20.486.014 28.272zM332.459 120h-206c-11.046 0-20 8.954-20 20s8.954 20 20 20h206c11.046 0 20-8.954 20-20s-8.954-20-20-20z" fill="currentColor"></path></g></svg>
           <span>Заявки</span>
-        </SidebarNavLink>
+        </SidebarNavLink>*/}
       </HasRole>
       <HasRole roles={['manager']}>
         <SidebarNavLink href={route('kanban.index')} active={route().current().startsWith('kanban.')}>
           <svg height="20" className="h-5" viewBox="0 0 24 24"><g><path d="M8.269 1.25H4.23c-2.006 0-2.981.932-2.981 2.85v15.8c0 1.918.975 2.85 2.981 2.85H8.27c2.006 0 2.981-.932 2.981-2.85V4.1c0-1.918-.975-2.85-2.981-2.85zM9.75 19.9c0 1.013-.214 1.35-1.481 1.35H4.23c-1.267 0-1.481-.337-1.481-1.35V4.1c0-1.013.214-1.35 1.481-1.35H8.27c1.267 0 1.481.337 1.481 1.35zM19.769 1.25H15.73c-2.006 0-2.981.932-2.981 2.85v8.8c0 1.918.975 2.85 2.981 2.85h4.038c2.006 0 2.981-.932 2.981-2.85V4.1c0-1.918-.975-2.85-2.981-2.85zM21.25 12.9c0 1.013-.214 1.35-1.481 1.35H15.73c-1.267 0-1.481-.337-1.481-1.35V4.1c0-1.013.214-1.35 1.481-1.35h4.038c1.267 0 1.481.337 1.481 1.35z" fill="currentColor"></path></g></svg>
           <span>Канбан</span>
         </SidebarNavLink>
-        <SidebarNavLink href="/clients">
+        {/*<SidebarNavLink href="/clients">
           <svg height="20" className="h-5" viewBox="0 0 32 32"><g><g fill="currentColor" fillRule="evenodd" clipRule="evenodd"><path d="M11 8a5.5 5.5 0 1 0 0 11 5.5 5.5 0 0 0 0-11zm-7.5 5.5a7.5 7.5 0 1 1 15 0 7.5 7.5 0 0 1-15 0zM21.184 6h.004a7.5 7.5 0 0 1 0 15 1 1 0 1 1 0-2 5.5 5.5 0 0 0 .001-11 5.813 5.813 0 0 0-1.502.203 1 1 0 0 1-.524-1.93A7.813 7.813 0 0 1 21.184 6z"></path><path d="M11 21a10 10 0 0 0-8.182 4.25 1 1 0 1 1-1.636-1.15 12 12 0 0 1 19.636 0 1 1 0 0 1-1.636 1.15A10 10 0 0 0 11 21zM25.798 22.124A9.988 9.988 0 0 0 21.188 21a1 1 0 1 1-.001-2 11.987 11.987 0 0 1 9.819 5.1 1 1 0 1 1-1.637 1.15 9.988 9.988 0 0 0-3.57-3.126z"></path></g></g></svg>
           <span>Клиенты</span>
         </SidebarNavLink>
@@ -49,7 +48,7 @@ export default function Sidebar() {
         <SidebarNavLink href="/objects">
           <Icon icon="objects" size="20" className="h-5"/>
           <span>Объекты КСОБЖ</span>
-        </SidebarNavLink>
+        </SidebarNavLink>*/}
       </HasRole>
     </div>
   </div>
